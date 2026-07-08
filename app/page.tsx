@@ -29,6 +29,27 @@ function iso(d: Date): string {
   ).padStart(2, "0")}`;
 }
 
+// Deterministic per-day hash (stable across builds; no Math.random).
+function hash(s: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+// Map a real activity count to a base green shade, spread across 1-4 using the
+// day hash so equal counts don't all render the same. Real work only: a day
+// with zero logged activity stays empty (weight 0).
+function baseShade(count: number, key: string): number {
+  if (count <= 0) return 0;
+  const j = hash(key);
+  if (count === 1) return 1 + (j % 2); // 1-2
+  if (count === 2) return 2 + (j % 2); // 2-3
+  return 3 + (j % 2); // 3-4
+}
+
 export default function Page() {
   const activity = readActivity();
   const itemsByDate = new Map(ITEMS.map((it) => [it.date, it]));
@@ -77,7 +98,51 @@ export default function Page() {
       }
       const count = activity.get(key) ?? 0;
       if (count > 0) total++;
-      cells.push({ date: key, label, weight: count === 0 ? 0 : count < 3 ? 1 : 2 });
+      cells.push({ date: key, label, weight: baseShade(count, key) });
+    }
+  }
+
+  // Anti-clump pass: no connected triple of touching cells may share a shade.
+  // Cells are column-major (index = wk*7 + dy): up = index-1 (same week),
+  // down = index+1, left = index-7 (same weekday, prior week), right = index+7.
+  // A green cell is checked against every direction so it never completes a
+  // straight run of three or an L-triple around any neighbor, INCLUDING a fixed
+  // item square (which keeps its real weight, so its movable arms must yield).
+  // Empty cells never move.
+  const at = (i: number) => (i >= 0 && i < cells.length ? cells[i]?.weight : undefined);
+  // Does putting shade w at index i complete a connected same-shade triple?
+  const forms = (i: number, w: number) => {
+    const dy = i % 7;
+    const up = dy > 0 ? at(i - 1) : undefined;
+    const up2 = dy > 1 ? at(i - 2) : undefined;
+    const down = dy < 6 ? at(i + 1) : undefined;
+    const down2 = dy < 5 ? at(i + 2) : undefined;
+    const left = at(i - 7);
+    const left2 = at(i - 14);
+    const right = at(i + 7);
+    const right2 = at(i + 14);
+    const eq = (a: number | undefined) => a === w;
+    // straight runs of three centered anywhere through this cell
+    if ((eq(up) && eq(up2)) || (eq(down) && eq(down2))) return true;
+    if ((eq(left) && eq(left2)) || (eq(right) && eq(right2))) return true;
+    if (eq(up) && eq(down)) return true;
+    if (eq(left) && eq(right)) return true;
+    // L-triples: this cell plus one vertical and one horizontal neighbor
+    if ((eq(up) || eq(down)) && (eq(left) || eq(right))) return true;
+    return false;
+  };
+  // Two sweeps: the second lets a cell react to a neighbor moved in the first.
+  for (let pass = 0; pass < 2; pass++) {
+    for (let i = 0; i < cells.length; i++) {
+      const c = cells[i];
+      if (c.item || c.weight <= 0) continue;
+      if (!forms(i, c.weight)) continue;
+      for (const w of [c.weight + 1, c.weight - 1, c.weight + 2, c.weight - 2]) {
+        if (w >= 1 && w <= 4 && !forms(i, w)) {
+          c.weight = w;
+          break;
+        }
+      }
     }
   }
 
