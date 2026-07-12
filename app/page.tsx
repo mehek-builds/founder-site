@@ -158,9 +158,9 @@ export default function Page() {
           <section className="readme">
             <div className="path">mehek-builds / README.md</div>
             <p>
-              I&apos;m a founder studying CS + Business at USC (Trustee Scholar,
-              top 1% of class). I run an AI agency, ship a product roughly every
-              week, and document all of it in public.
+              I&apos;m a founder studying CS + Business at USC (top 1% of class,
+              on a full-tuition merit scholarship). I run an AI agency, ship a
+              product roughly every week, and document all of it in public.
             </p>
             <p>
               This page works like a contribution graph, because that&apos;s how

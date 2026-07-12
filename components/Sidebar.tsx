@@ -9,7 +9,7 @@ export default function Sidebar() {
       <div className="handle">mehek-builds</div>
       <p className="bio">
         Founder. I ship a product a week and write about it. CS + Business @
-        USC, Trustee Scholar. Dubai / Los Angeles.
+        USC, full-ride merit scholar. Dubai / Los Angeles.
       </p>
       <a className="cta" href="mailto:mehekman@usc.edu">
         Get in touch
@@ -42,7 +42,7 @@ export default function Sidebar() {
           <div
             className="badge"
             style={{ background: "#2d1e6b" }}
-            title="Trustee Scholar: full-tuition merit scholarship, top 1% of USC class"
+            title="Full-tuition merit scholarship, top 1% of USC class"
           >
             <svg viewBox="0 0 16 16" width="28" height="28" fill="#a5a3ff" aria-hidden="true">
               <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z" />
