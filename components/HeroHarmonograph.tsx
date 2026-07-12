@@ -1,10 +1,10 @@
 "use client";
-// THE HARMONOGRAPH — the hero backdrop. A single ember moon endlessly draws a
-// slowly-evolving looping curve (a harmonograph figure: near-integer frequency
-// ratios, slightly detuned so it precesses and never quite repeats). The line
-// trails and fades like a light-ribbon. The cursor bends the figure. Easter egg:
-// press a letter key and the "pendulums" reseed to a brand-new figure.
-// Reduced-motion / touch: a full static figure with the moon parked.
+// THE HARMONOGRAPH + MOONLIGHT — the hero backdrop. A single ink moon slowly
+// draws a small, compressed, ever-evolving looping curve (a harmonograph: near-
+// integer frequency ratios, slightly detuned so it precesses and never repeats),
+// and casts a cool pool of light that follows it (--moon-x/--moon-y on .hero),
+// which is what reveals the name in ink as it sweeps past. Cursor bends the
+// figure; a letter key reseeds it. Reduced-motion: a static figure, moon parked.
 import { useEffect, useRef } from "react";
 
 interface Params {
@@ -13,7 +13,7 @@ interface Params {
 }
 
 function seed(): Params {
-  const pick = () => 2 + Math.floor(Math.random() * 3); // 2, 3, or 4
+  const pick = () => 3 + Math.floor(Math.random() * 3); // 3, 4, or 5 (denser loops)
   const det = () => (Math.random() - 0.5) * 0.006; // tiny detune -> slow precession
   const ph = () => Math.random() * Math.PI * 2;
   return {
@@ -29,10 +29,12 @@ export default function HeroHarmonograph() {
   useEffect(() => {
     const canvas = ref.current;
     if (!canvas) return;
-    // Moonlight follows the moon: a soft warm pool cast at its current point.
+    // The moon's light + the name-reveal both key off --moon-x/--moon-y, set on
+    // the .hero (a common ancestor of the moonlight and the lit text layer).
+    const heroEl = canvas.closest(".hero") as HTMLElement | null;
     const setMoon = (x: number, y: number) => {
-      scene.current?.style.setProperty("--moon-x", `${x.toFixed(1)}px`);
-      scene.current?.style.setProperty("--moon-y", `${y.toFixed(1)}px`);
+      heroEl?.style.setProperty("--moon-x", `${x.toFixed(1)}px`);
+      heroEl?.style.setProperty("--moon-y", `${y.toFixed(1)}px`);
     };
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
@@ -52,9 +54,9 @@ export default function HeroHarmonograph() {
 
     const drawMoon = (x: number, y: number, r: number) => {
       ctx.beginPath();
-      ctx.fillStyle = "rgba(217,102,10,1)";
-      ctx.shadowColor = "rgba(217,102,10,0.55)";
-      ctx.shadowBlur = 6;
+      ctx.fillStyle = "rgba(24,20,12,0.92)";
+      ctx.shadowColor = "rgba(24,20,12,0.35)";
+      ctx.shadowBlur = 3;
       ctx.arc(x, y, r, 0, Math.PI * 2);
       ctx.fill();
       ctx.shadowBlur = 0;
@@ -62,17 +64,17 @@ export default function HeroHarmonograph() {
 
     const drawStatic = () => {
       ctx.clearRect(0, 0, w, h);
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = "rgba(24,20,12,0.16)";
+      ctx.lineWidth = 0.6;
+      ctx.strokeStyle = "rgba(24,20,12,0.14)";
       ctx.beginPath();
-      for (let tt = 0; tt < 90; tt += 0.012) {
+      for (let tt = 0; tt < 120; tt += 0.01) {
         const [x, y] = point(tt);
         if (tt === 0) ctx.moveTo(x, y);
         else ctx.lineTo(x, y);
       }
       ctx.stroke();
       const [mx, my] = point(42);
-      drawMoon(mx, my, 5);
+      drawMoon(mx, my, 3);
       setMoon(mx, my);
     };
 
@@ -82,9 +84,9 @@ export default function HeroHarmonograph() {
       canvas.width = w * dpr;
       canvas.height = h * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      cx = w * 0.42;
-      cy = h * 0.46;
-      A = Math.min(w, h) * 0.4;
+      cx = w * 0.37;
+      cy = h * 0.45;
+      A = Math.min(w, h) * 0.3;
       drawStatic(); // initial figure (also the still frame if reduced-motion)
     };
     resize();
@@ -102,8 +104,8 @@ export default function HeroHarmonograph() {
       ctx.fillRect(0, 0, w, h);
       ctx.globalCompositeOperation = "source-over";
 
-      ctx.lineWidth = 1.1;
-      ctx.strokeStyle = "rgba(24,20,12,0.4)";
+      ctx.lineWidth = 0.6;
+      ctx.strokeStyle = "rgba(24,20,12,0.38)";
       ctx.lineCap = "round";
       ctx.beginPath();
       if (!started) {
@@ -113,20 +115,20 @@ export default function HeroHarmonograph() {
       }
       ctx.moveTo(px, py);
       let lx = px, ly = py;
-      for (let i = 0; i < 6; i++) {
-        t += 0.006;
+      for (let i = 0; i < 4; i++) {
+        t += 0.001; // much slower draw
         const [x, y] = point(t);
         ctx.lineTo(x, y);
         lx = x; ly = y;
       }
       ctx.stroke();
       px = lx; py = ly;
-      drawMoon(lx, ly, 3.8);
+      drawMoon(lx, ly, 3);
       setMoon(lx, ly);
 
-      // slow drift so the figure keeps evolving
-      params.p2 += 0.00018;
-      params.p4 += 0.00012;
+      // very slow drift so the figure keeps evolving
+      params.p2 += 0.00006;
+      params.p4 += 0.00004;
       raf = requestAnimationFrame(step);
     };
 

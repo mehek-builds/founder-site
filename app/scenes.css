@@ -9,19 +9,17 @@
   display: flex;
   align-items: center;
   overflow: hidden;
-  /* faint warm glow, upper-right, for depth behind the node field */
-  background: radial-gradient(60% 60% at 74% 26%, rgba(217, 102, 10, 0.07), transparent 62%);
+  /* the moon's light + the name-reveal both key off these (JS updates them) */
+  --moon-x: 37%;
+  --moon-y: 45%;
 }
-/* THE HARMONOGRAPH + MOONLIGHT: a single ember moon endlessly draws a slowly-
-   evolving looping curve (the ribbon, on canvas) AND casts a soft warm pool of
-   light that follows it (--moon-x / --moon-y), backlighting the name as it
-   passes behind. */
+/* THE HARMONOGRAPH + MOONLIGHT: an ink moon slowly draws a small looping curve
+   (the ribbon, on canvas) AND casts a cool pool of light that follows it. The
+   light is what reveals the name in ink (.hero-lit-layer, masked to the moon). */
 .hero-moon-scene {
   position: absolute;
   inset: 0;
   z-index: 0;
-  --moon-x: 42%;
-  --moon-y: 46%;
 }
 .hero-harmo {
   position: absolute;
@@ -30,21 +28,16 @@
   height: 100%;
   pointer-events: none;
 }
-/* The moonlight: warm light pooled at the moon, brightest at its centre. */
+/* Cool, cinematic moonlight: a soft silver-blue pool with a whisper-warm core
+   (the one note of warmth), pooled at the moon. */
 .hero-moonlight {
   position: absolute;
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(circle 130px at var(--moon-x) var(--moon-y), rgba(255, 190, 120, 0.28), transparent 62%),
-    radial-gradient(circle 340px at var(--moon-x) var(--moon-y), rgba(255, 178, 108, 0.12), transparent 70%);
-}
-/* No paper veil: let the moonlight reach the name for the backlight. */
-.hero-scrim {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
+    radial-gradient(circle 70px at var(--moon-x) var(--moon-y), rgba(255, 246, 232, 0.3), transparent 66%),
+    radial-gradient(circle 150px at var(--moon-x) var(--moon-y), rgba(214, 228, 246, 0.42), transparent 62%),
+    radial-gradient(circle 360px at var(--moon-x) var(--moon-y), rgba(196, 214, 240, 0.18), transparent 72%);
 }
 .hero-inner {
   position: relative;
@@ -56,72 +49,44 @@
   font-size: clamp(2.9rem, 9vw, 7rem);
   line-height: 1.04;
   letter-spacing: -0.035em;
-  margin-bottom: 34px;
+  margin: 0;
 }
-.hero-line {
+.hero-title span {
   display: block;
-  overflow: hidden;
-  padding: 0.02em 0.03em 0.1em;
-  margin: 0 -0.03em;
+  padding: 0.02em 0.03em 0.08em;
 }
-.hero-line-2 {
-  color: var(--text);
+/* ghost: the name barely present in the paper (and the real SSR text). */
+.ht-ghost {
+  color: rgba(27, 26, 23, 0.11);
 }
-.hero-line-inner {
-  display: block;
-}
-.hero-stats {
-  font-family: var(--font-text);
-  font-size: clamp(1.05rem, 2.4vw, 1.5rem);
-  color: var(--text-dim);
-  margin: 0 0 22px;
-  letter-spacing: -0.01em;
-}
-.hero-stat-label {
-  color: var(--text-dim);
-}
-.hero-dot {
-  color: var(--text-faint);
-  padding: 0 4px;
-}
-.hero-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-family: var(--font-text);
-  font-size: 0.92rem;
-  color: var(--text);
-  padding: 8px 16px 8px 14px;
-  border: 1px solid var(--line-strong);
-  border-radius: 999px;
-  background: #fffefb;
-  margin: 0 0 22px;
-}
-.hero-sub {
-  color: var(--text-dim);
-  margin: 0 0 30px;
-  font-size: 1.02rem;
-}
-.hero-cta {
+/* lit: full ink, revealed only where the moonlight falls (masked to the moon). */
+.hero-lit-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
   display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
+  align-items: center;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(circle 200px at var(--moon-x) var(--moon-y), #000 0%, rgba(0, 0, 0, 0.55) 52%, transparent 78%);
+  mask-image: radial-gradient(circle 200px at var(--moon-x) var(--moon-y), #000 0%, rgba(0, 0, 0, 0.55) 52%, transparent 78%);
+}
+.ht-lit {
+  color: var(--text);
+}
+@media (prefers-reduced-motion: reduce) {
+  /* accessible static twin: the whole name, in ink, no reveal gimmick */
+  .ht-ghost { color: var(--text); }
+  .hero-lit-layer { display: none; }
 }
 .hero-cue {
   position: absolute;
   bottom: 26px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  font-family: var(--font-text);
-  font-size: 0.72rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+  z-index: 4;
+  font-size: 1.15rem;
   color: var(--text-faint);
+  opacity: 0.65;
 }
 .hero-cue-arrow {
   animation: bob 2s ease-in-out infinite;
