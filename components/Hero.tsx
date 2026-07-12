@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 import { ensureGsap } from "../lib/gsap";
 import { whenVisible } from "../lib/visible";
 import CountUp from "./CountUp";
-import HeroOrbit from "./HeroOrbit";
+import HeroHarmonograph from "./HeroHarmonograph";
 import { COUNTS } from "../content/counts";
 import { getNow, BUILD_DATE } from "../content/now";
 
@@ -31,7 +31,7 @@ export default function Hero() {
 
   return (
     <header className="scene hero" ref={root} id="top">
-      <HeroOrbit />
+      <HeroHarmonograph />
       <div className="hero-scrim" aria-hidden="true" />
       <div className="wrap hero-inner">
         <h1 className="hero-title">

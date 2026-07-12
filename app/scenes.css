@@ -12,38 +12,17 @@
   /* faint warm glow, upper-right, for depth behind the node field */
   background: radial-gradient(60% 60% at 74% 26%, rgba(217, 102, 10, 0.07), transparent 62%);
 }
-/* THE ORBIT: one fine elliptical line with a single moon tracing it, endlessly,
-   behind the name. "Always in orbit"; the moon is the quiet light. Slow cursor
-   parallax nudges the whole orbit a touch. */
-.hero-orbit {
+/* THE HARMONOGRAPH: a single ember moon endlessly draws a slowly-evolving looping
+   curve, trailing and fading like a light-ribbon. Canvas fills the hero. */
+.hero-harmo {
   position: absolute;
   inset: 0;
+  width: 100%;
+  height: 100%;
   z-index: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   pointer-events: none;
-  transform: translate(var(--ox, 0px), var(--oy, 0px));
-  transition: transform 0.7s var(--ease-ui);
 }
-.orbit-svg {
-  width: min(1040px, 84vw);
-  height: auto;
-  overflow: visible;
-  /* nudge the orbit centre toward the name (left-of-centre, slightly high) */
-  transform: translate(-9%, -6%);
-}
-.orbit-ring {
-  fill: none;
-  stroke: rgba(24, 20, 12, 0.12);
-  stroke-width: 1;
-  vector-effect: non-scaling-stroke;
-}
-.orbit-moon {
-  fill: var(--amber);
-  filter: drop-shadow(0 0 6px rgba(217, 102, 10, 0.55));
-}
-/* A whisper of a scrim so the moon never fights the headline. */
+/* A whisper of a scrim so the ribbon never fights the headline. */
 .hero-scrim {
   position: absolute;
   inset: 0;
