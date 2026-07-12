@@ -25,7 +25,7 @@ const WINS: Win[] = [
     url: "https://role-quick-website.vercel.app",
     urlLabel: "role-quick-website.vercel.app",
     poster: "/work/rolequick.png",
-    beats: ["Chrome extension", "Resume generation", "5-view dashboard"],
+    beats: ["On the Chrome Web Store", "Resume generation", "5-view dashboard"],
   },
   {
     slug: "buildsmart",

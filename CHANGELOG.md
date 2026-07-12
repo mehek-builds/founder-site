@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-07-12 — RoleQuick store link + design-plan alignment pass
+
+- **RoleQuick** is now published on the Chrome Web Store (confirmed live): added
+  the Store link + "Distribution: Chrome Web Store" metric to its receipt, updated
+  the Work window beat and the making-of line.
+- **Craft alignment** against the design plan's carry-over rules: replaced the
+  banned bare CSS `ease` keyword with named curves (`--ease-reveal`/`--ease-ui`)
+  on every transition; added `text-wrap: balance` on headings and `text-wrap:
+  pretty` on body (widow/orphan control); `font-kerning: normal`; purged the last
+  dark-era amber values in favor of the ember token.
+
 ## 2026-07-12 — Rebuild: "Proof carries the color" (Phases B-F, on `rebuild` branch)
 
 Full cinematic rebuild per the master plan. The old GitHub-profile shell is

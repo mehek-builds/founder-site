@@ -409,9 +409,16 @@ export const ITEMS: Item[] = [
     date: "2026-07-04",
     weight: 4,
     status: "live",
-    links: [{ label: "Live", url: "https://role-quick-website.vercel.app" }],
+    metrics: [{ label: "Distribution", value: "Chrome Web Store" }],
+    links: [
+      { label: "Live", url: "https://role-quick-website.vercel.app" },
+      {
+        label: "Store",
+        url: "https://chromewebstore.google.com/detail/rolequick-tailored-resume/bdbedbmkjpfioknfpmhookefabipjaad",
+      },
+    ],
     makingOf: [
-      "A Chrome extension answers every application question.",
+      "Published on the Chrome Web Store; answers every application question.",
       "Generates tailored resumes on the fly.",
       "A full 5-view product dashboard on a live backend.",
       "A cinematic marketing site with a baked scroll film.",

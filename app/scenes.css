@@ -1,5 +1,5 @@
 /* ============================================================================
-   Scene styles. One film: quiet dark canvas, amber only on verified facts.
+   Scene styles. One gallery: quiet paper canvas, ember only on verified facts.
    ============================================================================ */
 
 /* ---------- Scene 0: HERO ---------- */
@@ -18,7 +18,7 @@
   z-index: 0;
 }
 .hero:not(:has(.hero-canvas)) {
-  background: radial-gradient(60% 50% at 50% 45%, rgba(255, 171, 82, 0.06), transparent 70%);
+  background: radial-gradient(60% 50% at 50% 45%, rgba(217, 102, 10, 0.06), transparent 70%);
 }
 .hero-scrim {
   position: absolute;
@@ -142,7 +142,7 @@
   font-family: var(--font-display);
   color: var(--text-dim);
   letter-spacing: 0.04em;
-  transition: color 0.2s ease;
+  transition: color 0.2s var(--ease-ui);
 }
 .bet-more:hover { color: var(--amber); }
 
@@ -216,7 +216,7 @@
   padding: 0;
   cursor: pointer;
   box-shadow: 0 0 12px -2px var(--nc, var(--amber));
-  transition: opacity 0.4s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  transition: opacity 0.4s var(--ease-ui), box-shadow 0.3s var(--ease-ui), transform 0.2s var(--ease-ui);
 }
 .rec-node:hover,
 .rec-node:focus-visible {
@@ -282,7 +282,7 @@
   right: 28px;
   opacity: 0;
   transform: translateY(10px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transition: opacity 0.5s var(--ease-ui), transform 0.5s var(--ease-ui);
 }
 .js .rec-beat.active { opacity: 1; transform: none; }
 .rec-hint {
@@ -306,7 +306,7 @@
   background: transparent;
   color: var(--text-dim);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s var(--ease-ui);
 }
 .chip:hover { color: var(--text); border-color: var(--text-dim); }
 .chip-on { background: var(--amber); color: #fffdf9; border-color: var(--amber); }
@@ -320,7 +320,7 @@
   display: flex;
   flex-direction: column;
   scroll-margin-top: 90px;
-  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+  transition: border-color 0.4s var(--ease-ui), box-shadow 0.4s var(--ease-ui);
 }
 .receipt.flash {
   border-color: var(--amber);
@@ -391,7 +391,7 @@
   border-radius: 8px;
   border: 1px solid var(--line-strong);
   color: var(--text);
-  transition: all 0.2s ease;
+  transition: all 0.2s var(--ease-ui);
 }
 .receipt-link:hover { border-color: var(--amber); color: var(--amber); }
 
@@ -448,7 +448,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(80% 80% at 50% 30%, rgba(255,171,82,0.08), transparent), var(--bg-3);
+  background: radial-gradient(80% 80% at 50% 30%, rgba(217,102,10,0.08), transparent), var(--bg-3);
 }
 .win-placeholder span {
   font-family: var(--font-display);
@@ -464,7 +464,7 @@
   object-fit: cover;
   object-position: top center;
   opacity: 0;
-  transition: opacity 0.6s ease;
+  transition: opacity 0.6s var(--ease-ui);
 }
 .win-shot.loaded { opacity: 1; }
 .work-more { margin-top: 10vh; color: var(--text-faint); font-family: var(--font-display); }
@@ -552,7 +552,7 @@
   color: var(--text);
 }
 .colophon-links { display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 16px; }
-.colophon-links a { font-family: var(--font-display); font-size: 0.88rem; color: var(--text-dim); transition: color 0.2s ease; }
+.colophon-links a { font-family: var(--font-display); font-size: 0.88rem; color: var(--text-dim); transition: color 0.2s var(--ease-ui); }
 .colophon-links a:hover { color: var(--amber); }
 .colophon-fine { color: var(--text-faint); font-size: 0.8rem; }
 
@@ -568,14 +568,14 @@
   gap: 14px;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.4s ease, transform 0.4s ease;
+  transition: opacity 0.4s var(--ease-ui), transform 0.4s var(--ease-ui);
 }
 .snav-on { opacity: 1; pointer-events: auto; transform: translateY(-50%) translateX(0); }
 .snav-item { display: flex; align-items: center; gap: 10px; justify-content: flex-end; }
 .snav-node {
   width: 8px; height: 8px; border-radius: 2px;
   background: var(--line-strong);
-  transition: background 0.25s ease, transform 0.25s ease;
+  transition: background 0.25s var(--ease-ui), transform 0.25s var(--ease-ui);
 }
 .snav-label {
   font-family: var(--font-display);
@@ -584,7 +584,7 @@
   color: var(--text-faint);
   opacity: 0;
   transform: translateX(6px);
-  transition: opacity 0.25s ease, transform 0.25s ease, color 0.25s ease;
+  transition: opacity 0.25s var(--ease-ui), transform 0.25s var(--ease-ui), color 0.25s var(--ease-ui);
 }
 .snav-item:hover .snav-label { opacity: 1; transform: none; color: var(--text-dim); }
 .snav-active .snav-node { background: var(--amber); transform: scale(1.25); }
