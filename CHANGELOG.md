@@ -1,12 +1,12 @@
 # Changelog
 
-## 2026-07-12 — Rebuild: "Proof emits light" (Phases B-F, on `rebuild` branch)
+## 2026-07-12 — Rebuild: "Proof carries the color" (Phases B-F, on `rebuild` branch)
 
 Full cinematic rebuild per the master plan. The old GitHub-profile shell is
 demolished (survives in git history); the data layer was kept and extended.
 
 **Added**
-- Dark "Proof emits light" design system (`globals.css`, `scenes.css`): near-black
+- Light "Proof carries the color" design system (`globals.css`, `scenes.css`): near-white paper
   canvas, one amber accent reserved for verified facts, Space Grotesk display +
   system text, global grain+vignette grade, node motif, glass receipts.
 - Seven scenes: Hero (kinetic reveal + count-ups + ambient grid backdrop), The Bet

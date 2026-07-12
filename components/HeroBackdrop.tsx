@@ -53,7 +53,8 @@ export default function HeroBackdrop() {
         const tw = 0.12 + 0.5 * (0.5 + 0.5 * Math.sin(t * d.sp + d.ph));
         ctx.beginPath();
         ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255,171,82,${(tw * d.a).toFixed(3)})`;
+        // ember specks on paper: the code-driven "grid echo"
+        ctx.fillStyle = `rgba(217,102,10,${(tw * d.a * 0.7).toFixed(3)})`;
         ctx.fill();
       }
       raf = requestAnimationFrame(draw);

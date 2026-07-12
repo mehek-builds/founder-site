@@ -1,33 +1,35 @@
 /* ============================================================================
-   PROOF EMITS LIGHT — the design system.
-   The site is a dark screening room; the only things that glow are receipts.
-   ONE amber accent, reserved exclusively for verified facts and live signals.
-   Never on chrome, headings, or decoration. A visitor learns: amber = real.
+   PROOF CARRIES THE COLOR — the design system.
+   A bright, clean gallery. Near-white paper canvas, ink typography, generous
+   whitespace. ONE ember accent, reserved exclusively for verified facts and
+   live signals: numbers, lit nodes, the now chip. Never on chrome, headings,
+   or decoration. A visitor learns the rule without being told: ember = real.
    ============================================================================ */
 
 :root {
-  /* Canvas: near-black, our own palette (not GitHub's). Empty space stays dark. */
-  --bg: #08080a;
-  --bg-2: #0d0d11;
-  --bg-3: #131319;
-  --glass: rgba(22, 22, 28, 0.55);
-  --glass-border: rgba(255, 255, 255, 0.09);
-  --line: rgba(255, 255, 255, 0.08);
-  --line-strong: rgba(255, 255, 255, 0.16);
+  /* Canvas: warm near-white paper. Empty space stays quiet paper. */
+  --bg: #f7f5f0;
+  --bg-2: #f0ede5;
+  --bg-3: #eae6dc;
+  /* Paper cards: white with a hairline border and a soft shadow (not glass). */
+  --glass: #fffefb;
+  --glass-border: rgba(24, 20, 12, 0.1);
+  --line: rgba(24, 20, 12, 0.09);
+  --line-strong: rgba(24, 20, 12, 0.17);
 
-  /* Text: quiet by default so proof stands out. */
-  --text: #ecebee;
-  --text-dim: #9a9aa4;
-  --text-faint: #5a5a63;
+  /* Ink text: quiet by default so proof (the color) stands out. */
+  --text: #1b1a17;
+  --text-dim: #5f5b52;
+  --text-faint: #a29c8f;
 
-  /* The one accent. Amber = verified. Four luminance steps for the grid. */
-  --amber: #ffab52;
-  --amber-bright: #ffc274;
-  --amber-glow: rgba(255, 171, 82, 0.55);
-  --lum-0: #5c3f1f; /* content    — dimmest */
-  --lum-1: #9a6a2c; /* leading    */
-  --lum-2: #d68f38; /* inventions */
-  --lum-3: #ffab52; /* ventures   — brightest */
+  /* The one accent. Ember = verified. Four steps for the grid, strong→light. */
+  --amber: #d9660a;
+  --amber-bright: #b9540a;
+  --amber-glow: rgba(217, 102, 10, 0.32);
+  --lum-0: #f0c69a; /* content    — lightest */
+  --lum-1: #eba967; /* leading    */
+  --lum-2: #e2842f; /* inventions */
+  --lum-3: #d9660a; /* ventures   — strongest */
 
   --radius: 14px;
   --radius-sm: 9px;
@@ -67,8 +69,8 @@ body {
   overflow-x: hidden;
 }
 
-/* The single film grade: grain + vignette overlay, so seven scenes read as one
-   continuous film, not stacked sections. Fixed, pointer-transparent, on top. */
+/* The single film grade: paper grain + a faint warm tint (no vignette), so the
+   seven scenes read as one continuous gallery. Fixed, pointer-transparent. */
 .grade {
   position: fixed;
   inset: 0;
@@ -76,22 +78,22 @@ body {
   z-index: 9000;
 }
 .grade::before {
-  /* vignette */
+  /* warm paper tint, edges very slightly warmer */
   content: "";
   position: absolute;
   inset: 0;
   background: radial-gradient(
-    130% 100% at 50% 40%,
-    transparent 55%,
-    rgba(0, 0, 0, 0.55) 100%
+    130% 110% at 50% 30%,
+    transparent 60%,
+    rgba(180, 120, 40, 0.05) 100%
   );
 }
 .grade::after {
-  /* fine grain via SVG noise, very subtle */
+  /* fine paper grain via SVG noise, very subtle */
   content: "";
   position: absolute;
   inset: -50%;
-  opacity: 0.035;
+  opacity: 0.025;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
@@ -134,7 +136,7 @@ a {
   position: relative;
 }
 
-/* Oversized kinetic title-card type. Near-black, one line. */
+/* Oversized kinetic title-card type. Ink, one line. */
 .titlecard {
   font-family: var(--font-display);
   font-weight: 500;
@@ -176,13 +178,12 @@ a {
   }
 }
 
-/* Glass receipt cards. */
+/* Paper receipt cards: white, hairline border, soft shadow (not glass). */
 .glass {
   background: var(--glass);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius);
-  backdrop-filter: blur(14px) saturate(1.2);
-  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  box-shadow: 0 1px 2px rgba(24, 20, 12, 0.04), 0 12px 30px -18px rgba(24, 20, 12, 0.18);
 }
 
 /* Buttons / CTAs */
@@ -207,7 +208,7 @@ a {
 }
 .btn-primary {
   background: var(--amber);
-  color: #1a1207;
+  color: #fffdf9;
   border-color: var(--amber);
 }
 .btn-primary:hover {

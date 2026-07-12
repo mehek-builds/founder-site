@@ -24,7 +24,7 @@
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: radial-gradient(70% 60% at 50% 42%, rgba(8, 8, 10, 0.4), var(--bg) 82%);
+  background: radial-gradient(75% 65% at 50% 42%, transparent, var(--bg) 85%);
 }
 .hero-inner {
   position: relative;
@@ -74,7 +74,7 @@
   padding: 8px 16px 8px 14px;
   border: 1px solid var(--line-strong);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.02);
+  background: #fffefb;
   margin: 0 0 22px;
 }
 .hero-sub {
@@ -238,9 +238,10 @@
   width: max-content;
   max-width: 220px;
   padding: 8px 11px;
-  background: #16161c;
+  background: var(--glass);
   border: 1px solid var(--line-strong);
   border-radius: 8px;
+  box-shadow: 0 8px 24px -12px rgba(24, 20, 12, 0.28);
   text-align: left;
   pointer-events: none;
   z-index: 10;
@@ -308,7 +309,7 @@
   transition: all 0.2s ease;
 }
 .chip:hover { color: var(--text); border-color: var(--text-dim); }
-.chip-on { background: var(--amber); color: #1a1207; border-color: var(--amber); }
+.chip-on { background: var(--amber); color: #fffdf9; border-color: var(--amber); }
 .receipt-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -415,14 +416,14 @@
 .win-frame {
   overflow: hidden;
   border-radius: 12px;
-  box-shadow: 0 40px 90px -40px rgba(0, 0, 0, 0.9);
+  box-shadow: 0 30px 70px -34px rgba(24, 20, 12, 0.35);
 }
 .win-bar {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 10px 14px;
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(24, 20, 12, 0.03);
   border-bottom: 1px solid var(--line);
 }
 .win-dots { display: inline-flex; gap: 6px; }
@@ -431,7 +432,7 @@
   font-family: var(--font-display);
   font-size: 0.78rem;
   color: var(--text-faint);
-  background: rgba(0,0,0,0.25);
+  background: rgba(24, 20, 12, 0.05);
   padding: 3px 12px;
   border-radius: 6px;
 }
@@ -594,7 +595,7 @@
   position: fixed;
   inset: 0;
   z-index: 9500;
-  background: rgba(4, 4, 6, 0.7);
+  background: rgba(24, 20, 12, 0.35);
   backdrop-filter: blur(3px);
   display: flex;
   align-items: center;

@@ -14,7 +14,7 @@ this file is the in-repo enforcement copy. A code editor must never break these.
 | Numbers ledger | Spark $14K; VCA 120 students; Tonee 100+ users in 8 weeks; intern/analyst titles are data only, never rendered. |
 | Higgsfield hero | One ambient loop allowed, real-asset-derived, PNG fallback. v1 ships an abstract canvas render of the grid (a real Higgsfield loop can swap into HeroBackdrop later). |
 | Motion system | GSAP only, one token set (`lib/motion.ts`). No Lenis, no Framer Motion at v1. |
-| Theme | "Proof emits light", dark-only v1. |
+| Theme | "Proof carries the color", light-only v1 (Mehek rejected dark 2026-07-12; bright clean gallery, near-white paper, ink type, ember reserved for verified facts). |
 
 ## Standing laws (build gates)
 

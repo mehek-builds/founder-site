@@ -1,7 +1,8 @@
 # Architecture
 
 Next.js 15 (app router) / React 19 / TypeScript, static-exported (SSG). GSAP +
-ScrollTrigger is the single motion system. Dark-only "Proof emits light" theme.
+ScrollTrigger is the single motion system. Light-only "Proof carries the color"
+theme (near-white paper, ink type, one ember accent for verified facts).
 
 ## Data flow (one source of truth)
 
