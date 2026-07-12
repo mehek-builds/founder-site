@@ -213,17 +213,18 @@ a {
   background: transparent;
 }
 .btn:hover {
-  border-color: var(--amber);
+  border-color: var(--text);
   transform: translateY(-1px);
 }
+/* Ink fill, not ember: the accent stays reserved for verified facts (design law 1). */
 .btn-primary {
-  background: var(--amber);
-  color: #fffdf9;
-  border-color: var(--amber);
+  background: var(--text);
+  color: var(--bg);
+  border-color: var(--text);
 }
 .btn-primary:hover {
-  background: var(--amber-bright);
-  border-color: var(--amber-bright);
+  background: #000;
+  border-color: #000;
 }
 
 .eyebrow {

@@ -235,6 +235,7 @@ export const ITEMS: Item[] = [
     date: "2026-05-25",
     weight: 2,
     status: "shipped",
+    metrics: [{ label: "Teardowns", value: "20+" }],
   },
   {
     slug: "graphify",
@@ -263,6 +264,7 @@ export const ITEMS: Item[] = [
     date: "2026-06-11",
     weight: 2,
     status: "shipped",
+    metrics: [{ label: "Portal apps", value: "3" }],
   },
   {
     slug: "dubai-internship-tracker",
@@ -395,6 +397,7 @@ export const ITEMS: Item[] = [
     weight: 2,
     status: "client-engagement",
     clientWork: true,
+    metrics: [{ label: "Scan cadence", value: "3h" }],
   },
   {
     slug: "rolequick",

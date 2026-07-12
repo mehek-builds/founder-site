@@ -36,7 +36,7 @@ function Card({ item }: { item: Item }) {
 
       {isTomb && (
         <p className="receipt-tombline">
-          First startup; the lessons fund everything since.
+          Wound down 2026. First startup; the lessons fund everything since.
         </p>
       )}
 

@@ -32,13 +32,13 @@ const WINS: Win[] = [
   },
   {
     slug: "buildsmart",
-    name: "BuildSmart / Elemental",
+    name: "BuildSmart",
     gloss: "An AI agency with live clients. Systems that source, verify, and send.",
     url: "https://buildsmartagency.com",
     urlLabel: "buildsmartagency.com",
     poster: "/work/buildsmart.jpg",
     video: "/work/buildsmart.mp4",
-    beats: ["651 companies sourced", "Two-sided quality gate", "Double email verification"],
+    beats: ["Live client engagements", "Sources, verifies, sends", "651 companies sourced"],
   },
   {
     slug: "rufescent",
