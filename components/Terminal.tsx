@@ -8,7 +8,7 @@ import { getNow, BUILD_DATE } from "../content/now";
 export default function Terminal() {
   const [open, setOpen] = useState(false);
   const [lines, setLines] = useState<string[]>([
-    "mehek.sh — type `help`, then Enter. Esc to close.",
+    "mehek.sh · type `help`, then Enter. Esc to close.",
   ]);
   const inputRef = useRef<HTMLInputElement>(null);
   const now = getNow(BUILD_DATE);
@@ -36,7 +36,7 @@ export default function Terminal() {
     const out: string[] = [`$ ${raw}`];
     if (cmd === "help") out.push("commands: help · stack · now · clear");
     else if (cmd === "stack")
-      out.push("Next.js · React · TypeScript · GSAP ScrollTrigger. Dark, static-exported, one motion token set.");
+      out.push("Next.js · React · TypeScript · GSAP ScrollTrigger. Light, static-exported, one motion token set.");
     else if (cmd === "now")
       out.push(
         now.stale

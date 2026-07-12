@@ -348,10 +348,7 @@ export const ITEMS: Item[] = [
     date: "2026-06-25",
     weight: 3,
     status: "live",
-    links: [
-      { label: "Live", url: "https://upwork-sniper.vercel.app" },
-      { label: "Code", url: "https://github.com/mehek-builds/upwork-sniper" },
-    ],
+    links: [{ label: "Live", url: "https://upwork-sniper.vercel.app" }],
     makingOf: [
       "Scrapes 20 search terms every two hours.",
       "Scores jobs against a playbook and drafts proposals with Claude.",

@@ -16,7 +16,8 @@ export default function NowFooter() {
           </span>
           {now.stale ? (
             <p className="now-text">
-              Latest ship: <b>{now.lastShip.name}</b>, {now.lastShip.date}.
+              Latest ship: <b>{now.lastShip.name}</b>, {now.lastShip.gloss},{" "}
+              {now.lastShip.date}.
             </p>
           ) : (
             <p className="now-text">
@@ -29,7 +30,7 @@ export default function NowFooter() {
               ) : (
                 <b>{now.lastShip.name}</b>
               )}
-              , {now.lastShip.date}.
+              , {now.lastShip.gloss}, {now.lastShip.date}.
             </p>
           )}
           {now.post && (

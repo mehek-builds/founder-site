@@ -16,11 +16,11 @@ const SITE = "https://mehek-site.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
-  title: "Mehek Mandal — building products",
+  title: "Mehek Mandal: building products",
   description:
     "Young founder who invents, ships, and leads at an unusual rate. A live record of the work, with receipts.",
   openGraph: {
-    title: "Mehek Mandal — building products",
+    title: "Mehek Mandal: building products",
     description:
       "Young founder who invents, ships, and leads at an unusual rate. A live record of the work, with receipts.",
     url: SITE,
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mehek Mandal — building products",
+    title: "Mehek Mandal: building products",
     description:
       "Young founder who invents, ships, and leads at an unusual rate. A live record, with receipts.",
     creator: "@MehekBuilds",
