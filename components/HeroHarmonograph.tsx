@@ -24,10 +24,16 @@ function seed(): Params {
 
 export default function HeroHarmonograph() {
   const ref = useRef<HTMLCanvasElement>(null);
+  const scene = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const canvas = ref.current;
     if (!canvas) return;
+    // Moonlight follows the moon: a soft warm pool cast at its current point.
+    const setMoon = (x: number, y: number) => {
+      scene.current?.style.setProperty("--moon-x", `${x.toFixed(1)}px`);
+      scene.current?.style.setProperty("--moon-y", `${y.toFixed(1)}px`);
+    };
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -67,6 +73,7 @@ export default function HeroHarmonograph() {
       ctx.stroke();
       const [mx, my] = point(42);
       drawMoon(mx, my, 5);
+      setMoon(mx, my);
     };
 
     const resize = () => {
@@ -115,6 +122,7 @@ export default function HeroHarmonograph() {
       ctx.stroke();
       px = lx; py = ly;
       drawMoon(lx, ly, 3.8);
+      setMoon(lx, ly);
 
       // slow drift so the figure keeps evolving
       params.p2 += 0.00018;
@@ -150,5 +158,10 @@ export default function HeroHarmonograph() {
     };
   }, []);
 
-  return <canvas ref={ref} className="hero-harmo" aria-hidden="true" />;
+  return (
+    <div className="hero-moon-scene" ref={scene} aria-hidden="true">
+      <canvas ref={ref} className="hero-harmo" />
+      <div className="hero-moonlight" />
+    </div>
+  );
 }

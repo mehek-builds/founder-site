@@ -12,27 +12,39 @@
   /* faint warm glow, upper-right, for depth behind the node field */
   background: radial-gradient(60% 60% at 74% 26%, rgba(217, 102, 10, 0.07), transparent 62%);
 }
-/* THE HARMONOGRAPH: a single ember moon endlessly draws a slowly-evolving looping
-   curve, trailing and fading like a light-ribbon. Canvas fills the hero. */
+/* THE HARMONOGRAPH + MOONLIGHT: a single ember moon endlessly draws a slowly-
+   evolving looping curve (the ribbon, on canvas) AND casts a soft warm pool of
+   light that follows it (--moon-x / --moon-y), backlighting the name as it
+   passes behind. */
+.hero-moon-scene {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  --moon-x: 42%;
+  --moon-y: 46%;
+}
 .hero-harmo {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  z-index: 0;
   pointer-events: none;
 }
-/* A whisper of a scrim so the ribbon never fights the headline. */
+/* The moonlight: warm light pooled at the moon, brightest at its centre. */
+.hero-moonlight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle 130px at var(--moon-x) var(--moon-y), rgba(255, 190, 120, 0.28), transparent 62%),
+    radial-gradient(circle 340px at var(--moon-x) var(--moon-y), rgba(255, 178, 108, 0.12), transparent 70%);
+}
+/* No paper veil: let the moonlight reach the name for the backlight. */
 .hero-scrim {
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  background: radial-gradient(
-    52% 54% at 30% 44%,
-    rgba(247, 245, 240, 0.55) 26%,
-    transparent 78%
-  );
 }
 .hero-inner {
   position: relative;
