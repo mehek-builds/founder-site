@@ -63,10 +63,6 @@ export default function Person() {
           </p>
           <div className="person-badges reveal">
             <span className="badge">
-              <span className="node" aria-hidden="true" /> Top 1% of USC class,
-              full-tuition merit scholarship
-            </span>
-            <span className="badge">
               <span className="node" aria-hidden="true" /> Dean&apos;s List
             </span>
           </div>

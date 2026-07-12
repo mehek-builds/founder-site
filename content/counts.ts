@@ -16,13 +16,6 @@ export const COUNTS = {
   studentsLed: 120,
   // Client systems shipped, for the Leading scene.
   clientSystems: ITEMS.filter((i) => i.clientWork).length,
-  // Total real nodes on the Record grid.
+  // Total real things on the record (the hero's single "[N] shipped" counter).
   total: ITEMS.length,
 } as const;
-
-// The three hero numerals, in order, ready to render.
-export const HERO_STATS = [
-  { value: COUNTS.live, label: "live" },
-  { value: COUNTS.shipped, label: "shipped" },
-  { value: COUNTS.studentsLed, label: "students led" },
-];

@@ -10,7 +10,7 @@ this file is the in-repo enforcement copy. A code editor must never break these.
 |---|---|
 | The fork | Option B reskin + one cinematic signature scene (The Record). |
 | Hero identity line | "Building products." (copy law: simplest possible text everywhere). |
-| Banned phrase | "Trustee Scholar" NEVER appears. Credential renders de-named: "full-ride merit scholar" / "top 1% of USC class, full-tuition merit scholarship". |
+| Banned phrase | NO mention of the merit scholarship ANYWHERE (Mehek, 2026-07-12): not "Trustee Scholar", not "full-ride merit scholar", not "full-tuition merit scholarship", not "top 1% of USC class". Removed entirely, not de-named. Also: no location/identity tags (Dubai / LA). Current status renders as "on a gap year building products". |
 | Numbers ledger | Spark $14K; VCA 120 students; Tonee 100+ users in 8 weeks; intern/analyst titles are data only, never rendered. |
 | Higgsfield hero | One ambient loop allowed, real-asset-derived, PNG fallback. v1 ships an abstract canvas render of the grid (a real Higgsfield loop can swap into HeroBackdrop later). |
 | Motion system | GSAP only, one token set (`lib/motion.ts`). No Lenis, no Framer Motion at v1. |

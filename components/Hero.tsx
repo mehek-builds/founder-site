@@ -6,7 +6,7 @@ import { ensureGsap } from "../lib/gsap";
 import { whenVisible } from "../lib/visible";
 import CountUp from "./CountUp";
 import HeroBackdrop from "./HeroBackdrop";
-import { HERO_STATS } from "../content/counts";
+import { COUNTS } from "../content/counts";
 import { getNow, BUILD_DATE } from "../content/now";
 
 export default function Hero() {
@@ -44,13 +44,8 @@ export default function Hero() {
         </h1>
 
         <p className="hero-stats hero-fade">
-          {HERO_STATS.map((s, i) => (
-            <span key={s.label} className="hero-stat">
-              <CountUp to={s.value} />
-              <span className="hero-stat-label"> {s.label}</span>
-              {i < HERO_STATS.length - 1 && <span className="hero-dot"> · </span>}
-            </span>
-          ))}
+          <CountUp to={COUNTS.total} />
+          <span className="hero-stat-label"> shipped</span>
         </p>
 
         <p className="hero-chip hero-fade">
@@ -61,7 +56,7 @@ export default function Hero() {
         </p>
 
         <p className="hero-sub hero-fade">
-          CS + Business @ USC, full-ride merit scholar. Dubai / LA.
+          CS + Business @ USC, on a gap year building products.
         </p>
 
         <div className="hero-cta hero-fade">

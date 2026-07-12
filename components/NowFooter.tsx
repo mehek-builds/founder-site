@@ -69,7 +69,7 @@ export default function NowFooter() {
             </a>
             <a href="mailto:mehekman@usc.edu">Email</a>
           </div>
-          <p className="colophon-fine">Mehek Mandal · Dubai / LA · {BUILD_DATE.slice(0, 4)}</p>
+          <p className="colophon-fine">Mehek Mandal · {BUILD_DATE.slice(0, 4)}</p>
         </div>
       </div>
       <Terminal />
