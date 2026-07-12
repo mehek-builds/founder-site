@@ -18,11 +18,11 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE),
   title: "Mehek Mandal: building products",
   description:
-    "Young founder who invents, ships, and leads at an unusual rate. A live record of the work, with receipts.",
+    "A live record of the work, with receipts.",
   openGraph: {
     title: "Mehek Mandal: building products",
     description:
-      "Young founder who invents, ships, and leads at an unusual rate. A live record of the work, with receipts.",
+      "A live record of the work, with receipts.",
     url: SITE,
     siteName: "Mehek Mandal",
     images: ["/og.png"],
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Mehek Mandal: building products",
     description:
-      "Young founder who invents, ships, and leads at an unusual rate. A live record, with receipts.",
+      "A live record of the work, with receipts.",
     creator: "@MehekBuilds",
     images: ["/og.png"],
   },

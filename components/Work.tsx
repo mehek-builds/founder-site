@@ -5,6 +5,7 @@
 import { useEffect, useRef } from "react";
 import { ensureGsap } from "../lib/gsap";
 import { whenVisible } from "../lib/visible";
+import { COUNTS } from "../content/counts";
 
 interface Win {
   slug: string; // receipt anchor
@@ -188,7 +189,9 @@ export default function Work() {
           <Window key={w.slug} win={w} i={i} />
         ))}
       </div>
-      <p className="wrap work-more reveal">plus the full record above ↑</p>
+      <p className="wrap work-more reveal">
+        plus {COUNTS.total - WINS.length} more in the record above ↑
+      </p>
     </section>
   );
 }
