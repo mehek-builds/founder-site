@@ -1,72 +1,69 @@
+// The single source of truth for the site. Grid nodes, receipts, the Work
+// windows, the Leading scene, and every hero/scene count all derive from this
+// file (see content/counts.ts). RULE: the site never states anything Mehek
+// cannot back in a phone call. Every oneLiner IS a stranger-readable gloss;
+// every proper noun in copy is either traditionally recognized or glossed.
+
 export type Pillar = "ventures" | "inventions" | "leadership" | "content";
+
+// Honest state of the thing. Drives the receipt state note and the hero counts.
+// "role" = a position led/held (leadership orgs), not a shipped artifact.
+export type Status =
+  | "live" // deployed and currently running
+  | "shipped" // built and reached users, not a maintained live URL
+  | "client-engagement" // paid client work
+  | "wound-down" // built, then deliberately ended
+  | "role"; // a program/team led
 
 export interface Item {
   slug: string;
   title: string;
   pillar: Pillar;
-  oneLiner: string;
+  oneLiner: string; // the gloss: says what this is to a stranger, in plain terms
   description: string;
-  date: string; // YYYY-MM-DD, the day the square sits on
+  date: string; // YYYY-MM-DD, the day the node sits on
   end?: string;
   weight: 1 | 2 | 3 | 4;
+  status: Status;
   metrics?: { label: string; value: string }[];
   tech?: string[];
   links?: { label: string; url: string }[];
+  makingOf?: string[]; // weight 3-4 only: real, dated, phone-call-backable process facts
+  clientWork?: boolean; // feeds the Leading scene "[N] client systems" count
+  watch?: string; // captured demo URL (fills over time; empty at v1)
   image?: string;
 }
 
 export interface PillarDef {
   key: Pillar;
-  repoName: string;
-  description: string;
-  language: { label: string; color: string };
-  headlineMetric: string;
+  label: string;
+  gloss: string;
+  // Luminance step inside the single amber family (design law: one accent hue,
+  // four brightness steps, the way GitHub uses four greens). 0 = dimmest.
+  lum: number;
 }
 
+// One accent hue, four luminance steps: the one-accent law is never broken by
+// the grid. Row position + label distinguish pillars; luminance distinguishes.
 export const PILLARS: PillarDef[] = [
-  {
-    key: "ventures",
-    repoName: "ventures",
-    description: "Companies and client work with real money at stake.",
-    language: { label: "Revenue", color: "#f1e05a" },
-    headlineMetric: "5 live",
-  },
-  {
-    key: "inventions",
-    repoName: "inventions",
-    description: "Products and tools shipped, roughly one a week.",
-    language: { label: "TypeScript", color: "#3178c6" },
-    headlineMetric: "11 shipped",
-  },
-  {
-    key: "leadership",
-    repoName: "leadership",
-    description: "People, budgets, and programs led at USC.",
-    language: { label: "People", color: "#e34c26" },
-    headlineMetric: "120 students led",
-  },
-  {
-    key: "content",
-    repoName: "content",
-    description: "Building in public as @mehek.builds.",
-    language: { label: "Storytelling", color: "#da5b9f" },
-    headlineMetric: "posting weekly",
-  },
+  { key: "ventures", label: "Ventures", gloss: "companies and client work with real money at stake", lum: 3 },
+  { key: "inventions", label: "Inventions", gloss: "products and tools shipped, roughly one a week", lum: 2 },
+  { key: "leadership", label: "Leading", gloss: "people, budgets, and programs led", lum: 1 },
+  { key: "content", label: "Content", gloss: "building in public as @mehek.builds", lum: 0 },
 ];
 
-// Canonical numbers per the spec ledger (2026-07-08): Spark SC = $14K,
-// VCA = 120 students. Client entries stay publish-safe: no deal terms.
 export const ITEMS: Item[] = [
   {
     slug: "usc-aim-product-lead",
     title: "USC AIM product lead",
     pillar: "leadership",
-    oneLiner: "Led a 4-person team through 6 design sprints.",
+    oneLiner: "Product lead for a campus mobile-ordering redesign.",
     description:
-      "Product lead for the Einstein Bros. mobile ordering redesign inside USC's Association of Innovative Marketing: 35 user interviews, 350 surveys, and a checkout A/B test that lifted completion 9.6%.",
+      "Product lead inside USC's Association of Innovative Marketing for a mobile-ordering redesign: 35 user interviews, 350 surveys, and a checkout A/B test that lifted completion 9.6%.",
     date: "2024-08-26",
     end: "2024-12-15",
     weight: 2,
+    status: "role",
     metrics: [
       { label: "Team", value: "4 people" },
       { label: "Completion lift", value: "+9.6%" },
@@ -74,162 +71,209 @@ export const ITEMS: Item[] = [
   },
   {
     slug: "vca-president",
-    title: "Venture Capital Academy, president",
+    title: "Venture Capital Academy",
     pillar: "leadership",
-    oneLiner: "USC's first student VC program: 120 students.",
+    oneLiner: "Venture Capital Academy, USC's first student VC program.",
     description:
-      "Launched and led USC's first student venture capital program: 120 students through an 8-week sourcing and diligence curriculum, with Bay Area firm visits to Lightspeed, NEA, and Altos Ventures.",
+      "Built and led USC's first student venture capital program: 120 students through an 8-week sourcing and diligence curriculum, with Bay Area visits to the firms Lightspeed, NEA, and Altos Ventures.",
     date: "2025-01-15",
     end: "2025-12-15",
     weight: 4,
+    status: "role",
     metrics: [
       { label: "Students", value: "120" },
       { label: "Curriculum", value: "8 weeks" },
       { label: "Mentors + VCs", value: "25+" },
     ],
+    makingOf: [
+      "Designed an 8-week sourcing-and-diligence curriculum from scratch.",
+      "Recruited 25+ mentors and investors to guest-teach.",
+      "Organized Bay Area visits to Lightspeed, NEA, and Altos Ventures.",
+      "Grew the first cohort to 120 students.",
+    ],
   },
   {
     slug: "sofi-pm",
-    title: "SoFi, product intern",
+    title: "SoFi",
     pillar: "leadership",
-    oneLiner: "Onboarding funnel analysis across 80K monthly signups.",
+    oneLiner: "SoFi, a consumer fintech: onboarding funnel work.",
     description:
-      "Operator role: analyzed the onboarding funnel for 80K monthly signups, identified the verification step as a 40% drop-off, and shipped research that contributed to a 15% retention improvement.",
+      "Operator role at the consumer fintech SoFi: analyzed the onboarding funnel across 80K monthly signups, found the verification step as a 40% drop-off, and shipped research that fed a 15% retention improvement.",
     date: "2025-02-10",
     end: "2025-05-15",
-    weight: 2,
+    weight: 1,
+    status: "role",
     metrics: [{ label: "Retention", value: "+15%" }],
   },
   {
     slug: "traeco",
     title: "Traeco",
     pillar: "ventures",
-    oneLiner: "First startup, wound down. The lessons fund everything since.",
+    oneLiner: "Traeco, an AI cost-visibility startup. Wound down.",
     description:
-      "AI cost visibility for engineering teams. Ran the full founder loop: user research, positioning, product. Wound down deliberately; the research corpus and instincts carry into every venture after it.",
+      "First startup: AI cost visibility for engineering teams. Ran the full founder loop of user research, positioning, and product. Wound down deliberately; the research corpus and instincts carry into every venture since.",
     date: "2025-03-03",
     weight: 2,
+    status: "wound-down",
   },
   {
     slug: "spark-sc-vp",
-    title: "Spark SC, VP finance and sponsorships",
+    title: "Spark SC",
     pillar: "leadership",
-    oneLiner: "$14K in sponsorships, $27K budget across 12 events.",
+    oneLiner: "Spark SC, USC's student entrepreneurship org: ran the money.",
     description:
-      "VP of finance for USC's entrepreneurship nonprofit: secured $14K across 7 sponsors, managed a $27K budget across 12 events, and improved sponsor renewal from 40% to 71% year over year.",
+      "Ran finance and sponsorships for Spark SC, USC's student entrepreneurship org: secured $14K across 7 sponsors, managed a $27K budget across 12 events, and lifted sponsor renewal from 40% to 71% year over year.",
     date: "2025-05-20",
     weight: 3,
+    status: "role",
     metrics: [
       { label: "Sponsorships", value: "$14K" },
       { label: "Budget", value: "$27K" },
       { label: "Renewal", value: "40% → 71%" },
     ],
+    makingOf: [
+      "Rebuilt the sponsor pitch and pipeline across 7 sponsors.",
+      "Managed a $27K budget across 12 events.",
+      "Lifted sponsor renewal from 40% to 71% year over year.",
+    ],
   },
   {
     slug: "cinematica-pm",
-    title: "Cinematica Labs, program manager",
+    title: "Cinematica Labs",
     pillar: "leadership",
-    oneLiner: "24 mentor-founder pods; missed check-ins cut 18% to 7%.",
+    oneLiner: "Cinematica Labs, a founder mentorship program.",
     description:
-      "Ran mentor-founder matching across 24 pods, built an early-warning system that flagged 12 of 14 at-risk pairings, and drove a 14-point NPS increase over the summer.",
+      "Ran mentor-founder matching at Cinematica Labs, a founder mentorship program: 24 pods, an early-warning system that flagged 12 of 14 at-risk pairings, and a 14-point NPS increase over the summer.",
     date: "2025-06-10",
     end: "2025-08-15",
     weight: 3,
+    status: "role",
     metrics: [
       { label: "Pods", value: "24" },
       { label: "Missed check-ins", value: "18% → 7%" },
+    ],
+    makingOf: [
+      "Ran mentor-founder matching across 24 pods.",
+      "Built an early-warning system that flagged 12 of 14 at-risk pairings.",
+      "Cut missed check-ins from 18% to 7%.",
     ],
   },
   {
     slug: "tonee",
     title: "Tonee",
     pillar: "ventures",
-    oneLiner: "AI texting tone detector. 100+ users in 8 weeks.",
+    oneLiner: "Tonee, an AI texting tone detector.",
     description:
-      "Founded and shipped an AI tone detector for texting: model fine-tuning through iOS deployment, a Core ML migration that cut latency from 2.3s to 0.1s, and 8,300+ annotations from 47 user interviews.",
+      "Founded and shipped an AI tone detector for texting: model fine-tuning through iOS deployment, a Core ML migration that cut latency from 2.3s to 0.1s, and 8,300+ annotations from 47 user interviews. 100+ users in 8 weeks.",
     date: "2025-09-15",
     weight: 3,
+    status: "shipped",
     metrics: [
-      { label: "Users", value: "100+" },
+      { label: "Users", value: "100+ in 8 weeks" },
       { label: "Latency", value: "2.3s → 0.1s" },
       { label: "Accuracy", value: "78% → 89%" },
     ],
     tech: ["Swift", "Core ML", "Python"],
+    makingOf: [
+      "Fine-tuned the tone model on 8,300+ annotations from 47 interviews.",
+      "Migrated inference to Core ML, cutting latency from 2.3s to 0.1s.",
+      "Shipped end to end, from model to iOS deployment.",
+      "Raised accuracy from 78% to 89%.",
+    ],
   },
   {
     slug: "fitness-tracker",
     title: "Fitness tracker",
     pillar: "inventions",
-    oneLiner: "HealthKit + GPT-4o food scans.",
+    oneLiner: "A health app with food-photo calorie scanning.",
     description:
-      "Full health app: real HealthKit integration, GPT-4o + USDA food scanning, FastAPI backend with an Expo client.",
+      "Full health app: real HealthKit integration, GPT-4o and USDA food-photo scanning, and a FastAPI backend behind an Expo client.",
     date: "2025-12-05",
     weight: 2,
+    status: "shipped",
     tech: ["FastAPI", "Expo", "HealthKit"],
-    links: [{ label: "Repo", url: "https://github.com/mehek-builds/fitness-tracker" }],
+    links: [{ label: "Code", url: "https://github.com/mehek-builds/fitness-tracker" }],
   },
   {
     slug: "hivemind",
     title: "HiveMind",
     pillar: "inventions",
-    oneLiner: "Optimize it all.",
-    description: "Optimization tooling in Python; one of the pinned public repos.",
+    oneLiner: "HiveMind, a codebase knowledge-graph tool.",
+    description:
+      "Turns a codebase into a navigable knowledge graph: clustered communities, an HTML view, and an audit report. One of the pinned public repos.",
     date: "2026-02-14",
     weight: 2,
+    status: "shipped",
     tech: ["Python"],
-    links: [{ label: "Repo", url: "https://github.com/mehek-builds/HiveMind" }],
+    links: [{ label: "Code", url: "https://github.com/mehek-builds/HiveMind" }],
   },
   {
     slug: "buildsmart",
-    title: "BuildSmart agency",
+    title: "BuildSmart",
     pillar: "ventures",
-    oneLiner: "AI agency with live clients and a cold-outreach engine.",
+    oneLiner: "BuildSmart, an AI agency with live clients.",
     description:
-      "Founded an AI agency (cash track): live client engagements, a verified-contact outreach pipeline with deliverability engineering, and a daily automation that advances 10 net-new companies to send-ready.",
+      "Founded an AI agency on the cash track: live client engagements, a verified-contact outreach pipeline with real deliverability engineering, and a daily automation that advances 10 net-new companies to send-ready.",
     date: "2026-05-12",
     weight: 4,
-    links: [{ label: "Site", url: "https://buildsmartagency.com" }],
+    status: "live",
+    links: [{ label: "Live", url: "https://buildsmartagency.com" }],
+    makingOf: [
+      "Built a verified-contact outreach pipeline (Hunter + Reoon + Apollo).",
+      "Engineered deliverability: DMARC, domain warmup, bounce control.",
+      "A daily automation advances 10 net-new companies to send-ready.",
+      "Live client engagements sold and delivered end to end.",
+    ],
   },
   {
     slug: "creator-corpus",
     title: "Creator research corpus",
     pillar: "content",
-    oneLiner: "20+ creator teardowns feeding the growth playbook to 1M.",
+    oneLiner: "20+ creator teardowns behind the growth playbook.",
     description:
-      "Deep teardowns of 20+ creators with platform roadmaps, benchmarks, and a gap analysis to 1M followers; the strategy layer under @mehek.builds.",
+      "Deep teardowns of 20+ creators with platform roadmaps, benchmarks, and a gap analysis to 1M followers: the strategy layer under @mehek.builds.",
     date: "2026-05-25",
     weight: 2,
+    status: "shipped",
   },
   {
     slug: "graphify",
     title: "graphify",
     pillar: "inventions",
-    oneLiner: "Any input becomes a knowledge graph.",
+    oneLiner: "graphify, a tool that turns any input into a knowledge graph.",
     description:
-      "Code, docs, papers, or images in; clustered knowledge-graph communities out, with HTML output and an audit report. Used across the vault and codebases.",
+      "Code, docs, papers, or images in; clustered knowledge-graph communities out, with an HTML view and an audit report. Used across the vault and codebases.",
     date: "2026-06-08",
     weight: 3,
+    status: "shipped",
     tech: ["Python"],
+    makingOf: [
+      "Parses code, docs, papers, or images into one knowledge graph.",
+      "Clusters nodes into communities with an audit report.",
+      "Outputs interactive HTML, used across the vault and codebases.",
+    ],
   },
   {
     slug: "g42-agent",
     title: "G42 AI agent",
     pillar: "inventions",
-    oneLiner: "Three portal applications submitted ahead of deadline.",
+    oneLiner: "An AI agent built for G42, a UAE AI group.",
     description:
-      "Built and submitted an AI agent across three G42 portal applications with a live evaluation URL kept up through review week.",
+      "Built and submitted an AI agent across three application portals for G42, a UAE AI group, with a live evaluation URL kept up through review week.",
     date: "2026-06-11",
     weight: 2,
+    status: "shipped",
   },
   {
     slug: "dubai-internship-tracker",
     title: "Dubai internship tracker",
     pillar: "inventions",
-    oneLiner: "61 verified roles, self-updating daily.",
+    oneLiner: "A live tracker of 61 verified Dubai roles.",
     description:
-      "Live tracker of 61 verified Dubai roles with pay estimates, priority buckets, and a weekday agent that re-verifies on employer ATS pages and redeploys itself.",
+      "Live tracker of 61 verified Dubai roles with pay estimates and priority buckets, plus a weekday agent that re-verifies on employer application pages and redeploys itself.",
     date: "2026-06-12",
     weight: 2,
+    status: "live",
     links: [{ label: "Live", url: "https://dubai-internship-tracker.vercel.app" }],
   },
   {
@@ -238,93 +282,159 @@ export const ITEMS: Item[] = [
     pillar: "content",
     oneLiner: "@mehek.builds: one product a week, documented.",
     description:
-      "The audience engine: build-in-public content targeting US startup and AI-builder audiences, with a timed posting system and weekly shoot batches.",
+      "The audience engine: build-in-public content aimed at US startup and AI-builder audiences, on a timed posting system with weekly shoot batches.",
     date: "2026-06-16",
     weight: 3,
+    status: "live",
     links: [{ label: "X", url: "https://x.com/MehekBuilds" }],
+    makingOf: [
+      "One product a week, documented publicly as @mehek.builds.",
+      "Timed posting system tuned to US startup and AI-builder audiences.",
+      "Weekly shoot batches feed the content engine.",
+    ],
   },
   {
     slug: "icra-validator",
     title: "ICRA rationale validator",
     pillar: "ventures",
-    oneLiner: "9 real rating docs validated, 0 false positives.",
+    oneLiner: "A rating-document validator for ICRA, an Indian credit rating agency.",
     description:
-      "Validation web app for a credit rating agency: upload a rationale PDF, extract claims, run deterministic checks, highlight discrepancies with one-click fixes and an audit trail.",
+      "Validation web app for ICRA, an Indian credit rating agency: upload a rationale PDF, extract claims, run deterministic checks, and highlight discrepancies with one-click fixes and an audit trail.",
     date: "2026-06-18",
     weight: 3,
+    status: "live",
+    clientWork: true,
     metrics: [
       { label: "Docs validated", value: "9" },
       { label: "False positives", value: "0" },
     ],
     links: [{ label: "Live", url: "https://icra-validator.vercel.app" }],
+    makingOf: [
+      "Claude extracts claims from a rationale PDF.",
+      "Deterministic checks flag discrepancies with an audit trail.",
+      "One-click swap fixes a flagged claim.",
+      "Verified on 9 real rating docs with 0 false positives.",
+    ],
   },
   {
     slug: "letterstory",
     title: "LetterStory engagement",
     pillar: "ventures",
-    oneLiner: "Paid trial: 651 leads sourced, outreach console shipped.",
+    oneLiner: "An outreach system for LetterStory, a NYC dev-tools startup.",
     description:
-      "Paid engagement for a NYC dev-tools startup: sourced and quality-gated 651 Series A-C leads, built the verification pipeline, and shipped a branded outreach console for review and bulk send.",
+      "Paid engagement for LetterStory, a NYC dev-tools startup: sourced and quality-gated 651 Series A-C leads, built the verification pipeline, and shipped a branded outreach console for review and bulk send.",
     date: "2026-06-20",
     weight: 3,
+    status: "client-engagement",
+    clientWork: true,
     metrics: [
       { label: "Leads sourced", value: "651" },
-      { label: "Blog-gate pass", value: "370" },
+      { label: "Passed the quality gate", value: "370" },
+    ],
+    makingOf: [
+      "Sourced 651 Series A-C leads.",
+      "Two-sided quality gate: rejects low-quality AND already-perfect.",
+      "Double email verification (Hunter + Reoon).",
+      "Shipped a branded outreach console for review and bulk send.",
     ],
   },
   {
     slug: "upwork-sniper",
     title: "Upwork Sniper",
     pillar: "inventions",
-    oneLiner: "Scrapes 20 searches every 2h, scores jobs, drafts proposals.",
+    oneLiner: "A dashboard that scores freelance jobs and drafts proposals.",
     description:
-      "A dashboard that scrapes 20 search terms every two hours, scores jobs against a playbook, drafts proposals with Claude, and fills application forms with Playwright.",
+      "A dashboard that scrapes 20 Upwork search terms every two hours, scores jobs against a playbook, drafts proposals with Claude, and fills application forms with Playwright.",
     date: "2026-06-25",
     weight: 3,
-    links: [{ label: "Live", url: "https://upwork-sniper.vercel.app" }],
+    status: "live",
+    links: [
+      { label: "Live", url: "https://upwork-sniper.vercel.app" },
+      { label: "Code", url: "https://github.com/mehek-builds/upwork-sniper" },
+    ],
+    makingOf: [
+      "Scrapes 20 search terms every two hours.",
+      "Scores jobs against a playbook and drafts proposals with Claude.",
+      "Fills application forms with Playwright.",
+    ],
   },
   {
     slug: "pead-system",
-    title: "PEAD trading system",
+    title: "Earnings-drift trading system",
     pillar: "ventures",
-    oneLiner: "Event-driven quant system with an operator dashboard.",
+    oneLiner: "A system that trades the drift after earnings announcements.",
     description:
-      "A post-earnings-announcement-drift trading system: research, signals, and an 8-view operator dashboard with live updates. Systems engineering applied to markets.",
+      "An automated trading system for the drift that follows earnings announcements (PEAD): research, signals, and an 8-view operator dashboard with live updates. Systems engineering applied to markets.",
     date: "2026-06-29",
     weight: 3,
+    status: "live",
     links: [{ label: "Dashboard", url: "https://pead-dashboard.vercel.app" }],
+    makingOf: [
+      "Event-driven signals off post-earnings drift.",
+      "An 8-view operator dashboard with live updates.",
+      "Research, backtest, and execution in one system.",
+    ],
   },
   {
     slug: "goal-journal",
     title: "Goal Journal",
     pillar: "inventions",
-    oneLiner: "Bullet-journal habit tracker, 12 roadmap goals as colors.",
+    oneLiner: "A bullet-journal habit tracker for long-horizon goals.",
     description:
-      "A bullet-journal-style habit tracker mapping 12 long-horizon goals to daily check-offs, with a spreadsheet Grid view.",
+      "A bullet-journal-style habit tracker that maps 12 long-horizon goals to daily check-offs, with a spreadsheet Grid view.",
     date: "2026-07-01",
     weight: 2,
+    status: "live",
     links: [{ label: "Live", url: "https://goal-bujo.vercel.app" }],
   },
   {
     slug: "kodecrafts",
     title: "KodeCrafts engagement",
     pillar: "ventures",
-    oneLiner: "Upwork qualification + application system for an agency client.",
+    oneLiner: "An Upwork qualification and application system for a dev agency.",
     description:
-      "Client engagement: designed a qualification and application system for a dev agency's Upwork pipeline, reusing the Upwork Sniper architecture with a 3-hour scan cadence.",
+      "Client engagement: a qualification and application system for a dev agency's Upwork pipeline, reusing the Upwork Sniper architecture on a 3-hour scan cadence.",
     date: "2026-07-02",
     weight: 2,
+    status: "client-engagement",
+    clientWork: true,
   },
   {
     slug: "rolequick",
-    title: "RoleQuick / Volley",
+    title: "RoleQuick",
     pillar: "ventures",
-    oneLiner: "Chrome extension + dashboard: autofill, resume gen, store-listed.",
+    oneLiner: "RoleQuick, a Chrome extension that autofills job applications.",
     description:
-      "Job application copilot: a Chrome Web Store extension that answers every application question, generates tailored resumes, plus a full product dashboard and cinematic marketing site.",
+      "Job-application copilot: a Chrome extension that answers every application question, generates tailored resumes, plus a full product dashboard and a cinematic marketing site.",
     date: "2026-07-04",
     weight: 4,
-    metrics: [{ label: "Distribution", value: "Chrome Web Store" }],
-    links: [{ label: "Site", url: "https://role-quick-website.vercel.app" }],
+    status: "live",
+    links: [{ label: "Live", url: "https://role-quick-website.vercel.app" }],
+    makingOf: [
+      "A Chrome extension answers every application question.",
+      "Generates tailored resumes on the fly.",
+      "A full 5-view product dashboard on a live backend.",
+      "A cinematic marketing site with a baked scroll film.",
+    ],
+  },
+  {
+    // ADDED per master-plan items.ts delta rule 9 (missing from spec §8).
+    slug: "rufescent",
+    title: "Rufescent film site",
+    pillar: "ventures",
+    oneLiner: "A scroll-driven cinematic site for a Dubai members club.",
+    description:
+      "A scroll-driven cinematic website for a Dubai members club, where the scroll is the camera. Built on an in-house GSAP scrub engine with motion anchored on real location frames.",
+    date: "2026-07-10",
+    weight: 3,
+    status: "live",
+    clientWork: true,
+    links: [{ label: "Live", url: "https://rufescent-site.vercel.app" }],
+    makingOf: [
+      "GSAP ScrollTrigger scrub engine: the scroll is the camera.",
+      "Motion anchored on real location frames, not invented scenery.",
+      "Per-segment lazy loading under a strict media budget.",
+      "The same craft this founder site is built on.",
+    ],
   },
 ];
