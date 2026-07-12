@@ -182,7 +182,6 @@ export default function Work() {
     <section className="scene work" id="flagships" aria-label="The work">
       <div className="wrap">
         <p className="eyebrow work-lead reveal">The work</p>
-        <h2 className="work-h reveal">Four I would show you first.</h2>
       </div>
       <div className="wrap work-list">
         {WINS.map((w, i) => (

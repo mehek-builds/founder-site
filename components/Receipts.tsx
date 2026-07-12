@@ -141,7 +141,7 @@ export default function Receipts() {
         <div className="receipts-head">
           <p className="eyebrow">The receipts</p>
           <p className="receipts-sub">
-            Every node above, with the proof. Filter by track.
+            Every node above, with the proof.
           </p>
           <div className="chips" role="tablist" aria-label="Filter by pillar">
             <button

@@ -51,9 +51,6 @@ export default function Bet() {
             </p>
           ))}
         </div>
-        <a className="bet-more reveal" href="#record">
-          the record ↓
-        </a>
       </div>
     </section>
   );

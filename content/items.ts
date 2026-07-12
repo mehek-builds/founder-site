@@ -75,7 +75,7 @@ export const ITEMS: Item[] = [
     pillar: "leadership",
     oneLiner: "Venture Capital Academy, USC's first student VC program.",
     description:
-      "Built and led USC's first student venture capital program: 120 students through an 8-week sourcing and diligence curriculum, with Bay Area visits to the firms Lightspeed, NEA, and Altos Ventures.",
+      "Built and led USC's first student venture capital program, from a blank page to a full cohort.",
     date: "2025-01-15",
     end: "2025-12-15",
     weight: 4,
@@ -122,7 +122,7 @@ export const ITEMS: Item[] = [
     pillar: "leadership",
     oneLiner: "Spark SC, USC's student entrepreneurship org: ran the money.",
     description:
-      "Ran finance and sponsorships for Spark SC, USC's student entrepreneurship org: secured $14K across 7 sponsors, managed a $27K budget across 12 events, and lifted sponsor renewal from 40% to 71% year over year.",
+      "Ran finance and sponsorships for Spark SC, USC's student entrepreneurship org.",
     date: "2025-05-20",
     weight: 3,
     status: "role",
@@ -143,7 +143,7 @@ export const ITEMS: Item[] = [
     pillar: "leadership",
     oneLiner: "Cinematica Labs, a founder mentorship program.",
     description:
-      "Ran mentor-founder matching at Cinematica Labs, a founder mentorship program: 24 pods, an early-warning system that flagged 12 of 14 at-risk pairings, and a 14-point NPS increase over the summer.",
+      "Ran mentor-founder matching at Cinematica Labs, a founder mentorship program. NPS up 14 points over the summer.",
     date: "2025-06-10",
     end: "2025-08-15",
     weight: 3,
@@ -164,7 +164,7 @@ export const ITEMS: Item[] = [
     pillar: "ventures",
     oneLiner: "Tonee, an AI texting tone detector.",
     description:
-      "Founded and shipped an AI tone detector for texting: model fine-tuning through iOS deployment, a Core ML migration that cut latency from 2.3s to 0.1s, and 8,300+ annotations from 47 user interviews. 100+ users in 8 weeks.",
+      "Founded and shipped an AI tone detector for texting, from a fine-tuned model to iOS deployment.",
     date: "2025-09-15",
     weight: 3,
     status: "shipped",
@@ -213,7 +213,7 @@ export const ITEMS: Item[] = [
     pillar: "ventures",
     oneLiner: "BuildSmart, an AI agency with live clients.",
     description:
-      "Founded an AI agency on the cash track: live client engagements, a verified-contact outreach pipeline with real deliverability engineering, and a daily automation that advances 10 net-new companies to send-ready.",
+      "Founded an AI agency on the cash track, with live client engagements.",
     date: "2026-05-12",
     weight: 4,
     status: "live",
@@ -243,7 +243,7 @@ export const ITEMS: Item[] = [
     pillar: "inventions",
     oneLiner: "graphify, a tool that turns any input into a knowledge graph.",
     description:
-      "Code, docs, papers, or images in; clustered knowledge-graph communities out, with an HTML view and an audit report. Used across the vault and codebases.",
+      "Any input in; a clustered, navigable knowledge graph out.",
     date: "2026-06-08",
     weight: 3,
     status: "shipped",
@@ -284,7 +284,7 @@ export const ITEMS: Item[] = [
     pillar: "content",
     oneLiner: "@mehek.builds: one product a week, documented.",
     description:
-      "The audience engine: build-in-public content aimed at US startup and AI-builder audiences, on a timed posting system with weekly shoot batches.",
+      "The audience engine behind @mehek.builds: one product a week, documented in public.",
     date: "2026-06-16",
     weight: 3,
     status: "live",
@@ -301,7 +301,7 @@ export const ITEMS: Item[] = [
     pillar: "ventures",
     oneLiner: "A rating-document validator for ICRA, an Indian credit rating agency.",
     description:
-      "Validation web app for ICRA, an Indian credit rating agency: upload a rationale PDF, extract claims, run deterministic checks, and highlight discrepancies with one-click fixes and an audit trail.",
+      "Flags discrepancies in a credit-rating rationale before it publishes, for ICRA, an Indian credit rating agency.",
     date: "2026-06-18",
     weight: 3,
     status: "live",
@@ -324,7 +324,7 @@ export const ITEMS: Item[] = [
     pillar: "ventures",
     oneLiner: "An outreach system for LetterStory, a NYC dev-tools startup.",
     description:
-      "Paid engagement for LetterStory, a NYC dev-tools startup: sourced and quality-gated 651 Series A-C leads, built the verification pipeline, and shipped a branded outreach console for review and bulk send.",
+      "A paid engagement for LetterStory, a NYC dev-tools startup: the full outreach system, from sourcing to a branded send console.",
     date: "2026-06-20",
     weight: 3,
     status: "client-engagement",
@@ -346,7 +346,7 @@ export const ITEMS: Item[] = [
     pillar: "inventions",
     oneLiner: "A dashboard that scores freelance jobs and drafts proposals.",
     description:
-      "A dashboard that scrapes 20 Upwork search terms every two hours, scores jobs against a playbook, drafts proposals with Claude, and fills application forms with Playwright.",
+      "A dashboard that finds the right freelance jobs and does the applying.",
     date: "2026-06-25",
     weight: 3,
     status: "live",
@@ -363,7 +363,7 @@ export const ITEMS: Item[] = [
     pillar: "ventures",
     oneLiner: "A system that trades the drift after earnings announcements.",
     description:
-      "An automated trading system for the drift that follows earnings announcements (PEAD): research, signals, and an 8-view operator dashboard with live updates. Systems engineering applied to markets.",
+      "Systems engineering applied to markets: an automated system for the post-earnings drift (PEAD).",
     date: "2026-06-29",
     weight: 3,
     status: "live",
@@ -405,7 +405,7 @@ export const ITEMS: Item[] = [
     pillar: "ventures",
     oneLiner: "RoleQuick, a Chrome extension that autofills job applications.",
     description:
-      "Job-application copilot: a Chrome extension that answers every application question, generates tailored resumes, plus a full product dashboard and a cinematic marketing site.",
+      "A job-application copilot: open a posting and it tailors the resume, fills the form, and drafts the outreach.",
     date: "2026-07-04",
     weight: 4,
     status: "live",

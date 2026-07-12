@@ -24,8 +24,7 @@ export default function Leading() {
           <p className="lead-line reveal">
             Runs <b>BuildSmart</b>, an AI agency.{" "}
             <CountUp to={COUNTS.clientSystems} />{" "}
-            <span className="lead-unit">client systems shipped</span>, sold and
-            delivered end to end.
+            <span className="lead-unit">client systems shipped</span>.
           </p>
         </div>
       </div>

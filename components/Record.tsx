@@ -143,7 +143,7 @@ export default function Record() {
           ))}
         </div>
       </div>
-      <p className="wrap rec-hint">Every node is real. Click any of them.</p>
+      <p className="wrap rec-hint">Click any node.</p>
     </section>
   );
 }
