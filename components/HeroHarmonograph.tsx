@@ -3,8 +3,11 @@
 // draws a small, compressed, ever-evolving looping curve (a harmonograph: near-
 // integer frequency ratios, slightly detuned so it precesses and never repeats),
 // and casts a cool pool of light that follows it (--moon-x/--moon-y on .hero),
-// which is what reveals the name in ink as it sweeps past. Cursor bends the
-// figure; a letter key reseeds it. Reduced-motion: a static figure, moon parked.
+// which is what reveals the name in ink as it sweeps past. Hovering the hero
+// brightens the moonlight and quickens the draw — the curve's own shape never
+// depends on the cursor, so it can never fragment mid-stroke the way bending
+// it in place did. A letter key reseeds it. Reduced-motion: a static figure,
+// moon parked.
 import { useEffect, useRef } from "react";
 
 interface Params {
@@ -43,15 +46,10 @@ export default function HeroHarmonograph() {
 
     let w = 0, h = 0, cx = 0, cy = 0, A = 0;
     let params = seed();
-    // warpX/Y is what `point()` actually reads; targetWarpX/Y is what the
-    // cursor wants it to be. Easing one toward the other (in step(), once
-    // per frame) instead of snapping it directly keeps consecutive frames
-    // geometrically continuous. Snapping it would retroactively shift where
-    // the curve sits at the same t, so a fast mouse move breaks the new
-    // segment away from where the last frame's stroke ended — with a thin
-    // line that reads as scattered dots instead of a bending curve.
-    let warpX = 0, warpY = 0;
-    let targetWarpX = 0, targetWarpY = 0;
+    // hover eases 0 -> 1 on mouseenter and back on mouseleave (see step()).
+    // It never touches point()'s shape — only draw speed and moonlight glow —
+    // so the curve can't fragment the way cursor-bending it in place did.
+    let hover = 0, hoverTarget = 0;
 
     // Only the line the moon currently sits over should ever be visible at
     // all — not just its ink reveal, but its ghost too. Earlier this only
@@ -94,16 +92,16 @@ export default function HeroHarmonograph() {
 
     const point = (t: number): [number, number] => {
       const { a, b, c, d, p1, p2, p3, p4 } = params;
-      const x = cx + A * 0.5 * (Math.sin(a * t + p1) + Math.sin(b * (1 + warpX * 0.22) * t + p2));
-      const y = cy + A * 0.5 * (Math.sin(c * t + p3) + Math.sin(d * (1 + warpY * 0.22) * t + p4));
+      const x = cx + A * 0.5 * (Math.sin(a * t + p1) + Math.sin(b * t + p2));
+      const y = cy + A * 0.5 * (Math.sin(c * t + p3) + Math.sin(d * t + p4));
       return [x, y];
     };
 
-    const drawMoon = (x: number, y: number, r: number) => {
+    const drawMoon = (x: number, y: number, r: number, glow: number) => {
       ctx.beginPath();
       ctx.fillStyle = "rgba(24,20,12,0.92)";
       ctx.shadowColor = "rgba(24,20,12,0.35)";
-      ctx.shadowBlur = 3;
+      ctx.shadowBlur = 3 + glow * 5;
       ctx.arc(x, y, r, 0, Math.PI * 2);
       ctx.fill();
       ctx.shadowBlur = 0;
@@ -121,7 +119,7 @@ export default function HeroHarmonograph() {
       }
       ctx.stroke();
       const [mx, my] = point(42);
-      drawMoon(mx, my, 3);
+      drawMoon(mx, my, 3, 0);
       setMoon(mx, my);
       setActiveLine(my);
     };
@@ -147,10 +145,9 @@ export default function HeroHarmonograph() {
 
     let t = 0, px = 0, py = 0, started = false, raf = 0;
     const step = () => {
-      // ease actual warp toward the cursor's target (see the warpX/Y comment
-      // above) so the curve's shape drifts continuously frame to frame
-      warpX += (targetWarpX - warpX) * 0.06;
-      warpY += (targetWarpY - warpY) * 0.06;
+      // ease hover 0 -> 1 (or back) instead of snapping, so the glow/speed
+      // bump ramps smoothly rather than jumping the instant the cursor enters
+      hover += (hoverTarget - hover) * 0.06;
 
       // fade the previous ribbon toward transparent (comet trail)
       ctx.globalCompositeOperation = "destination-out";
@@ -169,17 +166,21 @@ export default function HeroHarmonograph() {
       }
       ctx.moveTo(px, py);
       let lx = px, ly = py;
+      // hovering quickens the draw a little (up to ~1.8x), not the shape
+      const speed = 0.001 * (1 + hover * 0.8);
       for (let i = 0; i < 4; i++) {
-        t += 0.001; // much slower draw
+        t += speed;
         const [x, y] = point(t);
         ctx.lineTo(x, y);
         lx = x; ly = y;
       }
       ctx.stroke();
       px = lx; py = ly;
-      drawMoon(lx, ly, 3);
+      drawMoon(lx, ly, 3, hover);
       setMoon(lx, ly);
       setActiveLine(ly);
+      // hovering brightens the moonlight pool (see .hero-moonlight in CSS)
+      heroEl?.style.setProperty("--moon-glow", (1 + hover * 0.55).toFixed(2));
 
       // very slow drift so the figure keeps evolving
       params.p2 += 0.00006;
@@ -187,10 +188,8 @@ export default function HeroHarmonograph() {
       raf = requestAnimationFrame(step);
     };
 
-    const onMove = (e: MouseEvent) => {
-      targetWarpX = e.clientX / window.innerWidth - 0.5;
-      targetWarpY = e.clientY / window.innerHeight - 0.5;
-    };
+    const onEnter = () => { hoverTarget = 1; };
+    const onLeave = () => { hoverTarget = 0; };
     // easter egg: any letter key reseeds the pendulums to a new figure
     const onKey = (e: KeyboardEvent) => {
       const tag = (e.target as HTMLElement)?.tagName;
@@ -203,14 +202,16 @@ export default function HeroHarmonograph() {
       }
     };
 
-    window.addEventListener("mousemove", onMove, { passive: true });
+    heroEl?.addEventListener("mouseenter", onEnter);
+    heroEl?.addEventListener("mouseleave", onLeave);
     window.addEventListener("keydown", onKey);
     step();
 
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
-      window.removeEventListener("mousemove", onMove);
+      heroEl?.removeEventListener("mouseenter", onEnter);
+      heroEl?.removeEventListener("mouseleave", onLeave);
       window.removeEventListener("keydown", onKey);
     };
   }, []);

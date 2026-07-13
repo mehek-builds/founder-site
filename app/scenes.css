@@ -38,6 +38,10 @@
     radial-gradient(circle 70px at var(--moon-x) var(--moon-y), rgba(255, 246, 232, 0.3), transparent 66%),
     radial-gradient(circle 150px at var(--moon-x) var(--moon-y), rgba(214, 228, 246, 0.42), transparent 62%),
     radial-gradient(circle 360px at var(--moon-x) var(--moon-y), rgba(196, 214, 240, 0.18), transparent 72%);
+  /* hovering the hero brightens the pool (JS eases --moon-glow, see
+     HeroHarmonograph.tsx); brightness can exceed 1, unlike opacity */
+  filter: brightness(var(--moon-glow, 1));
+  transition: filter 0.1s linear;
 }
 .hero-inner {
   position: relative;
