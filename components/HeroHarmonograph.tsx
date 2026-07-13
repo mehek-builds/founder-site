@@ -43,7 +43,15 @@ export default function HeroHarmonograph() {
 
     let w = 0, h = 0, cx = 0, cy = 0, A = 0;
     let params = seed();
+    // warpX/Y is what `point()` actually reads; targetWarpX/Y is what the
+    // cursor wants it to be. Easing one toward the other (in step(), once
+    // per frame) instead of snapping it directly keeps consecutive frames
+    // geometrically continuous. Snapping it would retroactively shift where
+    // the curve sits at the same t, so a fast mouse move breaks the new
+    // segment away from where the last frame's stroke ended — with a thin
+    // line that reads as scattered dots instead of a bending curve.
     let warpX = 0, warpY = 0;
+    let targetWarpX = 0, targetWarpY = 0;
 
     // Only the line the moon currently sits over should ever be visible at
     // all — not just its ink reveal, but its ghost too. Earlier this only
@@ -139,6 +147,11 @@ export default function HeroHarmonograph() {
 
     let t = 0, px = 0, py = 0, started = false, raf = 0;
     const step = () => {
+      // ease actual warp toward the cursor's target (see the warpX/Y comment
+      // above) so the curve's shape drifts continuously frame to frame
+      warpX += (targetWarpX - warpX) * 0.06;
+      warpY += (targetWarpY - warpY) * 0.06;
+
       // fade the previous ribbon toward transparent (comet trail)
       ctx.globalCompositeOperation = "destination-out";
       ctx.fillStyle = "rgba(0,0,0,0.03)";
@@ -175,8 +188,8 @@ export default function HeroHarmonograph() {
     };
 
     const onMove = (e: MouseEvent) => {
-      warpX = e.clientX / window.innerWidth - 0.5;
-      warpY = e.clientY / window.innerHeight - 0.5;
+      targetWarpX = e.clientX / window.innerWidth - 0.5;
+      targetWarpY = e.clientY / window.innerHeight - 0.5;
     };
     // easter egg: any letter key reseeds the pendulums to a new figure
     const onKey = (e: KeyboardEvent) => {
