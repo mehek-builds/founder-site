@@ -338,7 +338,6 @@ export const ITEMS: Item[] = [
       "Shipped a branded outreach console for review and bulk send.",
     ],
     nda: true,
-    ndaNote: "The console runs on real client leads, so it stays private. I can walk you through it on a call.",
   },
   {
     slug: "upwork-sniper",
