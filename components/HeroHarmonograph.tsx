@@ -145,7 +145,7 @@ export default function HeroHarmonograph() {
       ctx.fillRect(0, 0, w, h);
       ctx.globalCompositeOperation = "source-over";
 
-      ctx.lineWidth = 0.6;
+      ctx.lineWidth = 0.28;
       ctx.strokeStyle = "rgba(24,20,12,0.38)";
       ctx.lineCap = "round";
       ctx.beginPath();
