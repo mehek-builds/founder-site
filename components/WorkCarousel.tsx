@@ -53,6 +53,15 @@ const CARDS: Card[] = [
     urlLabel: "pead-dashboard.vercel.app",
     poster: "/work/pead.jpg",
   },
+  {
+    slug: "traeco",
+    name: "Traeco",
+    gloss:
+      "AI cost visibility for engineering teams: analyzes agent traces and shows exactly what to cut, giving you the cost and quality impact.",
+    url: "https://traeco.dev",
+    urlLabel: "traeco.dev",
+    poster: "/work/traeco.jpg",
+  },
 ];
 
 function ProductCard({ card, ariaHidden }: { card: Card; ariaHidden?: boolean }) {
