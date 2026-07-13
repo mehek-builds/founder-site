@@ -449,29 +449,6 @@
 .car-card:hover .win-frame { transform: translateY(-4px); border-color: rgba(24, 20, 12, 0.34); }
 .car-name { font-size: clamp(1.3rem, 3vw, 1.7rem); letter-spacing: -0.02em; margin: 0 0 8px; }
 .car-gloss { color: var(--text-dim); font-size: 0.95rem; line-height: 1.55; margin-bottom: 0; }
-/* Confidential client build (LetterStory): no live link, an NDA tab instead */
-.car-card-nda { cursor: default; }
-.car-card-nda:hover .win-frame { transform: none; border-color: var(--line-strong); }
-.win-url-locked { font-style: italic; }
-.car-card-nda .car-gloss { margin-bottom: 14px; }
-.car-nda-tab {
-  display: inline-block;
-  font-family: var(--font-text);
-  font-size: 0.78rem;
-  letter-spacing: 0.02em;
-  color: var(--text);
-  background: rgba(24, 20, 12, 0.05);
-  border: 1px solid var(--line-strong);
-  border-radius: 999px;
-  padding: 5px 13px;
-}
-.car-nda-note {
-  color: var(--text-faint);
-  font-family: var(--font-text);
-  font-size: 0.82rem;
-  line-height: 1.5;
-  margin: 9px 0 0;
-}
 .car-hint { margin-top: 48px; color: var(--text-dim); font-size: 0.9rem; }
 @media (prefers-reduced-motion: reduce) {
   .car-track { animation: none; }
