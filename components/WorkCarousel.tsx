@@ -12,9 +12,13 @@ interface Card {
   slug: string; // receipt anchor
   name: string;
   gloss: string;
-  url: string;
-  urlLabel: string;
-  poster: string;
+  url?: string;
+  urlLabel?: string;
+  poster?: string;
+  // Client builds under NDA (e.g. the LetterStory console holds real lead data
+  // and can never be linked or screenshotted): no live link, an NDA tab instead.
+  nda?: boolean;
+  ndaNote?: string;
 }
 
 const CARDS: Card[] = [
@@ -34,6 +38,14 @@ const CARDS: Card[] = [
     url: "https://buildsmartagency.com",
     urlLabel: "buildsmartagency.com",
     poster: "/work/buildsmart.jpg",
+  },
+  {
+    slug: "letterstory",
+    name: "LetterStory",
+    gloss:
+      "A lead-gen and outreach console built for a NYC dev-tools startup: sources, verifies, and sends at scale.",
+    nda: true,
+    ndaNote: "Built for a client under NDA. I can walk you through it privately.",
   },
   {
     slug: "rufescent",
@@ -65,6 +77,52 @@ const CARDS: Card[] = [
 ];
 
 function ProductCard({ card, ariaHidden }: { card: Card; ariaHidden?: boolean }) {
+  const frame = (
+    <>
+      <div className="win-frame glass">
+        <div className="win-bar" aria-hidden="true">
+          <span className="win-dots">
+            <i /> <i /> <i />
+          </span>
+          <span className={card.nda ? "win-url win-url-locked" : "win-url"}>
+            {card.nda ? "confidential" : card.urlLabel}
+          </span>
+        </div>
+        <div className="win-screen">
+          <div className="win-placeholder" aria-hidden="true">
+            <span>{card.name}</span>
+          </div>
+          {/* rendered visible from the start: cached posters finish loading
+              before hydration, so an onLoad fade-in class can never attach.
+              NDA cards carry no screenshot (client data is never shown). */}
+          {card.poster && (
+            <img
+              className="win-shot loaded"
+              src={card.poster}
+              alt={ariaHidden ? "" : `${card.name} screenshot`}
+              loading="lazy"
+              onError={(e) => (e.currentTarget.style.display = "none")}
+            />
+          )}
+        </div>
+      </div>
+      <h3 className="car-name">{card.name}</h3>
+      <p className="car-gloss">{card.gloss}</p>
+    </>
+  );
+
+  // Confidential client build: no live link, so the card is not a link. It
+  // shows an NDA tab and a short note where the others open a dashboard.
+  if (card.nda) {
+    return (
+      <div className="car-card car-card-nda" aria-hidden={ariaHidden || undefined}>
+        {frame}
+        <span className="car-nda-tab">Under NDA, available upon request</span>
+        {card.ndaNote && <p className="car-nda-note">{card.ndaNote}</p>}
+      </div>
+    );
+  }
+
   return (
     <a
       className="car-card"
@@ -75,30 +133,7 @@ function ProductCard({ card, ariaHidden }: { card: Card; ariaHidden?: boolean })
       tabIndex={ariaHidden ? -1 : undefined}
       aria-label={ariaHidden ? undefined : `${card.name}, open the live site`}
     >
-      <div className="win-frame glass">
-        <div className="win-bar" aria-hidden="true">
-          <span className="win-dots">
-            <i /> <i /> <i />
-          </span>
-          <span className="win-url">{card.urlLabel}</span>
-        </div>
-        <div className="win-screen">
-          <div className="win-placeholder" aria-hidden="true">
-            <span>{card.name}</span>
-          </div>
-          {/* rendered visible from the start: cached posters finish loading
-              before hydration, so an onLoad fade-in class can never attach */}
-          <img
-            className="win-shot loaded"
-            src={card.poster}
-            alt={ariaHidden ? "" : `${card.name} screenshot`}
-            loading="lazy"
-            onError={(e) => (e.currentTarget.style.display = "none")}
-          />
-        </div>
-      </div>
-      <h3 className="car-name">{card.name}</h3>
-      <p className="car-gloss">{card.gloss}</p>
+      {frame}
     </a>
   );
 }
