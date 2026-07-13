@@ -41,6 +41,11 @@ export interface Item {
   // ratified by Mehek); everything else defaults to a one-line ledger row.
   // Grid nodes and derived counts include BOTH tiers.
   tier?: "shelf" | "ledger";
+  // Client work under NDA (e.g. the LetterStory console holds real lead data
+  // and can never be linked or screenshotted). The receipt shows an NDA tag in
+  // place of a live link, plus a short note. Publish-safety, not decoration.
+  nda?: boolean;
+  ndaNote?: string;
 }
 
 export interface PillarDef {
@@ -332,6 +337,8 @@ export const ITEMS: Item[] = [
       "Double email verification (Hunter + Reoon).",
       "Shipped a branded outreach console for review and bulk send.",
     ],
+    nda: true,
+    ndaNote: "The console runs on real client leads, so it stays private. I can walk you through it on a call.",
   },
   {
     slug: "upwork-sniper",

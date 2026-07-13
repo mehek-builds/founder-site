@@ -87,6 +87,12 @@ function Card({ item }: { item: Item }) {
             ))}
           </div>
         )}
+        {item.nda && (
+          <div className="receipt-nda">
+            <span className="receipt-nda-tag">Under NDA, available upon request</span>
+            {item.ndaNote && <p className="receipt-nda-note">{item.ndaNote}</p>}
+          </div>
+        )}
       </div>
     </article>
   );
