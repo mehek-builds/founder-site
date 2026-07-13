@@ -6,8 +6,8 @@
 // Everything else (numbers, contact, status) lives elsewhere on the site.
 import HeroHarmonograph from "./HeroHarmonograph";
 
-const NAME = "Mehek Mandal";
-const TAG = "Building products.";
+const NAME = "mehek mandal";
+const TAG = "building products.";
 
 function Title({ cls }: { cls: string }) {
   return (

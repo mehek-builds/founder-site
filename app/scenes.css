@@ -60,6 +60,9 @@
   display: block;
   padding: 0.02em 0.03em 0.08em;
 }
+.hero-title span + span {
+  margin-top: 0.21em; /* ~20% of the 1.04 line box, opens the name/tagline gap */
+}
 /* ghost: the name barely present in the paper (and the real SSR text). */
 .ht-ghost {
   color: rgba(27, 26, 23, 0.11);
