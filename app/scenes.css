@@ -423,7 +423,9 @@
   display: flex;
   gap: 40px;
   width: max-content;
-  padding: 0 20px;
+  /* vertical padding gives the hover lift (translateY -4px) headroom so the
+     card's top border isn't clipped by .car-viewport's overflow: hidden */
+  padding: 16px 20px;
   /* drift + drag are both JS-driven (WorkCarousel.tsx) via inline translateX */
   cursor: grab;
   touch-action: pan-y; /* horizontal swipes drag the track, vertical still scrolls */
