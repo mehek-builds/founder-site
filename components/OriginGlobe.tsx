@@ -525,7 +525,21 @@ export default function OriginGlobe({ stamp = false }: { stamp?: boolean }) {
       },
       { threshold: 0.35 }
     );
-    io.observe(section);
+    // The load intro (IntroZoomOut) may be flying the Earth into this corner
+    // right now. If so, wait for its baton instead of starting underneath it,
+    // and skip the fade-in: the intro already performed the reveal.
+    const wIntro = window as unknown as { __originIntroRunning?: boolean };
+    const takeBaton = () => {
+      started = true;
+      state.intro = 1;
+      state.seg = 1;
+      state.segTime = 0;
+    };
+    if (stamp && wIntro.__originIntroRunning) {
+      window.addEventListener("origin-intro-done", takeBaton, { once: true });
+    } else {
+      io.observe(section);
+    }
     raf = requestAnimationFrame((t) => { last = t; tick(t); });
     // some embedded webviews suspend rAF; a timer keeps the story playing
     const watchdog = window.setInterval(() => {
@@ -539,6 +553,7 @@ export default function OriginGlobe({ stamp = false }: { stamp?: boolean }) {
       window.clearInterval(watchdog);
       window.clearTimeout(swapTimer);
       window.removeEventListener("resize", resize);
+      window.removeEventListener("origin-intro-done", takeBaton);
       ro?.disconnect();
       io.disconnect();
       railButtons.forEach((b, i) => b.removeEventListener("click", railHandlers[i]));

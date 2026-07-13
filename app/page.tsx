@@ -1,4 +1,5 @@
 import Hero from "@/components/Hero";
+import IntroZoomOut from "@/components/IntroZoomOut";
 import WorkCarousel from "@/components/WorkCarousel";
 import Receipts from "@/components/Receipts";
 import Leading from "@/components/Leading";
@@ -13,6 +14,9 @@ export default function Home() {
     <main>
       <Reveal />
       <StickyNav />
+      {/* IntroZoomOut must mount before the stamp: its layout effect flags the
+          running intro, and the stamp waits for the baton instead of starting */}
+      <IntroZoomOut />
       <OriginGlobe stamp />
       <Hero />
       <WorkCarousel />

@@ -97,6 +97,29 @@
   .ht-ghost { color: var(--text); }
   .hero-lit-layer { display: none; }
 }
+/* The opening: a full-viewport paper cover where the zoom-out globe plays
+   (Earth pulls back through orbit rings toward the sun-glow and stars, then
+   docks into the corner mark). Sits under the grade so the grain applies;
+   fades out as the mark takes the baton. */
+.intro-cover {
+  position: fixed;
+  inset: 0;
+  z-index: 8990;
+  background: var(--bg);
+  transition: opacity 0.4s var(--ease-ui);
+}
+.intro-cover canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.intro-cover-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
 /* The site mark: the origin globe, fixed top-left on every scene like a
    logomark, quietly looping its journey. Clicking it returns to the hero
    (#top). Same layer family as the sticky nav; hides with it below 820px. */
