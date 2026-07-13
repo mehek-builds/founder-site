@@ -66,7 +66,15 @@ const CARDS: Card[] = [
 
 function ProductCard({ card, ariaHidden }: { card: Card; ariaHidden?: boolean }) {
   return (
-    <div className="car-card" aria-hidden={ariaHidden || undefined}>
+    <a
+      className="car-card"
+      href={card.url}
+      target="_blank"
+      rel="noreferrer"
+      aria-hidden={ariaHidden || undefined}
+      tabIndex={ariaHidden ? -1 : undefined}
+      aria-label={ariaHidden ? undefined : `${card.name}, open the live site`}
+    >
       <div className="win-frame glass">
         <div className="win-bar" aria-hidden="true">
           <span className="win-dots">
@@ -91,21 +99,7 @@ function ProductCard({ card, ariaHidden }: { card: Card; ariaHidden?: boolean })
       </div>
       <h3 className="car-name">{card.name}</h3>
       <p className="car-gloss">{card.gloss}</p>
-      <div className="car-actions">
-        <a
-          className="btn btn-primary"
-          href={card.url}
-          target="_blank"
-          rel="noreferrer"
-          tabIndex={ariaHidden ? -1 : undefined}
-        >
-          Open live
-        </a>
-        <a className="btn" href={`#item-${card.slug}`} tabIndex={ariaHidden ? -1 : undefined}>
-          The receipt
-        </a>
-      </div>
-    </div>
+    </a>
   );
 }
 

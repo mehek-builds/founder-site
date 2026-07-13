@@ -431,11 +431,18 @@
 }
 .car-track:active { cursor: grabbing; }
 .car-track img { -webkit-user-drag: none; }
-.car-card { width: min(420px, 78vw); flex: none; }
-.car-card .win-frame { margin-bottom: 18px; }
+.car-card {
+  width: min(420px, 78vw);
+  flex: none;
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+.car-card .win-frame { margin-bottom: 18px; transition: transform 0.3s var(--ease-ui, ease), box-shadow 0.3s var(--ease-ui, ease); }
+.car-card:hover .win-frame { transform: translateY(-4px); }
 .car-name { font-size: clamp(1.3rem, 3vw, 1.7rem); letter-spacing: -0.02em; margin: 0 0 8px; }
-.car-gloss { color: var(--text-dim); font-size: 0.95rem; line-height: 1.55; margin-bottom: 14px; }
-.car-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.car-gloss { color: var(--text-dim); font-size: 0.95rem; line-height: 1.55; margin-bottom: 0; }
 .car-hint { margin-top: 48px; color: var(--text-dim); font-size: 0.9rem; }
 @media (prefers-reduced-motion: reduce) {
   .car-track { animation: none; }
