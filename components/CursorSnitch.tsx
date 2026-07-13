@@ -25,20 +25,33 @@ export default function CursorSnitch() {
 
     let x = 0, y = 0, tx = 0, ty = 0;
     let started = false;
+    let away = false;
     let raf = 0;
 
     const onMove = (e: MouseEvent) => {
       tx = e.clientX;
       ty = e.clientY;
-      if (!started) {
+      // First move ever, or the first move after the pointer left the window:
+      // snap the snitch onto the pointer (don't slide it in from its old spot).
+      if (!started || away) {
         x = tx;
         y = ty;
         started = true;
-        el.style.opacity = "1";
+        away = false;
       }
+      // Always ensure it's visible on any movement. This is the fix for the
+      // pointer vanishing after it left and re-entered the window: opacity used
+      // to be set once, so onLeave could hide it with nothing to bring it back.
+      el.style.opacity = "1";
     };
-    const onLeave = () => {
-      el.style.opacity = "0";
+    // Only hide when the pointer truly leaves the window (no relatedTarget),
+    // not on every internal element boundary — mouseleave on <html> fired
+    // spuriously and made the snitch flicker.
+    const onOut = (e: MouseEvent) => {
+      if (!e.relatedTarget) {
+        away = true;
+        el.style.opacity = "0";
+      }
     };
 
     const tick = () => {
@@ -50,12 +63,12 @@ export default function CursorSnitch() {
     tick();
 
     window.addEventListener("mousemove", onMove, { passive: true });
-    document.documentElement.addEventListener("mouseleave", onLeave);
+    document.addEventListener("mouseout", onOut);
 
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("mousemove", onMove);
-      document.documentElement.removeEventListener("mouseleave", onLeave);
+      document.removeEventListener("mouseout", onOut);
       root.classList.remove("snitch-active");
     };
   }, []);

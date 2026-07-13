@@ -367,7 +367,7 @@ a {
   pointer-events: none;
   z-index: 9999;
   opacity: 0;
-  transition: opacity 0.4s var(--ease-ui);
+  transition: opacity 0.18s var(--ease-ui);
   will-change: transform;
 }
 .cursor-snitch-svg {
