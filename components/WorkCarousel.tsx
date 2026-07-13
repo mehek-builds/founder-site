@@ -220,7 +220,7 @@ export default function WorkCarousel() {
       <div className="wrap">
         <p className="eyebrow reveal">The work</p>
         <p className="car-count-line reveal">
-          <span className="num">{COUNTS.total}</span> real things.
+          <span className="num">{COUNTS.shipped}</span> shipped projects so far.
         </p>
       </div>
       <div className="car-viewport">
