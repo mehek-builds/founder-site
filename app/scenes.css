@@ -10,7 +10,7 @@
   align-items: center;
   overflow: hidden;
   /* the moon's light + the name-reveal both key off these (JS updates them) */
-  --moon-x: 37%;
+  --moon-x: 50%;
   --moon-y: 45%;
 }
 /* THE HARMONOGRAPH + MOONLIGHT: an ink moon slowly draws a small looping curve
@@ -54,6 +54,7 @@
   line-height: 1.04;
   letter-spacing: -0.035em;
   margin: 0;
+  text-align: center;
 }
 .hero-title span {
   display: block;

@@ -130,7 +130,7 @@ export default function HeroHarmonograph() {
       canvas.width = w * dpr;
       canvas.height = h * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      cx = w * 0.37;
+      cx = w * 0.5;
       cy = h * 0.45;
       A = Math.min(w, h) * 0.3;
       measureLines();
