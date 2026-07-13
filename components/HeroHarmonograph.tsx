@@ -42,7 +42,13 @@ export default function HeroHarmonograph() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    // Deliberately NOT matching devicePixelRatio here (reference: terishim.com's
+    // orbit canvas does the same — backing width equals CSS width even on a 2x
+    // display). That forces the browser to upscale/blur the bitmap to fill a
+    // retina screen, which softens the stroke edges — a crisp dpr-matched
+    // canvas can't reproduce that same soft, hazy thinness no matter how low
+    // lineWidth/alpha go.
+    const dpr = 1;
 
     let w = 0, h = 0, cx = 0, cy = 0, A = 0;
     let params = seed();
@@ -155,13 +161,12 @@ export default function HeroHarmonograph() {
       ctx.fillRect(0, 0, w, h);
       ctx.globalCompositeOperation = "source-over";
 
-      // Canvas strokes floor out at roughly one device pixel of coverage no
-      // matter how far lineWidth drops below that — width alone stopped
-      // making this visibly thinner a few steps ago. Opacity is the lever
-      // that keeps working past that floor, so it's doing the rest of the
-      // "thinner" work now (moonlight radius/strength is untouched).
+      // Measured terishim.com's orbit ring directly (getImageData on their
+      // canvas): stroke pixels sample at alpha 1-18 out of 255 (~0.4%-7%
+      // opacity), nowhere near what we'd tried. That, plus the no-dpr canvas
+      // above, is the actual recipe for "impossibly thin" — not lineWidth.
       ctx.lineWidth = 0.3;
-      ctx.strokeStyle = "rgba(24,20,12,0.16)";
+      ctx.strokeStyle = "rgba(24,20,12,0.05)";
       ctx.lineCap = "round";
       ctx.beginPath();
       if (!started) {
