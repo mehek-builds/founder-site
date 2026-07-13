@@ -115,38 +115,6 @@
   .hero-cue-arrow { animation: none; }
 }
 
-/* ---------- Scene 1: THE BET ---------- */
-.bet {
-  min-height: 100svh;
-  display: flex;
-  align-items: center;
-  padding: 12vh 0;
-}
-.bet-inner {
-  width: 100%;
-}
-.bet-lines {
-  display: flex;
-  flex-direction: column;
-  gap: 26px;
-  margin: 32px 0 40px;
-}
-.bet-line {
-  max-width: 16ch;
-  color: var(--text);
-}
-.bet-line-lead .amber,
-.bet-line-lead {
-  color: var(--text);
-}
-.bet-more {
-  font-family: var(--font-text);
-  color: var(--text-dim);
-  letter-spacing: 0.04em;
-  transition: color 0.2s var(--ease-ui);
-}
-.bet-more:hover { color: var(--amber); }
-
 /* ---------- Scene 2: THE RECORD ---------- */
 .record {
   position: relative;

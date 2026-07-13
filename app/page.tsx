@@ -1,5 +1,4 @@
 import Hero from "@/components/Hero";
-import Bet from "@/components/Bet";
 import Record from "@/components/Record";
 import Receipts from "@/components/Receipts";
 import Work from "@/components/Work";
@@ -15,7 +14,6 @@ export default function Home() {
       <Reveal />
       <StickyNav />
       <Hero />
-      <Bet />
       <Record />
       <Receipts />
       <Work />
