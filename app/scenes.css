@@ -73,10 +73,16 @@
 .ht-lit {
   color: var(--text);
 }
-/* Only the line the moon is currently over is ever allowed to show ink; the
-   JS sets each line's opacity per frame (see HeroHarmonograph.tsx setActiveLine). */
-.hero-lit-layer .hero-title span {
+/* Only the line the moon is currently over is ever visible at all — ghost
+   AND ink both fade with it; the JS sets each line's opacity per frame (see
+   HeroHarmonograph.tsx setActiveLine). */
+.ht-ghost > span,
+.ht-lit > span {
   transition: opacity 0.5s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  /* accessible static twin: both lines stay fully visible, no line-gating */
+  .ht-ghost > span { opacity: 1 !important; }
 }
 @media (prefers-reduced-motion: reduce) {
   /* accessible static twin: the whole name, in ink, no reveal gimmick */

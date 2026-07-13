@@ -45,20 +45,25 @@ export default function HeroHarmonograph() {
     let params = seed();
     let warpX = 0, warpY = 0;
 
-    // Only the line the moon currently sits over should ever show any ink.
-    // Without this, the mask (a single radius around the moon) can catch the
-    // tail end of one line and the start of the other whenever the moon's
-    // path drifts near the gap between them, or loops back through a line
-    // it already lit a moment ago — reading as random already-erased
-    // fragments rather than one line currently resolving.
-    const lineEls: HTMLElement[] = Array.from(
-      heroEl?.querySelectorAll<HTMLElement>(".hero-lit-layer .hero-title > span") ?? []
+    // Only the line the moon currently sits over should ever be visible at
+    // all — not just its ink reveal, but its ghost too. Earlier this only
+    // gated the lit (ink) layer, so the OTHER line's permanent ~11% ghost
+    // stayed on screen the whole time, which read as "an already-erased
+    // line sitting in the background" (Mehek: only the current line should
+    // be seen, full stop). Ghost spans (".ht-ghost > span") and lit spans
+    // (".ht-lit > span") are two separate DOM trees at the same position;
+    // both members of a line pair fade together.
+    const ghostEls: HTMLElement[] = Array.from(
+      heroEl?.querySelectorAll<HTMLElement>(".ht-ghost > span") ?? []
+    );
+    const litEls: HTMLElement[] = Array.from(
+      heroEl?.querySelectorAll<HTMLElement>(".ht-lit > span") ?? []
     );
     let lineMid: number[] = [];
     const measureLines = () => {
-      if (!heroEl || lineEls.length === 0) return;
+      if (!heroEl || ghostEls.length === 0) return;
       const heroTop = heroEl.getBoundingClientRect().top;
-      lineMid = lineEls.map((el) => {
+      lineMid = ghostEls.map((el) => {
         const r = el.getBoundingClientRect();
         return r.top - heroTop + r.height / 2;
       });
@@ -71,7 +76,10 @@ export default function HeroHarmonograph() {
         const dist = Math.abs(moonY - mid);
         if (dist < bestDist) { bestDist = dist; closest = i; }
       });
-      lineEls.forEach((el, i) => {
+      ghostEls.forEach((el, i) => {
+        el.style.opacity = i === closest ? "1" : "0";
+      });
+      litEls.forEach((el, i) => {
         el.style.opacity = i === closest ? "1" : "0";
       });
     };
