@@ -1,7 +1,6 @@
 import Hero from "@/components/Hero";
-import Record from "@/components/Record";
+import WorkCarousel from "@/components/WorkCarousel";
 import Receipts from "@/components/Receipts";
-import Work from "@/components/Work";
 import Leading from "@/components/Leading";
 import Person from "@/components/Person";
 import NowFooter from "@/components/NowFooter";
@@ -14,9 +13,8 @@ export default function Home() {
       <Reveal />
       <StickyNav />
       <Hero />
-      <Record />
+      <WorkCarousel />
       <Receipts />
-      <Work />
       <Leading />
       <Person />
       <NowFooter />

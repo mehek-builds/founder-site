@@ -367,6 +367,39 @@
 }
 .receipt-link:hover { border-color: var(--amber); color: var(--amber); }
 
+/* ---------- Scene 2: THE WORK carousel ---------- */
+.work-carousel { padding: 12vh 0 10vh; overflow: hidden; }
+.car-count-line {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  letter-spacing: -0.03em;
+  margin: 6px 0 48px;
+}
+.car-count-line .num { color: var(--amber); }
+.car-viewport { overflow: hidden; }
+.car-track {
+  display: flex;
+  gap: 40px;
+  width: max-content;
+  padding: 0 20px;
+  /* drift + drag are both JS-driven (WorkCarousel.tsx) via inline translateX */
+  cursor: grab;
+  touch-action: pan-y; /* horizontal swipes drag the track, vertical still scrolls */
+  user-select: none;
+}
+.car-track:active { cursor: grabbing; }
+.car-track img { -webkit-user-drag: none; }
+.car-card { width: min(420px, 78vw); flex: none; }
+.car-card .win-frame { margin-bottom: 18px; }
+.car-name { font-size: clamp(1.3rem, 3vw, 1.7rem); letter-spacing: -0.02em; margin: 0 0 8px; }
+.car-gloss { color: var(--text-dim); font-size: 0.95rem; line-height: 1.55; margin-bottom: 14px; }
+.car-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.car-hint { margin-top: 48px; color: var(--text-dim); font-size: 0.9rem; }
+@media (prefers-reduced-motion: reduce) {
+  .car-track { animation: none; }
+  .car-viewport { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+}
+
 /* ---------- Scene 3: THE WORK ---------- */
 .work { padding: 10vh 0; }
 .work-lead { margin-bottom: 10px; }

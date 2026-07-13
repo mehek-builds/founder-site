@@ -4,7 +4,6 @@
 import { useEffect, useState } from "react";
 
 const SECTIONS = [
-  { id: "record", label: "Record" },
   { id: "flagships", label: "Work" },
   { id: "leading", label: "Leading" },
   { id: "person", label: "Person" },
@@ -13,7 +12,7 @@ const SECTIONS = [
 
 export default function StickyNav() {
   const [shown, setShown] = useState(false);
-  const [active, setActive] = useState("record");
+  const [active, setActive] = useState("flagships");
 
   useEffect(() => {
     const onScroll = () => setShown(window.scrollY > window.innerHeight * 0.8);
