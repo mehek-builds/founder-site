@@ -352,11 +352,13 @@ a {
   }
 }
 
-/* Cursor moon: an always-on, subtle ink dot + ring that trails the real
-   cursor site-wide (see components/CursorMoon.tsx). Wrapper is 0x0 and
-   JS-transformed to the eased pointer position; the dot/ring center
-   themselves on that point via negative margins. */
-.cursor-moon {
+/* Cursor snitch: an always-on Golden Snitch that trails the real cursor
+   site-wide (see components/CursorSnitch.tsx). Wrapper is 0x0 and
+   JS-transformed to the eased pointer position; the SVG centers its gold
+   body on that point via negative margins. The wings beat on a fast CSS
+   loop and the whole body bobs, so it reads as alive even when the pointer
+   is still. */
+.cursor-snitch {
   position: fixed;
   top: 0;
   left: 0;
@@ -368,28 +370,42 @@ a {
   transition: opacity 0.4s var(--ease-ui);
   will-change: transform;
 }
-.cursor-moon-dot {
+.cursor-snitch-svg {
   position: absolute;
   top: 0;
   left: 0;
-  width: 5px;
-  height: 5px;
-  margin: -2.5px 0 0 -2.5px;
-  border-radius: 50%;
-  background: rgba(27, 26, 23, 0.32);
+  /* SVG is 16px; body sits at viewBox center, so center the box on the point.
+     Soft neutral shadow lifts the mark off a light background (no color). */
+  margin: -8px 0 0 -8px;
+  filter: drop-shadow(0 1px 1.5px rgba(27, 26, 23, 0.35));
+  animation: snitchBob 2.4s ease-in-out infinite;
 }
-.cursor-moon-ring {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 22px;
-  height: 22px;
-  margin: -11px 0 0 -11px;
-  border-radius: 50%;
-  border: 1px solid rgba(27, 26, 23, 0.13);
+.snitch-wing {
+  transform-box: fill-box;
+  will-change: transform;
+}
+.snitch-wing-r {
+  transform-origin: 0% 85%;
+  animation: snitchFlapR 0.28s ease-in-out infinite;
+}
+.snitch-wing-l {
+  transform-origin: 100% 85%;
+  animation: snitchFlapL 0.28s ease-in-out infinite;
+}
+@keyframes snitchFlapR {
+  0%, 100% { transform: rotate(-7deg); }
+  50% { transform: rotate(15deg); }
+}
+@keyframes snitchFlapL {
+  0%, 100% { transform: rotate(7deg); }
+  50% { transform: rotate(-15deg); }
+}
+@keyframes snitchBob {
+  0%, 100% { transform: translateY(-1.4px) rotate(-2deg); }
+  50% { transform: translateY(1.4px) rotate(2deg); }
 }
 @media (pointer: coarse), (prefers-reduced-motion: reduce) {
-  .cursor-moon {
+  .cursor-snitch {
     display: none;
   }
 }

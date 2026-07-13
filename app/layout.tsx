@@ -3,7 +3,7 @@ import { Instrument_Serif } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import "./scenes.css";
-import CursorMoon from "../components/CursorMoon";
+import CursorSnitch from "../components/CursorSnitch";
 
 // Light, high-contrast editorial serif (the creative voice). Airy display cuts.
 const display = Instrument_Serif({
@@ -81,7 +81,7 @@ export default function RootLayout({
       <body>
         {children}
         <div className="grade" aria-hidden="true" />
-        <CursorMoon />
+        <CursorSnitch />
       </body>
     </html>
   );
