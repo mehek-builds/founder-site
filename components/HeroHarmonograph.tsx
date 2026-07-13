@@ -149,54 +149,72 @@ export default function HeroHarmonograph() {
       return () => window.removeEventListener("resize", resize);
     }
 
-    let t = 0, px = 0, py = 0, started = false, raf = 0;
+    // A harmonograph is a mathematically space-filling curve — given enough
+    // time it densely weaves through its whole bounding region. An
+    // exponential-decay "comet trail" (erase X% per frame) can't cap that:
+    // measured 0.03-0.4 erase all settled at ~6-7% canvas coverage (the curve
+    // revisits the same screen area before old paint decays below the 8-bit
+    // floor, so it never truly clears) vs. terishim.com's simple orbit-
+    // ellipse at 0.3% (24x sparser, since a 1-D ellipse only ever re-paints
+    // its own ring). Worse, the erase-rate-vs-coverage relationship has a
+    // knife-edge bifurcation, not a gradient: 0.48 gave 4.4% coverage, 0.52
+    // gave 0.019% (fully invisible) — a 0.04 change flips between "still
+    // hazy" and "vanished," too fragile to tune reliably.
+    //
+    // Mehek: keep the harmonograph (not the ellipse), but shrink its visible
+    // memory drastically. Fixed-length trail buffer instead: only the last
+    // MAX_TRAIL points are ever drawn, redrawn fresh every frame (full
+    // clearRect, not a fade), with alpha tapering along the tail. This makes
+    // "how much memory" an exact, stable point count, not a threshold to
+    // chase.
+    const MAX_TRAIL = 600;
+    const trail: [number, number][] = [];
+
+    let t = 0, started = false, raf = 0;
     const step = () => {
       // ease hover 0 -> 1 (or back) instead of snapping, so the glow/speed
       // bump ramps smoothly rather than jumping the instant the cursor enters
       hover += (hoverTarget - hover) * 0.06;
 
-      // Fade the previous ribbon (comet trail). This was 0.03 (barely
-      // erasing 3%/frame) — with how slowly this curve moves, that let
-      // strokes re-paint nearby space many times before the old ones faded,
-      // building up a hazy "wash" over the whole orbited area (measured: one
-      // alpha value covered 61,727 px, ~6% of the canvas — two orders of
-      // magnitude more than terishim.com's biggest single spike of 994).
-      // Faster erase keeps only a short, clean trail instead of that buildup.
-      ctx.globalCompositeOperation = "destination-out";
-      ctx.fillStyle = "rgba(0,0,0,0.1)";
-      ctx.fillRect(0, 0, w, h);
-      ctx.globalCompositeOperation = "source-over";
-
-      // Re-measured against the LIVE terishim.com canvas (ctx.lineWidth /
-      // ctx.strokeStyle read directly off their context, not guessed):
-      // lineWidth 0.9, strokeStyle rgba(30,28,26,0.22), lineCap butt, no
-      // shadowBlur, no filter. Going thinner than ~0.3 width + ultra-low
-      // alpha (what we had) starves the anti-aliased coverage so badly the
-      // line renders as a broken, inconsistent scratch instead of a smooth
-      // hairline — the softness is supposed to come entirely from the
-      // no-dpr canvas blurring a CONSISTENTLY covered line, not from
-      // starving the line itself.
-      ctx.lineWidth = 0.9;
-      ctx.strokeStyle = "rgba(24,20,12,0.22)";
-      ctx.lineCap = "butt";
-      ctx.beginPath();
       if (!started) {
-        const [x0, y0] = point(t);
-        px = x0; py = y0;
+        trail.push(point(t));
         started = true;
       }
-      ctx.moveTo(px, py);
-      let lx = px, ly = py;
       // hovering quickens the draw a little (up to ~1.8x), not the shape
       const speed = 0.001 * (1 + hover * 0.8);
       for (let i = 0; i < 4; i++) {
         t += speed;
-        const [x, y] = point(t);
-        ctx.lineTo(x, y);
-        lx = x; ly = y;
+        trail.push(point(t));
       }
-      ctx.stroke();
-      px = lx; py = ly;
+      while (trail.length > MAX_TRAIL) trail.shift();
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Re-measured against the LIVE terishim.com canvas (ctx.lineWidth /
+      // ctx.strokeStyle read directly off their context, not guessed):
+      // lineWidth 0.9, base alpha 0.22, lineCap butt, no shadowBlur, no
+      // filter. Going thinner than ~0.3 width + ultra-low alpha (what we'd
+      // tried) starves the anti-aliased coverage so badly the line renders
+      // as a broken, inconsistent scratch instead of a smooth hairline — the
+      // softness is supposed to come entirely from the no-dpr canvas
+      // blurring a CONSISTENTLY covered line, not from starving the line
+      // itself. Alpha now tapers per-segment from that 0.22 at the head
+      // (near the moon) down to 0 at the tail, drawn oldest-first so newer
+      // segments layer on top.
+      ctx.lineWidth = 0.9;
+      ctx.lineCap = "butt";
+      for (let i = 1; i < trail.length; i++) {
+        const age = 1 - i / trail.length; // 0 at head, ~1 at oldest
+        const segAlpha = 0.22 * (1 - age);
+        if (segAlpha <= 0.002) continue;
+        ctx.strokeStyle = `rgba(24,20,12,${segAlpha.toFixed(3)})`;
+        ctx.beginPath();
+        ctx.moveTo(trail[i - 1][0], trail[i - 1][1]);
+        ctx.lineTo(trail[i][0], trail[i][1]);
+        ctx.stroke();
+      }
+
+      const [lx, ly] = trail[trail.length - 1];
       drawMoon(lx, ly, 3, hover);
       setMoon(lx, ly);
       setActiveLine(ly);
@@ -219,6 +237,7 @@ export default function HeroHarmonograph() {
         params = seed();
         t = 0;
         started = false;
+        trail.length = 0;
         ctx.clearRect(0, 0, w, h);
       }
     };
