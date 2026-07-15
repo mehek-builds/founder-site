@@ -76,6 +76,7 @@ const CARDS: Card[] = [
     url: "https://github.com/mehek-builds/fitness-tracker",
     urlLabel: "Nourish · iOS",
     poster: "/work/nourish.png",
+    video: "/work/nourish.mp4",
     phone: true,
   },
 ];
@@ -87,13 +88,31 @@ function ProductCard({ card, ariaHidden }: { card: Card; ariaHidden?: boolean })
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) {
       v.pause();
       v.removeAttribute("autoplay");
       v.currentTime = 0;
-    } else {
-      void v.play().catch(() => {});
+      return;
     }
+    const tryPlay = () => void v.play().catch(() => {});
+    tryPlay();
+    // Browsers pause muted autoplay videos when the tab backgrounds and don't
+    // resume on their own; replay when it (or the element) comes back into view.
+    const onVisible = () => { if (document.visibilityState === "visible") tryPlay(); };
+    document.addEventListener("visibilitychange", onVisible);
+    const io =
+      typeof IntersectionObserver !== "undefined"
+        ? new IntersectionObserver(
+            (entries) => entries.forEach((e) => { if (e.isIntersecting) tryPlay(); }),
+            { threshold: 0.15 }
+          )
+        : null;
+    io?.observe(v);
+    return () => {
+      document.removeEventListener("visibilitychange", onVisible);
+      io?.disconnect();
+    };
   }, []);
   return (
     <a
@@ -111,12 +130,29 @@ function ProductCard({ card, ariaHidden }: { card: Card; ariaHidden?: boolean })
         // native mobile app: a phone mockup, not a browser window
         <div className="phone-frame">
           <span className="phone-notch" aria-hidden="true" />
-          <img
-            className="phone-shot"
-            src={card.poster}
-            alt={ariaHidden ? "" : `${card.name} app screenshot`}
-            loading="lazy"
-          />
+          {card.video ? (
+            <video
+              ref={videoRef}
+              className="phone-shot"
+              poster={card.poster}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              aria-hidden="true"
+              tabIndex={-1}
+            >
+              <source src={card.video} type="video/mp4" />
+            </video>
+          ) : (
+            <img
+              className="phone-shot"
+              src={card.poster}
+              alt={ariaHidden ? "" : `${card.name} app screenshot`}
+              loading="lazy"
+            />
+          )}
         </div>
       ) : (
         <div className="win-frame glass">
