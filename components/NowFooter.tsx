@@ -3,10 +3,20 @@
 // now.json (anti-rot: degrades to a still-true "Latest ship" line past 21 days).
 // Two CTAs, colophon, and the terminal easter egg.
 import Terminal from "./Terminal";
+import NowRotator from "./NowRotator";
 import { getNow, BUILD_DATE } from "../content/now";
 
 export default function NowFooter() {
   const now = getNow(BUILD_DATE);
+  // Rotating status: FACTUAL present-tense lines built from real now data. No
+  // invented state; each is true at build time.
+  const statusLines = [
+    now.building
+      ? `Building ${now.building.name}, ${now.building.gloss}`
+      : `Last ship: ${now.lastShip.name}, ${now.lastShip.date}`,
+    `Last ship: ${now.lastShip.name}, ${now.lastShip.gloss}`,
+    "Building in public as @mehek.builds",
+  ];
   return (
     <footer className="scene nowfoot" id="now" aria-label="Now">
       <div className="wrap">
@@ -38,6 +48,7 @@ export default function NowFooter() {
               {now.post.label} ↗
             </a>
           )}
+          <NowRotator lines={statusLines} />
         </div>
 
         <div className="now-cta reveal">

@@ -799,6 +799,7 @@ video.win-shot { background: var(--bg-2); }
   .work-list { gap: 9vh; }
   .snav { display: none; }
   .globe-mark { display: none; }
+  .scene-caption { display: none; }
   .now-post { margin-left: 0; }
   .rec-plot { height: 260px; }
 }
@@ -807,4 +808,133 @@ video.win-shot { background: var(--bg-2); }
   .wrap { padding: 0 20px; }
   .rec-row-label { font-size: 0.56rem; }
   .receipt-grid { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   PROTOTYPES 2026-07-15 (peer-site teardown, pre-approval)
+   ============================================================ */
+
+/* [1] Claims-as-receipts: a sourced metric is a checkable ember link.
+   Only the number carries color; a dashed ember underline is the "verify"
+   tell, the label stays quiet until hover so the color budget isn't spent
+   on chrome. */
+.metric-sourced {
+  text-decoration: none;
+  cursor: pointer;
+}
+.metric-sourced .num {
+  border-bottom: 1.5px dashed var(--amber);
+  padding-bottom: 2px;
+  transition: border-bottom-color 0.2s var(--ease-ui);
+}
+.metric-sourced .metric-label {
+  transition: color 0.2s var(--ease-ui);
+}
+.metric-sourced:hover .metric-label,
+.metric-sourced:focus-visible .metric-label {
+  color: var(--amber-bright);
+}
+.metric-sourced:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 3px;
+  border-radius: 5px;
+}
+
+/* [2] Live-URL browser chrome: the address bar reads "deployed, click me".
+   The window dots stay warm-gray; the live dot + URL are the one ember
+   moment per frame. */
+.win-live {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--amber);
+  display: inline-block;
+  margin-right: 7px;
+  vertical-align: middle;
+  box-shadow: 0 0 0 0 var(--amber-glow);
+  animation: pulse 2.4s ease-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .win-live { animation: none; }
+}
+.win-url {
+  display: inline-flex;
+  align-items: center;
+  color: var(--amber-bright);
+  background: rgba(217, 102, 10, 0.06);
+}
+
+/* [3] Rotating "Recently" status line in the now widget. Information-bearing
+   (real present-tense facts), opacity crossfade only, on --ease-ui. */
+.now-rotator {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  flex: 1 1 100%;
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  min-width: 0;
+}
+.now-recently {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  flex: none;
+}
+.now-rot-line {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  /* resting state is visible; the animation is only a subtle entrance, so a
+     paused/disabled animation can never leave the line invisible */
+  opacity: 1;
+  animation: rotLineIn 0.34s var(--ease-ui);
+}
+@keyframes rotLineIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .now-rot-line { animation: none; }
+}
+
+/* [4] Per-scene scroll caption: fixed, quiet, bottom-left (clear of the
+   top-left globe and the right-edge nav). Rewrites per scene = orientation
+   that carries information. */
+.scene-caption {
+  position: fixed;
+  left: clamp(14px, 1.6vw, 26px);
+  bottom: clamp(14px, 2.4vh, 26px);
+  z-index: 8000;
+  max-width: 42vw;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.5s var(--ease-reveal), transform 0.5s var(--ease-reveal);
+}
+.scene-caption.is-on {
+  opacity: 1;
+  transform: none;
+}
+.scene-caption-text {
+  display: inline-block;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  transition: opacity 0.22s var(--ease-ui);
+}
+.scene-caption-text.is-in { opacity: 1; }
+.scene-caption-text.is-out { opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .scene-caption,
+  .scene-caption-text {
+    transition: none;
+  }
 }

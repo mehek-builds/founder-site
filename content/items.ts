@@ -25,7 +25,10 @@ export interface Item {
   end?: string;
   weight: 1 | 2 | 3 | 4;
   status: Status;
-  metrics?: { label: string; value: string }[];
+  // `source` (prototype 2026-07-15): a primary-source URL that proves this exact
+  // number. When present, the metric renders as a dashed-underline ember link
+  // ("this fact is checkable"): claims-as-receipts, the Calix pattern.
+  metrics?: { label: string; value: string; source?: string }[];
   tech?: string[];
   links?: { label: string; url: string }[];
   makingOf?: string[]; // weight 3-4 only: real, dated, phone-call-backable process facts
@@ -410,7 +413,14 @@ export const ITEMS: Item[] = [
     weight: 4,
     status: "live",
     tier: "shelf",
-    metrics: [{ label: "Distribution", value: "Chrome Web Store" }],
+    metrics: [
+      {
+        label: "Distribution",
+        value: "Chrome Web Store",
+        source:
+          "https://chromewebstore.google.com/detail/rolequick-tailored-resume/bdbedbmkjpfioknfpmhookefabipjaad",
+      },
+    ],
     links: [
       { label: "Live", url: "https://role-quick-website.vercel.app" },
       {

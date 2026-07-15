@@ -7,6 +7,7 @@ import OriginGlobe from "@/components/OriginGlobe";
 import Person from "@/components/Person";
 import NowFooter from "@/components/NowFooter";
 import StickyNav from "@/components/StickyNav";
+import SceneCaption from "@/components/SceneCaption";
 import Reveal from "@/components/Reveal";
 
 export default function Home() {
@@ -14,6 +15,7 @@ export default function Home() {
     <main>
       <Reveal />
       <StickyNav />
+      <SceneCaption />
       {/* IntroZoomOut must mount before the stamp: its layout effect flags the
           running intro, and the stamp waits for the baton instead of starting */}
       <IntroZoomOut />

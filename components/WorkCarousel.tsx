@@ -80,7 +80,11 @@ function ProductCard({ card, ariaHidden }: { card: Card; ariaHidden?: boolean })
           <span className="win-dots">
             <i /> <i /> <i />
           </span>
-          <span className="win-url">{card.urlLabel}</span>
+          {/* the live URL is the one ember element per frame: "this is deployed" */}
+          <span className="win-url">
+            <span className="win-live" />
+            {card.urlLabel}
+          </span>
         </div>
         <div className="win-screen">
           <div className="win-placeholder" aria-hidden="true">

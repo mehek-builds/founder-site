@@ -42,12 +42,27 @@ function Card({ item }: { item: Item }) {
 
       {item.metrics && item.metrics.length > 0 && (
         <div className="receipt-metrics">
-          {item.metrics.map((m) => (
-            <span className="metric" key={m.label}>
-              <span className="num">{m.value}</span>
-              <span className="metric-label">{m.label}</span>
-            </span>
-          ))}
+          {item.metrics.map((m) =>
+            m.source ? (
+              // claims-as-receipts: a sourced fact is a checkable ember link
+              <a
+                className="metric metric-sourced"
+                key={m.label}
+                href={m.source}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`${m.value} ${m.label}, verify at the source`}
+              >
+                <span className="num">{m.value}</span>
+                <span className="metric-label">{m.label} · verify ↗</span>
+              </a>
+            ) : (
+              <span className="metric" key={m.label}>
+                <span className="num">{m.value}</span>
+                <span className="metric-label">{m.label}</span>
+              </span>
+            )
+          )}
         </div>
       )}
 
