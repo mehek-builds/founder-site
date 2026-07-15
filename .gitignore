@@ -5,3 +5,8 @@ out/
 *.tsbuildinfo
 next-env.d.ts
 .DS_Store
+
+# Environment / secrets
+.env
+.env.local
+.env*.local
