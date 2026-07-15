@@ -16,6 +16,7 @@ interface Card {
   urlLabel: string;
   poster: string;
   video?: string; // real product footage; hover-plays over the poster
+  phone?: boolean; // native mobile app: renders a phone mockup, not a browser window
 }
 
 const CARDS: Card[] = [
@@ -67,6 +68,16 @@ const CARDS: Card[] = [
     poster: "/work/traeco.jpg",
     video: "/work/traeco.mp4",
   },
+  {
+    slug: "fitness-tracker",
+    name: "Nourish",
+    gloss:
+      "All-in-one iOS health app: calories that adapt to your workouts, cycle, and bloodwork via Apple Health.",
+    url: "https://github.com/mehek-builds/fitness-tracker",
+    urlLabel: "Nourish · iOS",
+    poster: "/work/nourish.png",
+    phone: true,
+  },
 ];
 
 function ProductCard({ card, ariaHidden }: { card: Card; ariaHidden?: boolean }) {
@@ -86,56 +97,71 @@ function ProductCard({ card, ariaHidden }: { card: Card; ariaHidden?: boolean })
   }, []);
   return (
     <a
-      className="car-card"
+      className={`car-card ${card.phone ? "car-phone" : ""}`}
       href={card.url}
       target="_blank"
       rel="noreferrer"
       aria-hidden={ariaHidden || undefined}
       tabIndex={ariaHidden ? -1 : undefined}
-      aria-label={ariaHidden ? undefined : `${card.name}, open the live site`}
+      aria-label={
+        ariaHidden ? undefined : `${card.name}, ${card.phone ? "view the code" : "open the live site"}`
+      }
     >
-      <div className="win-frame glass">
-        <div className="win-bar" aria-hidden="true">
-          <span className="win-dots">
-            <i /> <i /> <i />
-          </span>
-          {/* the live URL is the one ember element per frame: "this is deployed" */}
-          <span className="win-url">
-            <span className="win-live" />
-            {card.urlLabel}
-          </span>
-        </div>
-        <div className="win-screen">
-          <div className="win-placeholder" aria-hidden="true">
-            <span>{card.name}</span>
-          </div>
-          {/* rendered visible from the start: cached posters finish loading
-              before hydration, so an onLoad fade-in class can never attach */}
+      {card.phone ? (
+        // native mobile app: a phone mockup, not a browser window
+        <div className="phone-frame">
+          <span className="phone-notch" aria-hidden="true" />
           <img
-            className="win-shot loaded"
+            className="phone-shot"
             src={card.poster}
-            alt={ariaHidden ? "" : `${card.name} screenshot`}
+            alt={ariaHidden ? "" : `${card.name} app screenshot`}
             loading="lazy"
-            onError={(e) => (e.currentTarget.style.display = "none")}
           />
-          {card.video && (
-            <video
-              ref={videoRef}
-              className="win-video"
-              poster={card.poster}
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="auto"
-              aria-hidden="true"
-              tabIndex={-1}
-            >
-              <source src={card.video} type="video/mp4" />
-            </video>
-          )}
         </div>
-      </div>
+      ) : (
+        <div className="win-frame glass">
+          <div className="win-bar" aria-hidden="true">
+            <span className="win-dots">
+              <i /> <i /> <i />
+            </span>
+            {/* the live URL is the one ember element per frame: "this is deployed" */}
+            <span className="win-url">
+              <span className="win-live" />
+              {card.urlLabel}
+            </span>
+          </div>
+          <div className="win-screen">
+            <div className="win-placeholder" aria-hidden="true">
+              <span>{card.name}</span>
+            </div>
+            {/* rendered visible from the start: cached posters finish loading
+                before hydration, so an onLoad fade-in class can never attach */}
+            <img
+              className="win-shot loaded"
+              src={card.poster}
+              alt={ariaHidden ? "" : `${card.name} screenshot`}
+              loading="lazy"
+              onError={(e) => (e.currentTarget.style.display = "none")}
+            />
+            {card.video && (
+              <video
+                ref={videoRef}
+                className="win-video"
+                poster={card.poster}
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="auto"
+                aria-hidden="true"
+                tabIndex={-1}
+              >
+                <source src={card.video} type="video/mp4" />
+              </video>
+            )}
+          </div>
+        </div>
+      )}
       <h3 className="car-name">{card.name}</h3>
       <p className="car-gloss">{card.gloss}</p>
     </a>

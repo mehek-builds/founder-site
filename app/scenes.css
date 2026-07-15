@@ -976,3 +976,38 @@ video.win-shot { background: var(--bg-2); }
   z-index: 2;
   display: block;
 }
+
+/* Native mobile app: a phone mockup instead of the browser window. The
+   screenshot already carries the real iOS status bar, so the frame is just a
+   dark device bezel.
+   Filmstrip rule: cards share HEIGHT and vary in width. So the CARD keeps a
+   normal width (the name + gloss read on 2-3 lines like the others), but the
+   phone FRAME is a narrow device, centered, whose height tracks the browser
+   windows' so every card's media area lines up. */
+.car-card.car-phone { width: min(340px, 80vw); }
+/* the app's story is denser than a one-liner; keep its gloss small so it still
+   holds to ~two lines beside the terser website cards */
+.car-phone .car-gloss { font-size: 0.8rem; line-height: 1.5; }
+.phone-frame {
+  width: fit-content;
+  margin: 0 auto 18px;
+  border-radius: 22px;
+  background: #14110c;
+  padding: 3px;
+  box-shadow: 0 30px 70px -34px rgba(24, 20, 12, 0.42);
+  transition: transform 0.3s var(--ease-ui);
+  position: relative;
+  z-index: 1;
+}
+.car-card:hover .phone-frame { transform: translateY(-4px); }
+.phone-shot {
+  display: block;
+  height: 304px; /* + 6px bezel = 310px frame, matching the browser windows */
+  width: auto;
+  border-radius: 19px;
+}
+@media (max-width: 560px) {
+  /* below the cap the browser windows shrink with the viewport; track them */
+  .phone-shot { height: 60vw; max-height: 304px; }
+}
+.phone-notch { display: none; }
