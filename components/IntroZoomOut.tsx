@@ -254,11 +254,9 @@ export default function IntroZoomOut() {
           ? { x: tr.left + tr.width / 2, y: tr.top + tr.height / 2 }
           : C0;
         const Rt = tr ? tr.width * 0.46 : R1;
-        // gentle arc: up and out of the solar system, then into the corner
-        const ctrl = { x: lerp(C0.x, CT.x, 0.35), y: CT.y - 90 };
-        const u = 1 - q;
-        cx = u * u * C0.x + 2 * u * q * ctrl.x + q * q * CT.x;
-        cy = u * u * C0.y + 2 * u * q * ctrl.y + q * q * CT.y;
+        // one clean line: a straight, swift glide from center to the corner mark
+        cx = lerp(C0.x, CT.x, q);
+        cy = lerp(C0.y, CT.y, q);
         R = lerp(R1, Rt, q);
         rings = 1 - q;
         sky = 1 - q;
