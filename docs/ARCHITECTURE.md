@@ -1,48 +1,86 @@
 # Architecture
 
-Next.js 15 (app router) / React 19 / TypeScript, static-exported (SSG). GSAP +
-ScrollTrigger is the single motion system. Light-only "Proof carries the color"
-theme (near-white paper, ink type, one ember accent for verified facts).
+Next.js 15 (app router) / React 19 / TypeScript, prerendered to static HTML at
+build (SSG by default; no `output: export` is set, so `next build` prerenders the
+page and it deploys on Vercel). Light-only "Proof carries the color" theme (warm
+near-white paper, ink type, one ember accent reserved for verified facts).
+Everything is server-rendered first; the motion layer hydrates on top and only
+enhances. This file is the terse in-repo code map (the enforcement copy of the
+vault master plan). For the full narrative writeup, see the repo `README.md`.
 
 ## Data flow (one source of truth)
 
 ```
-content/items.ts        ← every real thing, with status/clientWork/makingOf
-   ├─ content/counts.ts ← ALL hero + scene numbers derive here (never hardcode)
-   ├─ lib/record.ts     ← node positions for the Record grid + texture from activity.json
-   └─ components/*       ← scenes read items/counts, never invent data
-content/now.json → content/now.ts (21-day anti-rot) → Hero chip + Now widget
-content/activity.json ← real git-log day counts (scripts/build-activity.mjs); grid texture only
+content/items.ts         (every real item: status / clientWork / makingOf / tier / metrics)
+   └─ content/counts.ts  (ALL hero + scene numbers derive here; never hardcode a count)
+content/now.json  ->  content/now.ts   (21-day anti-rot)  ->  Now widget + Terminal
+content/activity.json    (real git-log day counts from scripts/build-activity.mjs;
+                          generated, not currently imported by any shipped scene)
 ```
 
-Counts: `live` = built products (ventures/inventions) with `status: "live"`;
-`shipped` = all ventures+inventions; `clientSystems` = items with `clientWork`.
+Counts (`content/counts.ts`): `live` and `shipped` are filters over the "built"
+subset (the ventures + inventions pillars); `studentsLed` is a single canonical
+constant (120, the VCA ledger); `clientSystems` counts items flagged `clientWork`;
+`total` is the whole `ITEMS` array. Adding or removing a receipt moves every number
+that references it, so a count can never drift from its evidence.
+
+The build date is frozen into `NEXT_PUBLIC_BUILD_DATE` at `next build`
+(`next.config.mjs`) so the server prerender and the client hydration agree on "now"
+for the 21-day staleness check in `content/now.ts`.
 
 ## Rendering & motion
 
-- Everything is server-rendered HTML (a plain `curl` returns the full pitch of
-  every scene). The motion layer hydrates after paint and only enhances.
-- `lib/gsap.ts` registers ScrollTrigger once, client-side.
-- `lib/motion.ts` holds the one token set (ease-scene, ease-ui, durations, spring).
-- `lib/visible.ts` `whenVisible()` gates every entrance/scrub so a background tab
-  (throttled rAF) never freezes content in a hidden state. The DOM's default
-  (no-JS) state is always the readable one; JS hides-then-reveals only when visible.
-- Reduced motion: `.js` class is only added when motion is allowed, so all
-  `.reveal` / count-up / grid-dim behavior falls back to a fully static, lit twin.
+- Every scene is server-rendered HTML (a plain `curl` returns the full pitch). The
+  motion layer hydrates after paint and only enhances.
+- The signature motion is bespoke: hand-rolled Canvas 2D + `requestAnimationFrame`
+  drive the hero harmonograph (`components/HeroHarmonograph.tsx`), all three globes
+  (`components/OriginGlobe.tsx`, `IntroZoomOut.tsx`, `FaviconGlobe.tsx`, which share
+  the same sphere math and the `lib/land-arcs.ts` Natural Earth coastline data), the
+  product carousel (`components/WorkCarousel.tsx`), and the cursor snitch. Entrances
+  and count-ups use `IntersectionObserver` + CSS transitions. There is no 3D library
+  and no WebGL anywhere.
+- GSAP 3.15.0 + ScrollTrigger is a dependency, registered once client-side in
+  `lib/gsap.ts`, with one shared motion-token set in `lib/motion.ts` (named eases,
+  durations, one spring). No shipped scene component imports GSAP today; the token
+  set is the design contract and `lib/gsap.ts` is the engine seam.
+- `lib/visible.ts` `whenVisible()` gates entrance/count-up setup so a background tab
+  (throttled rAF) never freezes content mid-animation. The globes additionally run a
+  watchdog timer that re-drives the loop if rAF is suspended (embedded webviews).
+- Reduced motion: an inline script in `app/layout.tsx` adds the `.js` class only when
+  motion is allowed, so every `.reveal` / count-up / canvas effect falls back to a
+  fully static, readable twin. The SSR text is always the readable default.
 
 ## Directory map
 
-- `app/` — layout (fonts, OG, grade overlay), page (scene composition), globals.css
-  (design tokens + primitives), scenes.css (per-scene styles).
-- `components/` — one file per scene (Hero, Bet, Record, Receipts, Work, Leading,
-  Person, NowFooter) plus StickyNav, Reveal, CountUp, HeroBackdrop, Terminal.
-- `content/` — data layer. `lib/` — engine (gsap, motion, record, visible).
-- `public/` — headshot.jpg, work/*.png (Scene 3 screenshots), og.png.
+- `app/` - `layout.tsx` (fonts, metadata/OG, the SVG favicon twin, the `.grade`
+  overlay, and the CursorSnitch + FaviconGlobe mounts), `page.tsx` (scene
+  composition), `globals.css` (design tokens + primitives), `scenes.css` (per-scene
+  styles), `fonts/` (General Sans variable woff2).
+- `components/` - one file per scene: Hero (+ HeroHarmonograph), WorkCarousel,
+  Receipts, Leading, OriginGlobe (the route scene AND its `stamp` corner mark),
+  Person, NowFooter (+ NowRotator, Terminal). Overlays / utilities: IntroZoomOut,
+  StickyNav, SceneCaption, Reveal, CountUp, CursorSnitch, FaviconGlobe.
+- `content/` - the data layer (items, counts, now.ts + now.json, activity.json).
+- `lib/` - the engine: gsap (register ScrollTrigger), motion (tokens), visible
+  (background-tab gate), land-arcs (Natural Earth 110m coastlines).
+- `public/` - headshot.jpg, og.png, work/*.jpg (carousel posters) + work/*.mp4
+  (hover-play clips; pead is a still, with no mp4).
+- `scripts/` - build-activity.mjs (git-log day counts), qa-motion-recorder.js
+  (Playwright motion gate). `docs/` - this file, DECISIONS, SCENES.
 
-## Known follow-ups
+## Fonts & theme
 
-- `public/work/*.png`: real screenshots of the four flagship sites (windows
-  currently degrade to styled placeholders until these land).
-- `public/og.png`: rendered share image (the lit Record grid + name + claim).
-- First Load JS ~160 kB; trim toward the <150 kB budget (lazy ScrollTrigger).
-- PostHog (US) analytics, buildsmart env-var pattern.
+Display = Instrument Serif (`next/font/google`); body + every small label = General
+Sans (local variable woff2, `next/font/local`); verified-fact labels use a system
+monospace. One ember accent (`--amber #d9660a`) with four luminance steps for the
+four pillars; a fixed SVG-noise film-grade overlay (`.grade`). Full token set in
+`app/globals.css`.
+
+## Known follow-ups / cruft
+
+- `app/scenes.css` still carries `.record` / `.rec-node` rules, and the hero scroll
+  cue still targets `#record` (`components/Hero.tsx`). Both are inert leftovers from
+  the retired pinned-timeline scene, which WorkCarousel replaced (2026-07-13).
+- `content/activity.json` is still generated by `scripts/build-activity.mjs` but is
+  no longer imported by any shipped scene.
+- `public/og.png` share image; PostHog (US) analytics not yet wired.
