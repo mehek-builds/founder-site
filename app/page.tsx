@@ -1,7 +1,6 @@
 import Hero from "@/components/Hero";
 import IntroZoomOut from "@/components/IntroZoomOut";
 import WorkCarousel from "@/components/WorkCarousel";
-import Leading from "@/components/Leading";
 import OriginGlobe from "@/components/OriginGlobe";
 import NowFooter from "@/components/NowFooter";
 import StickyNav from "@/components/StickyNav";
@@ -22,7 +21,6 @@ export default function Home() {
       <SiteTabs />
       <Hero />
       <WorkCarousel />
-      <Leading />
       <OriginGlobe />
       <NowFooter />
     </main>

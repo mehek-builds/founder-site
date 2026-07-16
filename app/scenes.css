@@ -668,21 +668,6 @@ video.win-shot { background: var(--bg-2); }
 }
 .work-more { margin-top: 10vh; color: var(--text-faint); font-family: var(--font-text); }
 
-/* ---------- Scene 4: LEADING ---------- */
-.leading { padding: 12vh 0; }
-.lead-lines { display: flex; flex-direction: column; gap: 34px; margin-top: 34px; }
-.lead-line {
-  font-family: var(--font-display);
-  font-size: clamp(1.25rem, 3.2vw, 2rem);
-  line-height: 1.32;
-  letter-spacing: -0.015em;
-  color: var(--text-dim);
-  max-width: 24ch;
-}
-.lead-line b { color: var(--text); font-weight: 500; }
-.lead-unit { color: var(--text-dim); }
-.lead-line .num { font-size: 1.1em; }
-
 /* ---------- Scene 4.5: THE ROUTE ---------- */
 /* The origin globe (components/OriginGlobe.tsx): gallery label left, exhibit
    right, unframed on the paper. Ember appears only on pins + flight line
