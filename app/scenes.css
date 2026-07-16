@@ -43,6 +43,17 @@
   filter: brightness(var(--moon-glow, 1));
   transition: filter 0.1s linear;
 }
+/* The ink skyline (Mehek ruling, 2026-07-16): one building per items.ts
+   record item, drawn/undrawn on a slow loop along the hero horizon. Sits
+   above the harmonograph field but under the name layers. */
+.hero-skyline {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
 .hero-inner {
   position: relative;
   z-index: 2;

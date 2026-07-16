@@ -5,6 +5,7 @@
 // ghost is real server-rendered text, so a plain fetch still returns the pitch.
 // Everything else (numbers, contact, status) lives elsewhere on the site.
 import HeroHarmonograph from "./HeroHarmonograph";
+import HeroSkyline from "./HeroSkyline";
 
 const NAME = "mehek mandal";
 const TAG = "building products.";
@@ -22,6 +23,9 @@ export default function Hero() {
   return (
     <header className="scene hero" id="top">
       <HeroHarmonograph />
+      {/* the ink skyline: the record building itself on the horizon (see
+          HeroSkyline.tsx for the 2026-07-16 ruling) */}
+      <HeroSkyline />
       {/* ghost: faint, always present (and the real SSR text) */}
       <div className="wrap hero-inner">
         <Title cls="ht-ghost" />
