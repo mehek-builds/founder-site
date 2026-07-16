@@ -851,39 +851,9 @@ video.win-shot { background: var(--bg-2); }
 .colophon-links a:hover { color: var(--amber); }
 .colophon-fine { color: var(--text-faint); font-size: 0.8rem; }
 
-/* ---------- Sticky nav ---------- */
-.snav {
-  position: fixed;
-  right: 22px;
-  top: 50%;
-  transform: translateY(-50%) translateX(14px);
-  z-index: 8000;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.4s var(--ease-ui), transform 0.4s var(--ease-ui);
-}
-.snav-on { opacity: 1; pointer-events: auto; transform: translateY(-50%) translateX(0); }
-.snav-item { display: flex; align-items: center; gap: 10px; justify-content: flex-end; }
-.snav-node {
-  width: 8px; height: 8px; border-radius: 2px;
-  background: var(--line-strong);
-  transition: background 0.25s var(--ease-ui), transform 0.25s var(--ease-ui);
-}
-.snav-label {
-  font-family: var(--font-text);
-  font-size: 0.74rem;
-  letter-spacing: 0.06em;
-  color: var(--text-faint);
-  opacity: 0;
-  transform: translateX(6px);
-  transition: opacity 0.25s var(--ease-ui), transform 0.25s var(--ease-ui), color 0.25s var(--ease-ui);
-}
-.snav-item:hover .snav-label { opacity: 1; transform: none; color: var(--text-dim); }
-.snav-active .snav-node { background: var(--amber); transform: scale(1.25); }
-.snav-active .snav-label { opacity: 1; transform: none; color: var(--amber); }
+/* The sticky scene nav (.snav) left 2026-07-16 (Mehek): after Leading and
+   Route left the film it scrubbed only two stops, which made it chrome, not
+   navigation (law: nothing decorates). StickyNav.tsx deleted with it. */
 
 /* ---------- Terminal ---------- */
 .term-overlay {
@@ -916,7 +886,6 @@ video.win-shot { background: var(--bg-2); }
   .about-lede { font-size: 1.1rem; }
   .work-item-alt { direction: ltr; }
   .work-list { gap: 9vh; }
-  .snav { display: none; }
   .globe-mark { display: none; }
   /* The tabs stay: with the globe gone they are the only route nav on screen. */
   .site-tabs { gap: 16px; top: clamp(20px, 3.4vh, 30px); }
