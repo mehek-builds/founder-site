@@ -147,7 +147,7 @@ export default function AboutBody() {
               <ol className="about-rules">
                 <li className="about-rule">
                   <span className="about-rule-n" aria-hidden="true">01</span>
-                  <span>Always try. There is no failing, only learning.</span>
+                  <span>Always learn from everyone, everything, every place.</span>
                 </li>
                 <li className="about-rule">
                   <span className="about-rule-n" aria-hidden="true">02</span>
