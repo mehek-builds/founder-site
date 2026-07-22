@@ -2,8 +2,8 @@
 
 ## 2026-07-22: RoleQuick rebrand to Litos
 
-- Updated the homepage highlight reel and receipts page to use the new Litos
-  product name and link to trylitos.com.
+- Updated the homepage highlight reel and shared product metadata to use the new
+  Litos product name and link to trylitos.com.
 
 ## 2026-07-12: Two-tier receipts (Mehek curation directive, shelf ratified)
 
