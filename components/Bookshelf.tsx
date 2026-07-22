@@ -8,6 +8,10 @@ type Book = {
   spineTitle: string;
   author: string;
   spineAuthor: string;
+  spineSubtitle?: string;
+  spinePublisher: string;
+  spineDesign: string;
+  spineWidth: number;
   cover: string;
   coverWidth: number;
   coverHeight: number;
@@ -19,9 +23,13 @@ type Book = {
 const books: Book[] = [
   {
     title: "Homo Deus",
-    spineTitle: "Homo Deus",
+    spineTitle: "HOMO DEUS",
     author: "Yuval Noah Harari",
-    spineAuthor: "YNH",
+    spineAuthor: "YUVAL NOAH HARARI",
+    spineSubtitle: "A BRIEF HISTORY OF TOMORROW",
+    spinePublisher: "HARPER",
+    spineDesign: "homo-deus",
+    spineWidth: 25,
     cover: "/books/homo-deus.jpg",
     coverWidth: 329,
     coverHeight: 500,
@@ -31,9 +39,13 @@ const books: Book[] = [
   },
   {
     title: "Zero to One",
-    spineTitle: "Zero to One",
+    spineTitle: "ZERO TO ONE",
     author: "Peter Thiel with Blake Masters",
-    spineAuthor: "PT",
+    spineAuthor: "PETER THIEL",
+    spineSubtitle: "WITH BLAKE MASTERS",
+    spinePublisher: "CROWN BUSINESS",
+    spineDesign: "zero-to-one",
+    spineWidth: 19,
     cover: "/books/zero-to-one.jpg",
     coverWidth: 332,
     coverHeight: 500,
@@ -43,9 +55,13 @@ const books: Book[] = [
   },
   {
     title: "The Intelligent Investor",
-    spineTitle: "Intelligent Investor",
+    spineTitle: "THE INTELLIGENT INVESTOR",
     author: "Benjamin Graham",
-    spineAuthor: "BG",
+    spineAuthor: "BENJAMIN GRAHAM",
+    spineSubtitle: "REVISED EDITION",
+    spinePublisher: "HARPER BUSINESS",
+    spineDesign: "intelligent-investor",
+    spineWidth: 30,
     cover: "/books/intelligent-investor.jpg",
     coverWidth: 325,
     coverHeight: 500,
@@ -55,9 +71,13 @@ const books: Book[] = [
   },
   {
     title: "The Inequality Paradox",
-    spineTitle: "Inequality Paradox",
+    spineTitle: "THE INEQUALITY PARADOX",
     author: "Douglas McWilliams",
-    spineAuthor: "DM",
+    spineAuthor: "DOUGLAS McWILLIAMS",
+    spineSubtitle: "HOW CAPITALISM CAN WORK FOR EVERYONE",
+    spinePublisher: "OVERLOOK DUCKWORTH",
+    spineDesign: "inequality-paradox",
+    spineWidth: 25,
     cover: "/books/inequality-paradox.jpg",
     coverWidth: 920,
     coverHeight: 1389,
@@ -67,9 +87,13 @@ const books: Book[] = [
   },
   {
     title: "Atomic Habits",
-    spineTitle: "Atomic Habits",
+    spineTitle: "ATOMIC HABITS",
     author: "James Clear",
-    spineAuthor: "JC",
+    spineAuthor: "JAMES CLEAR",
+    spineSubtitle: "TINY CHANGES, REMARKABLE RESULTS",
+    spinePublisher: "AVERY",
+    spineDesign: "atomic-habits",
+    spineWidth: 24,
     cover: "/books/atomic-habits.jpg",
     coverWidth: 331,
     coverHeight: 500,
@@ -79,9 +103,12 @@ const books: Book[] = [
   },
   {
     title: "A Little History of Economics",
-    spineTitle: "Little History of Economics",
+    spineTitle: "A LITTLE HISTORY OF ECONOMICS",
     author: "Niall Kishtainy",
-    spineAuthor: "NK",
+    spineAuthor: "NIALL KISHTAINY",
+    spinePublisher: "YALE",
+    spineDesign: "little-history",
+    spineWidth: 21,
     cover: "/books/little-history-economics.jpg",
     coverWidth: 320,
     coverHeight: 500,
@@ -91,9 +118,13 @@ const books: Book[] = [
   },
   {
     title: "The Power of Habit",
-    spineTitle: "Power of Habit",
+    spineTitle: "THE POWER OF HABIT",
     author: "Charles Duhigg",
-    spineAuthor: "CD",
+    spineAuthor: "CHARLES DUHIGG",
+    spineSubtitle: "10TH ANNIVERSARY EDITION",
+    spinePublisher: "RANDOM HOUSE",
+    spineDesign: "power-of-habit",
+    spineWidth: 25,
     cover: "/books/power-of-habit.jpg",
     coverWidth: 290,
     coverHeight: 450,
@@ -103,15 +134,83 @@ const books: Book[] = [
   },
   {
     title: "Becoming Supernatural",
-    spineTitle: "Becoming Supernatural",
+    spineTitle: "BECOMING SUPERNATURAL",
     author: "Dr Joe Dispenza",
-    spineAuthor: "JD",
+    spineAuthor: "DR JOE DISPENZA",
+    spineSubtitle: "HOW COMMON PEOPLE ARE DOING THE UNCOMMON",
+    spinePublisher: "HAY HOUSE",
+    spineDesign: "becoming-supernatural",
+    spineWidth: 24,
     cover: "/books/becoming-supernatural.jpg",
     coverWidth: 333,
     coverHeight: 500,
     spineColor: "#a8c5bd",
     spineInk: "#17201d",
     url: "https://www.penguinrandomhouse.com/books/598767/becoming-supernatural-by-dr-joe-dispenza/",
+  },
+  {
+    title: "The Hard Thing About Hard Things",
+    spineTitle: "THE HARD THING ABOUT HARD THINGS",
+    author: "Ben Horowitz",
+    spineAuthor: "BEN HOROWITZ",
+    spineSubtitle: "BUILDING A BUSINESS WHEN THERE ARE NO EASY ANSWERS",
+    spinePublisher: "HARPER BUSINESS",
+    spineDesign: "hard-thing",
+    spineWidth: 24,
+    cover: "/books/hard-thing-about-hard-things.jpg",
+    coverWidth: 301,
+    coverHeight: 500,
+    spineColor: "#171a1a",
+    spineInk: "#ff4d18",
+    url: "https://www.harpercollins.com/products/the-hard-thing-about-hard-things-ben-horowitz",
+  },
+  {
+    title: "The 5 AM Club",
+    spineTitle: "THE 5 AM CLUB",
+    author: "Robin Sharma",
+    spineAuthor: "ROBIN SHARMA",
+    spineSubtitle: "OWN YOUR MORNING. ELEVATE YOUR LIFE.",
+    spinePublisher: "HARPER COLLINS",
+    spineDesign: "five-am-club",
+    spineWidth: 23,
+    cover: "/books/five-am-club.jpg",
+    coverWidth: 327,
+    coverHeight: 500,
+    spineColor: "#f8f7f2",
+    spineInk: "#e36c29",
+    url: "https://books.google.com/books/about/The_5_AM_Club_Own_Your_Morning_Elevate_Y.html?id=7W9bDwAAQBAJ",
+  },
+  {
+    title: "The 4-Hour Workweek",
+    spineTitle: "THE 4-HOUR WORKWEEK",
+    author: "Timothy Ferriss",
+    spineAuthor: "TIMOTHY FERRISS",
+    spineSubtitle: "EXPANDED AND UPDATED",
+    spinePublisher: "HARMONY",
+    spineDesign: "four-hour-workweek",
+    spineWidth: 28,
+    cover: "/books/four-hour-workweek.jpg",
+    coverWidth: 333,
+    coverHeight: 500,
+    spineColor: "#f5a018",
+    spineInk: "#ce2635",
+    url: "https://www.penguinrandomhouse.com/books/49081/the-4-hour-workweek-expanded-and-updated-by-timothy-ferriss/",
+  },
+  {
+    title: "The Psychology of Money",
+    spineTitle: "THE PSYCHOLOGY OF MONEY",
+    author: "Morgan Housel",
+    spineAuthor: "MORGAN HOUSEL",
+    spineSubtitle: "TIMELESS LESSONS ON WEALTH, GREED, AND HAPPINESS",
+    spinePublisher: "HH",
+    spineDesign: "psychology-of-money",
+    spineWidth: 22,
+    cover: "/books/psychology-of-money.jpg",
+    coverWidth: 318,
+    coverHeight: 500,
+    spineColor: "#eeeae0",
+    spineInk: "#22201e",
+    url: "https://www.harriman-house.com/psychologyofmoney",
   },
 ];
 
@@ -154,6 +253,7 @@ export default function Bookshelf() {
                   {
                     "--book-ratio": book.coverWidth / book.coverHeight,
                     "--book-lean": `${lean}deg`,
+                    "--spine-width": `calc(${book.spineWidth}px * var(--shelf-scale))`,
                     "--spine-color": book.spineColor,
                     "--spine-ink": book.spineInk,
                   } as CSSProperties
@@ -179,9 +279,16 @@ export default function Bookshelf() {
                         sizes="150px"
                       />
                     </span>
-                    <span className="bookshelf-spine">
+                    <span className={`bookshelf-spine bookshelf-spine--${book.spineDesign}`}>
+                      <span className="bookshelf-spine-head" aria-hidden="true" />
                       <span className="bookshelf-spine-title">{book.spineTitle}</span>
+                      {book.spineSubtitle ? (
+                        <span className="bookshelf-spine-subtitle">{book.spineSubtitle}</span>
+                      ) : null}
                       <span className="bookshelf-spine-author">{book.spineAuthor}</span>
+                      <span className="bookshelf-spine-publisher" aria-hidden="true">
+                        {book.spinePublisher}
+                      </span>
                     </span>
                   </span>
                 </button>

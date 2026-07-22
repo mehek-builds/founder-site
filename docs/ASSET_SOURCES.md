@@ -16,6 +16,10 @@ rights.
 | `public/books/little-history-economics.jpg` | *A Little History of Economics*, ISBN 9780300234527, [Yale University Press](https://yalebooks.yale.edu/book/9780300226317/a-little-history-of-economics/) |
 | `public/books/power-of-habit.jpg` | *The Power of Habit*, ISBN 9780812981605, [Penguin Random House](https://www.penguinrandomhouse.com/books/202855/the-power-of-habit-by-charles-duhigg/9780812981605/) |
 | `public/books/becoming-supernatural.jpg` | *Becoming Supernatural*, ISBN 9781401953119, [Penguin Random House](https://www.penguinrandomhouse.com/books/598767/becoming-supernatural-by-dr-joe-dispenza/) |
+| `public/books/hard-thing-about-hard-things.jpg` | *The Hard Thing About Hard Things*, ISBN 9780062273208, [HarperCollins](https://www.harpercollins.com/products/the-hard-thing-about-hard-things-ben-horowitz) |
+| `public/books/five-am-club.jpg` | *The 5 AM Club*, ISBN 9780008312855, [Google Books edition record](https://books.google.com/books/about/The_5_AM_Club_Own_Your_Morning_Elevate_Y.html?id=7W9bDwAAQBAJ) |
+| `public/books/four-hour-workweek.jpg` | *The 4-Hour Workweek*, ISBN 9780307465351, [Penguin Random House](https://www.penguinrandomhouse.com/books/49081/the-4-hour-workweek-expanded-and-updated-by-timothy-ferriss/) |
+| `public/books/psychology-of-money.jpg` | *The Psychology of Money*, ISBN 9780857197689, [Harriman House](https://www.harriman-house.com/psychologyofmoney) |
 
 The accordion bookshelf interaction is inspired by the public
 [cali.so bookshelf](https://cali.so/) and was implemented for this site's own

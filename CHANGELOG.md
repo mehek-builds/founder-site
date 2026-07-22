@@ -2,9 +2,13 @@
 
 ## 2026-07-22: About-page bookshelf
 
-- Added an interactive accordion bookshelf to the About page with eight selected
+- Added an interactive accordion bookshelf to the About page with twelve selected
   titles, locally stored edition covers, keyboard navigation, and reduced-motion
   behavior.
+- Rebuilt every closed-book spine with edition-specific thickness, typography,
+  jacket colors, rules, accent bands, and publisher marks.
+- Added *The Hard Thing About Hard Things*, *The 5 AM Club*, *The 4-Hour
+  Workweek*, and *The Psychology of Money* with ISBN-matched cover art.
 
 ## 2026-07-22: RoleQuick rebrand to Litos
 
