@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-07-22: About-page bookshelf
+
+- Added an interactive accordion bookshelf to the About page with eight selected
+  titles, locally stored edition covers, keyboard navigation, and reduced-motion
+  behavior.
+
 ## 2026-07-22: RoleQuick rebrand to Litos
 
 - Updated the homepage highlight reel and shared product metadata to use the new

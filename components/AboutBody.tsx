@@ -21,6 +21,7 @@
 // she approves it (master plan §11, Phase G gate).
 import { useEffect, useRef } from "react";
 import Link from "next/link";
+import Bookshelf from "./Bookshelf";
 import OriginGlobe from "./OriginGlobe";
 import SiteTabs from "./SiteTabs";
 
@@ -172,6 +173,8 @@ export default function AboutBody() {
             </div>
           </div>
         </div>
+
+        <Bookshelf />
       </div>
     </main>
   );

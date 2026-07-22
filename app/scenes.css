@@ -782,6 +782,195 @@ video.win-shot { background: var(--bg-2); }
 /* Same gap as the footer's actions: one CTA language across both surfaces. */
 .about-cta { display: flex; flex-wrap: wrap; gap: 38px; margin-top: 12px; }
 
+/* A physical accordion shelf, adapted to this site's paper and ink system.
+   One cover faces forward while the rest settle into readable spines. */
+.about-bookshelf {
+  margin-top: clamp(72px, 12vh, 132px);
+  padding-top: 28px;
+  border-top: 1px solid var(--line);
+}
+.about-bookshelf-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+.about-bookshelf-head .about-block-label { margin: 0; }
+.about-bookshelf-head p {
+  margin: 0;
+  color: var(--text-faint);
+  font-size: 0.82rem;
+}
+.bookshelf-viewport {
+  position: relative;
+  width: 100%;
+  min-height: clamp(190px, 58vw, 222px);
+  overflow: visible;
+}
+.bookshelf-list {
+  --book-height: clamp(178px, 55vw, 210px);
+  --spine-width: clamp(20px, 6.4vw, 24px);
+  display: flex;
+  align-items: flex-end;
+  gap: 1px;
+  width: max-content;
+  height: var(--book-height);
+  margin: 0;
+  padding: 0 10px;
+  list-style: none;
+}
+.bookshelf-book {
+  position: relative;
+  width: var(--spine-width);
+  height: var(--book-height);
+  flex: 0 0 auto;
+  transition: width 650ms var(--ease-reveal);
+}
+.bookshelf-book[data-open] {
+  width: calc(var(--book-height) * var(--book-ratio));
+  z-index: 2;
+}
+.bookshelf-trigger {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  perspective: 1200px;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 180ms var(--ease-ui);
+}
+.bookshelf-trigger::before {
+  content: "";
+  position: absolute;
+  inset: 0 50% 0 auto;
+  width: max(100%, 44px);
+  transform: translateX(50%);
+}
+.bookshelf-trigger:focus-visible {
+  outline: 1px solid var(--text);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+.bookshelf-book-inner {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(var(--book-height) * var(--book-ratio));
+  height: var(--book-height);
+  transform: rotate(var(--book-lean)) rotateY(90deg);
+  transform-origin: left bottom;
+  transform-style: preserve-3d;
+  transition: transform 650ms var(--ease-reveal);
+  will-change: transform;
+}
+.bookshelf-book[data-open] .bookshelf-book-inner {
+  transform: rotate(0deg) rotateY(0deg);
+}
+.bookshelf-cover {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 2px 4px 4px 2px;
+  background: var(--glass);
+  backface-visibility: hidden;
+  box-shadow:
+    0 0 0 1px rgba(24, 20, 12, 0.1),
+    2px 3px 4px -2px rgba(24, 20, 12, 0.24),
+    7px 14px 24px -14px rgba(24, 20, 12, 0.48);
+  transform: translateZ(var(--spine-width));
+  user-select: none;
+}
+.bookshelf-cover img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.bookshelf-spine {
+  position: absolute;
+  inset: 0 auto 0 0;
+  display: flex;
+  width: var(--spine-width);
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 0;
+  overflow: hidden;
+  color: var(--spine-ink);
+  background:
+    linear-gradient(to right, rgba(0, 0, 0, 0.14), transparent 34%, rgba(255, 255, 255, 0.15) 76%, rgba(0, 0, 0, 0.08)),
+    var(--spine-color);
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 1px rgba(24, 20, 12, 0.12);
+  backface-visibility: hidden;
+  transform: rotateY(-90deg);
+  transform-origin: left center;
+}
+.bookshelf-spine-title,
+.bookshelf-spine-author {
+  font-family: var(--font-mono);
+  color: inherit;
+  white-space: nowrap;
+  writing-mode: vertical-rl;
+}
+.bookshelf-spine-title {
+  min-height: 0;
+  flex: 1;
+  overflow: hidden;
+  font-size: 0.58rem;
+  letter-spacing: 0.02em;
+}
+.bookshelf-spine-author {
+  flex: none;
+  font-size: 0.48rem;
+  opacity: 0.7;
+}
+@media (hover: hover) and (pointer: fine) {
+  .bookshelf-book:not([data-open]) .bookshelf-trigger:hover {
+    transform: translateY(-5px);
+  }
+}
+.bookshelf-plank {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 8px;
+  border-top: 1px solid var(--line-strong);
+  border-bottom: 1px solid rgba(24, 20, 12, 0.06);
+  background: linear-gradient(to bottom, #e1d7c4, #cdbfa8);
+  box-shadow: 0 8px 14px -12px rgba(24, 20, 12, 0.7);
+}
+.bookshelf-annotation {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-top: 15px;
+  color: var(--text);
+  font-size: 0.9rem;
+  transition: color 180ms var(--ease-ui);
+}
+.bookshelf-annotation:hover { color: var(--text-dim); }
+.bookshelf-annotation:focus-visible {
+  outline: 1px solid var(--text);
+  outline-offset: 4px;
+}
+.bookshelf-annotation-author {
+  color: var(--text-faint);
+  font-size: 0.76rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  .bookshelf-book,
+  .bookshelf-book-inner,
+  .bookshelf-trigger { transition: none; }
+  .bookshelf-book:not([data-open]) .bookshelf-trigger:hover { transform: none; }
+}
+
 /* ---------- Scene 6: NOW + footer ---------- */
 .nowfoot { padding: 12vh 0 8vh; }
 /* The now block, REDESIGNED 2026-07-16 (Mehek): no card, no rotator. Both were
@@ -896,6 +1085,15 @@ video.win-shot { background: var(--bg-2); }
   body { font-size: 16px; }
   .wrap { padding: 0 20px; }
   .receipt-grid { grid-template-columns: 1fr; }
+  .about-bookshelf-head { display: block; }
+  .about-bookshelf-head p { margin-top: 8px; }
+  .bookshelf-list { padding-left: 4px; padding-right: 4px; }
+  .bookshelf-annotation {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2px 10px;
+  }
+  .bookshelf-annotation-author { grid-column: 1 / -1; }
 }
 
 /* ============================================================
