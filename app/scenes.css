@@ -691,6 +691,55 @@ video.win-shot { background: var(--bg-2); }
   line-height: 1.55;
 }
 
+/* Education is one compact fact, not a new credential section. The structure
+   follows the reference treatment: field, school mark, institution. */
+.about-education {
+  display: grid;
+  grid-template-columns: auto 32px minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
+  width: fit-content;
+  max-width: 100%;
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  color: var(--text);
+  text-decoration: none;
+}
+.about-education-role {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+}
+.about-education-mark {
+  display: inline-flex;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.03em;
+  color: var(--text-dim);
+  transition: border-color 0.25s var(--ease-ui), color 0.25s var(--ease-ui);
+}
+.about-education-school {
+  font-size: 0.96rem;
+  line-height: 1.35;
+}
+.about-education:hover .about-education-mark,
+.about-education:focus-visible .about-education-mark {
+  border-color: var(--text);
+  color: var(--text);
+}
+.about-education:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 6px;
+}
+
 /* The blocks: labelled sections of short prose (Mehek, 2026-07-16). The label
    is the site's system-label voice, matched to .scene-caption-text and the
    header tabs. Ink and faint only: law 1 keeps ember for verified receipts, and
@@ -1421,6 +1470,12 @@ video.win-shot { background: var(--bg-2); }
 @media (max-width: 520px) {
   body { font-size: 16px; }
   .wrap { padding: 0 20px; }
+  .about-education {
+    grid-template-columns: auto 28px minmax(0, 1fr);
+    gap: 10px;
+  }
+  .about-education-mark { width: 28px; height: 28px; }
+  .about-education-school { font-size: 0.88rem; }
   .receipt-grid { grid-template-columns: 1fr; }
   .about-bookshelf-head { display: block; }
   .about-bookshelf-head p { margin-top: 8px; }

@@ -81,6 +81,10 @@ first load it can take a baton from IntroZoomOut instead of starting underneath 
 A headshot with a restrained cursor-reactive tilt (static on touch and under reduced
 motion), an honest note (a DRAFT until Mehek approves it), a texture line, and a badge.
 
+The separate `/about` surface includes one compact education row for computer
+science at the University of Southern California. It is presented as a factual
+line, not as a credential section, and does not imply degree completion.
+
 ## 6. Now + colophon (`NowFooter.tsx`, `NowRotator.tsx`, `Terminal.tsx`) - id `now`
 The live Now widget bakes from `now.json` (21-day anti-rot: past 21 days it degrades
 to a still-true "Latest ship" line from the newest dated item), plus a rotating
