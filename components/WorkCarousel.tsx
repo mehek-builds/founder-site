@@ -1,10 +1,7 @@
 "use client";
-// Scene 2 — THE WORK, as a continuously rotating carousel. Replaces the pinned
-// timeline record (Mehek, 2026-07-13): every product is a card — a fake-live
-// window (device chrome + real screenshot) with the name and a short gloss
-// riding underneath it. The track drifts left forever (seamless loop via a
-// duplicated half), pauses on hover so the links are clickable, and falls back
-// to a plain scrollable row under prefers-reduced-motion.
+// Scene 2: THE WORK, as six equal grid cards. Every product keeps its fake-live
+// window, real screenshot, and looping product footage, while the full set is
+// visible at once instead of hidden inside a moving track.
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { COUNTS } from "../content/counts";
@@ -17,20 +14,19 @@ interface Card {
   url: string;
   urlLabel: string;
   poster: string;
-  video?: string; // real product footage; hover-plays over the poster
+  video?: string; // real product footage; loops while the card is visible
   phone?: boolean; // native mobile app: renders a phone mockup, not a browser window
 }
 
 const CARDS: Card[] = [
   {
-    slug: "rolequick",
+    slug: "litos",
     name: "Litos",
     gloss:
       "Autofills job applications: a Chrome extension, resume generation, and a full product dashboard.",
     url: "https://trylitos.com",
     urlLabel: "trylitos.com",
-    poster: "/work/rolequick.jpg",
-    video: "/work/rolequick.mp4",
+    poster: "/work/litos.jpg",
   },
   {
     slug: "buildsmart",
@@ -89,10 +85,11 @@ const CARDS: Card[] = [
 // the receipts in the same commit.
 export const CARD_SLUGS: readonly string[] = CARDS.map((c) => c.slug);
 
-function ProductCard({ card, ariaHidden }: { card: Card; ariaHidden?: boolean }) {
+function ProductCard({ card }: { card: Card }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  // The footage loops continuously (muted, autoplay), so every window is alive.
-  // Reduced-motion is the one exception: pause and rest on the poster frame.
+  // The footage loops while the card is visible, so every project has movement
+  // without decoding five clips while the visitor is elsewhere on the page.
+  // Reduced motion is the one exception: pause and rest on the poster frame.
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
@@ -103,16 +100,23 @@ function ProductCard({ card, ariaHidden }: { card: Card; ariaHidden?: boolean })
       v.currentTime = 0;
       return;
     }
-    const tryPlay = () => void v.play().catch(() => {});
-    tryPlay();
-    // Browsers pause muted autoplay videos when the tab backgrounds and don't
-    // resume on their own; replay when it (or the element) comes back into view.
-    const onVisible = () => { if (document.visibilityState === "visible") tryPlay(); };
+    let isIntersecting = false;
+    const syncPlayback = () => {
+      if (document.visibilityState === "visible" && isIntersecting) {
+        void v.play().catch(() => {});
+      } else {
+        v.pause();
+      }
+    };
+    const onVisible = () => syncPlayback();
     document.addEventListener("visibilitychange", onVisible);
     const io =
       typeof IntersectionObserver !== "undefined"
         ? new IntersectionObserver(
-            (entries) => entries.forEach((e) => { if (e.isIntersecting) tryPlay(); }),
+            (entries) => entries.forEach((entry) => {
+              isIntersecting = entry.isIntersecting;
+              syncPlayback();
+            }),
             { threshold: 0.15 }
           )
         : null;
@@ -124,16 +128,13 @@ function ProductCard({ card, ariaHidden }: { card: Card; ariaHidden?: boolean })
   }, []);
   return (
     <a
-      className={`car-card ${card.phone ? "car-phone" : ""}`}
+      className={`car-card reveal ${card.phone ? "car-phone" : ""} ${card.video ? "has-video" : "has-still"}`}
       href={card.url}
       target="_blank"
       rel="noreferrer"
-      aria-hidden={ariaHidden || undefined}
-      tabIndex={ariaHidden ? -1 : undefined}
-      aria-label={
-        ariaHidden ? undefined : `${card.name}, ${card.phone ? "view the code" : "open the live site"}`
-      }
+      aria-label={`${card.name}, ${card.phone ? "view the code" : "open the live site"}`}
     >
+      <div className="project-media">
       {card.phone ? (
         // native mobile app: a phone mockup, not a browser window
         <div className="phone-frame">
@@ -143,11 +144,10 @@ function ProductCard({ card, ariaHidden }: { card: Card; ariaHidden?: boolean })
               ref={videoRef}
               className="phone-shot"
               poster={card.poster}
-              autoPlay
               muted
               loop
               playsInline
-              preload="auto"
+              preload="metadata"
               aria-hidden="true"
               tabIndex={-1}
             >
@@ -157,7 +157,7 @@ function ProductCard({ card, ariaHidden }: { card: Card; ariaHidden?: boolean })
             <img
               className="phone-shot"
               src={card.poster}
-              alt={ariaHidden ? "" : `${card.name} app screenshot`}
+              alt={`${card.name} app screenshot`}
               loading="lazy"
             />
           )}
@@ -183,7 +183,7 @@ function ProductCard({ card, ariaHidden }: { card: Card; ariaHidden?: boolean })
             <img
               className="win-shot loaded"
               src={card.poster}
-              alt={ariaHidden ? "" : `${card.name} screenshot`}
+              alt={`${card.name} screenshot`}
               loading="lazy"
               onError={(e) => (e.currentTarget.style.display = "none")}
             />
@@ -192,11 +192,10 @@ function ProductCard({ card, ariaHidden }: { card: Card; ariaHidden?: boolean })
                 ref={videoRef}
                 className="win-video"
                 poster={card.poster}
-                autoPlay
                 muted
                 loop
                 playsInline
-                preload="auto"
+                preload="metadata"
                 aria-hidden="true"
                 tabIndex={-1}
               >
@@ -206,132 +205,14 @@ function ProductCard({ card, ariaHidden }: { card: Card; ariaHidden?: boolean })
           </div>
         </div>
       )}
+      </div>
       <h3 className="car-name">{card.name}</h3>
       <p className="car-gloss">{card.gloss}</p>
     </a>
   );
 }
 
-// One full half-track (the seamless loop length) drifts past in this many
-// seconds; the px/s speed derives from the measured half width so the pace
-// matches the old CSS marquee at any card size.
-const LOOP_SECONDS = 55;
-
 export default function WorkCarousel() {
-  const trackRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const track = trackRef.current!;
-    const GAP = 40; // matches .car-track gap in scenes.css
-
-    let x = 0; // current translate, wrapped into (-half, 0]
-    let half = 0; // loop length: half the track + one gap
-    let hovered = false;
-    let dragging = false;
-    let captured = false;
-    let dragPointer = -1;
-    let lastPointerX = 0;
-    let dragDistance = 0;
-    let raf = 0;
-    let last = performance.now();
-
-    const measure = () => {
-      half = track.scrollWidth / 2 + GAP / 2;
-    };
-    measure();
-    const ro = new ResizeObserver(measure);
-    ro.observe(track);
-
-    const wrap = () => {
-      if (half <= 0) return;
-      x = (((x % half) + half) % half) - half; // into [-half, 0)
-      track.style.transform = `translateX(${x}px)`;
-    };
-
-    const tick = (now: number) => {
-      const dt = Math.min((now - last) / 1000, 0.1);
-      last = now;
-      // auto-drift only while the cursor is away; a hover hands over control
-      if (!hovered && !dragging) {
-        x -= (half / LOOP_SECONDS) * dt;
-        wrap();
-      }
-      raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-
-    const onEnter = () => {
-      hovered = true;
-    };
-    const onLeave = () => {
-      hovered = false;
-      dragging = false;
-    };
-    const onDown = (e: PointerEvent) => {
-      dragging = true;
-      dragPointer = e.pointerId;
-      lastPointerX = e.clientX;
-      dragDistance = 0;
-      captured = false;
-      // NB: do NOT capture the pointer here. setPointerCapture retargets the
-      // follow-up click event to the capturing element (.car-track), so the
-      // card <a> never receives the click and never navigates. Capture is
-      // taken lazily in onMove once a real drag starts.
-    };
-    const onMove = (e: PointerEvent) => {
-      if (!dragging || e.pointerId !== dragPointer) return;
-      const dx = e.clientX - lastPointerX;
-      lastPointerX = e.clientX;
-      dragDistance += Math.abs(dx);
-      // only once this is unmistakably a drag do we grab the pointer, so a
-      // plain click keeps landing on the link underneath it
-      if (!captured && dragDistance > 6) {
-        try {
-          track.setPointerCapture(dragPointer);
-        } catch {}
-        captured = true;
-      }
-      x += dx;
-      wrap();
-    };
-    const onUp = (e: PointerEvent) => {
-      if (e.pointerId !== dragPointer) return;
-      dragging = false;
-      captured = false;
-      // touch has no hover: releasing the finger resumes the drift
-      if (e.pointerType !== "mouse") hovered = false;
-    };
-    // a real drag must not fire the link under the pointer on release
-    const onClick = (e: MouseEvent) => {
-      if (dragDistance > 6) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-      dragDistance = 0;
-    };
-
-    track.addEventListener("pointerenter", onEnter);
-    track.addEventListener("pointerleave", onLeave);
-    track.addEventListener("pointerdown", onDown);
-    track.addEventListener("pointermove", onMove);
-    track.addEventListener("pointerup", onUp);
-    track.addEventListener("pointercancel", onUp);
-    track.addEventListener("click", onClick, true);
-
-    return () => {
-      cancelAnimationFrame(raf);
-      ro.disconnect();
-      track.removeEventListener("pointerenter", onEnter);
-      track.removeEventListener("pointerleave", onLeave);
-      track.removeEventListener("pointerdown", onDown);
-      track.removeEventListener("pointermove", onMove);
-      track.removeEventListener("pointerup", onUp);
-      track.removeEventListener("pointercancel", onUp);
-      track.removeEventListener("click", onClick, true);
-    };
-  }, []);
-
   return (
     <section className="scene work-carousel" id="flagships" aria-label="Highlight reel">
       {/* One oversized kinetic line, ink on paper: the eyebrow and the count
@@ -340,14 +221,10 @@ export default function WorkCarousel() {
       <div className="wrap">
         <MoonTitle text="Highlight reel" />
       </div>
-      <div className="car-viewport">
-        <div className="car-track" ref={trackRef}>
+      <div className="wrap">
+        <div className="car-grid">
           {CARDS.map((c) => (
             <ProductCard key={c.slug} card={c} />
-          ))}
-          {/* duplicated half: makes the wrap-around seamless */}
-          {CARDS.map((c) => (
-            <ProductCard key={c.slug + "-dup"} card={c} ariaHidden />
           ))}
         </div>
       </div>

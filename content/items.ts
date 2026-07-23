@@ -393,7 +393,7 @@ export const ITEMS: Item[] = [
     metrics: [{ label: "Scan cadence", value: "3h" }],
   },
   {
-    slug: "rolequick",
+    slug: "litos",
     title: "Litos",
     pillar: "ventures",
     oneLiner: "Litos, a Chrome extension that autofills job applications.",
@@ -407,17 +407,9 @@ export const ITEMS: Item[] = [
       {
         label: "Distribution",
         value: "Chrome Web Store",
-        source:
-          "https://chromewebstore.google.com/detail/rolequick-tailored-resume/bdbedbmkjpfioknfpmhookefabipjaad",
       },
     ],
-    links: [
-      { label: "Live", url: "https://trylitos.com" },
-      {
-        label: "Store",
-        url: "https://chromewebstore.google.com/detail/rolequick-tailored-resume/bdbedbmkjpfioknfpmhookefabipjaad",
-      },
-    ],
+    links: [{ label: "Live", url: "https://trylitos.com" }],
     makingOf: [
       "Published on the Chrome Web Store; answers every application question.",
       "Generates tailored resumes on the fly.",

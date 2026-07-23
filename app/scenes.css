@@ -449,7 +449,7 @@
   color: var(--text-faint);
 }
 
-/* ---------- Scene 2: THE WORK carousel ---------- */
+/* ---------- Scene 2: THE WORK grid ---------- */
 .work-carousel { padding: 12vh 0 10vh; overflow: hidden; }
 
 /* MOONRISE title (Mehek, 2026-07-16). The hero's device, compressed to one
@@ -526,31 +526,42 @@
   .mt-light,
   .mt-harmo { display: none; }
 }
-.car-viewport { overflow: hidden; }
-.car-track {
-  display: flex;
-  gap: 40px;
-  width: max-content;
-  /* vertical padding gives the hover lift (translateY -4px) headroom so the
-     card's top border isn't clipped by .car-viewport's overflow: hidden */
-  padding: 16px 20px;
-  /* drift + drag are both JS-driven (WorkCarousel.tsx) via inline translateX */
-  cursor: grab;
-  touch-action: pan-y; /* horizontal swipes drag the track, vertical still scrolls */
-  user-select: none;
+.car-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 72px 32px;
+  align-items: stretch;
 }
-.car-track:active { cursor: grabbing; }
-.car-track img { -webkit-user-drag: none; }
 .car-card {
-  width: min(420px, 78vw);
-  flex: none;
-  display: block;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   color: inherit;
   text-decoration: none;
   cursor: pointer;
 }
-.car-card .win-frame {
+.project-media {
+  width: 100%;
+  min-height: 250px;
+  max-height: 280px;
+  aspect-ratio: 1.45;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 18px;
+}
+.js .car-grid .car-card.in {
+  transition-duration: 1.2s;
+}
+.js .car-grid .car-card:nth-child(3n + 2) { transition-delay: 0.12s; }
+.js .car-grid .car-card:nth-child(3n) { transition-delay: 0.24s; }
+.car-card .win-frame {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   border: 1px solid var(--line-strong);
   transition: transform 0.3s var(--ease-ui, ease), border-color 0.3s var(--ease-ui, ease);
 }
@@ -568,9 +579,14 @@
   transition: color 0.25s var(--ease-ui), border-color 0.25s var(--ease-ui);
 }
 .car-hint-link:hover { color: var(--text); border-bottom-color: var(--text); }
-@media (prefers-reduced-motion: reduce) {
-  .car-track { animation: none; }
-  .car-viewport { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+@media (max-width: 900px) {
+  .car-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .js .car-grid .car-card:nth-child(n) { transition-delay: 0s; }
+  .js .car-grid .car-card:nth-child(even) { transition-delay: 0.12s; }
+}
+@media (max-width: 620px) {
+  .car-grid { grid-template-columns: 1fr; gap: 56px; }
+  .js .car-grid .car-card:nth-child(n) { transition-delay: 0s; }
 }
 
 /* ---------- Scene 3: THE WORK ---------- */
@@ -620,6 +636,12 @@
   overflow: hidden;
   background: var(--bg-2);
 }
+.project-media .win-screen {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  aspect-ratio: auto;
+}
 .win-placeholder {
   position: absolute;
   inset: 0;
@@ -645,6 +667,16 @@
   transition: opacity 0.6s var(--ease-ui);
 }
 .win-shot.loaded { opacity: 1; }
+.has-still .win-shot.loaded {
+  animation: project-still-drift 12s var(--ease-ui) infinite alternate;
+}
+@keyframes project-still-drift {
+  from { transform: scale(1); }
+  to { transform: scale(1.025); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .has-still .win-shot.loaded { animation: none; }
+}
 video.win-shot { background: var(--bg-2); }
 .win-playcue {
   position: absolute;
@@ -1602,9 +1634,8 @@ video.win-shot { background: var(--bg-2); }
   .car-card::before { transition: none; }
 }
 
-/* Real product footage: overlays the poster (its own poster frame shows at rest,
-   the clip plays on hover). object-fit cover, but the clip is already 16:10 so
-   nothing crops. */
+/* Real product footage: overlays the poster and loops whenever its card is in
+   view. object-fit cover, but the clip is already 16:10 so nothing crops. */
 .win-video {
   position: absolute;
   inset: 0;
@@ -1622,13 +1653,13 @@ video.win-shot { background: var(--bg-2); }
    normal width (the name + gloss read on 2-3 lines like the others), but the
    phone FRAME is a narrow device, centered, whose height tracks the browser
    windows' so every card's media area lines up. */
-.car-card.car-phone { width: min(340px, 80vw); }
+.car-card.car-phone { width: 100%; }
 /* the app's story is denser than a one-liner; keep its gloss small so it still
    holds to ~two lines beside the terser website cards */
 .car-phone .car-gloss { font-size: 0.8rem; line-height: 1.5; }
 .phone-frame {
   width: fit-content;
-  margin: 0 auto 18px;
+  margin: 0 auto;
   border-radius: 22px;
   background: #14110c;
   padding: 3px;
@@ -1640,12 +1671,12 @@ video.win-shot { background: var(--bg-2); }
 .car-card:hover .phone-frame { transform: translateY(-4px); }
 .phone-shot {
   display: block;
-  height: 304px; /* + 6px bezel = 310px frame, matching the browser windows */
+  height: 244px; /* + 6px bezel aligns the device with the browser windows */
   width: auto;
   border-radius: 19px;
 }
 @media (max-width: 560px) {
   /* below the cap the browser windows shrink with the viewport; track them */
-  .phone-shot { height: 60vw; max-height: 304px; }
+  .phone-shot { height: min(62vw, 244px); }
 }
 .phone-notch { display: none; }
