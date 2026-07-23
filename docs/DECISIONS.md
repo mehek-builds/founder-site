@@ -15,7 +15,7 @@ this file is the in-repo enforcement copy. A code editor must never break these.
 | Higgsfield hero | One ambient loop allowed, real-asset-derived, PNG fallback. v1 ships an abstract canvas render of the grid (a real Higgsfield loop can swap into HeroBackdrop later). |
 | Motion system | GSAP only, one token set (`lib/motion.ts`). No Lenis, no Framer Motion at v1. |
 | Theme | "Proof carries the color", light-only v1 (Mehek rejected dark 2026-07-12; bright clean gallery, near-white paper, ink type, ember reserved for verified facts). |
-| Curation (two-tier receipts) | Mehek, 2026-07-12: only the strongest pieces get cards. Shelf = RoleQuick, BuildSmart, Rufescent, Earnings-drift trading system, LetterStory + the Traeco tombstone (links traeco.dev, verified live). Six cards, RATIFIED. Everything else renders a one-line ledger row ("The rest of the record"). G42 agent + creator research corpus EVICTED from items.ts until they carry external proof. Grid nodes and derived counts include both tiers. Vault spec: master plan §5 Scene 2 "Two-tier receipts". |
+| Curation (two-tier receipts) | Mehek, 2026-07-12: only the strongest pieces get cards. Shelf = Litos, BuildSmart, Rufescent, Earnings-drift trading system, LetterStory + the Traeco tombstone (links traeco.dev, verified live). Six cards, RATIFIED. Everything else renders a one-line ledger row ("The rest of the record"). G42 agent + creator research corpus EVICTED from items.ts until they carry external proof. Grid nodes and derived counts include both tiers. Vault spec: master plan §5 Scene 2 "Two-tier receipts". |
 
 ## Standing laws (build gates)
 
@@ -52,5 +52,5 @@ this file is the in-repo enforcement copy. A code editor must never break these.
   currently 8 live / 16 shipped / 120 students / 4 client systems).
 - Approve or rewrite the Scene 5 honest note (currently a draft).
 - Early-age origin receipt (optional): supply one, or the arc stays at the JPM no.
-- RoleQuick Chrome Web Store link is intentionally omitted until the listing is
+- Litos Chrome Web Store link is intentionally omitted until the listing is
   confirmed approved (it was rejected/pending as of the submission doc).

@@ -1,7 +1,7 @@
 # Scenes (as built)
 
 Composition in `app/page.tsx`, top to bottom:
-Hero -> WorkCarousel -> Receipts -> Leading -> OriginGlobe (route) -> Person ->
+Hero -> Work grid -> Receipts -> Leading -> OriginGlobe (route) -> Person ->
 NowFooter. Always-on overlays are mounted alongside: IntroZoomOut (first-load
 intro), OriginGlobe `stamp` (the corner mark), StickyNav, SceneCaption, and Reveal;
 plus CursorSnitch and FaviconGlobe from `app/layout.tsx`. The sticky nav, the scene
@@ -19,14 +19,12 @@ and quickens the draw without changing the curve. Any letter key reseeds the fig
 Reduced motion: the figure is drawn once and parked, with the text lit.
 
 ## 1. The work (`WorkCarousel.tsx`) - id `flagships`
-A continuously drifting carousel of "fake-live" product windows (device chrome + a
-real screenshot poster from `public/work/`, the deployed URL as the one ember
-element, and muted looping `.mp4` footage over the poster). The loop is seamless via
-a duplicated half and driven by `requestAnimationFrame` (speed derived from the
-measured half-width). It pauses on hover and is pointer-draggable (capture is taken
-lazily only past a 6px threshold, so a plain click still opens the card link). The
-"plus N more in the receipts below" hint derives from `counts.ts`. Reduced motion: a
-plain scrollable row, with videos resting on their posters.
+Six equal "fake-live" product windows render in a responsive grid: three columns on
+desktop, two on tablet, and one on mobile. Each card keeps its device chrome, real
+poster, deployed URL, and muted looping footage. Clips play only while their cards
+are visible. A subtle 1.2-second entrance staggers across each row. The "plus N more
+in the receipts below" hint derives from `counts.ts`. Reduced motion: cards render
+immediately and videos rest on their posters.
 
 The section opens on `MoonTitle` ("Highlight reel"): the hero's moon, compressed to
 one line (Mehek, 2026-07-16). The eyebrow and the old "N shipped projects so far"
@@ -38,7 +36,7 @@ passes one amplitude twice). The ghost `<h2>` is the real server-rendered text a
 the lit layer is an aria-hidden duplicate masked to the moonlight. Reduced motion:
 full-ink title, no moon, no canvas.
 
-**THE REEL IS THE SHELF** (Mehek ruling, 2026-07-16, which amends the 2026-07-12
+**THE GRID IS THE SHELF** (Mehek ruling, 2026-07-16, which amends the 2026-07-12
 curation directive): these six cards carry all card-level emphasis, so `Receipts`
 renders only the remainder. `CARD_SLUGS` is exported here and filtered there, so
 adding a card to the reel removes it from the receipts in the same commit.
@@ -52,7 +50,7 @@ Each item leads with its strongest verified fact in ember display type, then the
 name, the gloss, and the link row: DO #2, "one real outcome per artifact", built as a
 layout. A second metric may ride alongside as context but renders subordinate, since
 two facts at equal size read as two heroes. A "metric" is any verified fact, not just
-a number (RoleQuick's was the value "Chrome Web Store" with a source link), and a
+a number (Litos uses the value "Chrome Web Store"), and a
 sourced fact becomes a checkable ember link. An item with NO metric cannot lead with
 one, so it stays a one-line row under "The rest of the record" rather than opening on
 an empty hero slot. A quiet state-and-date line closes each card.
@@ -62,7 +60,7 @@ to and flash a card. All server-rendered.
 
 Consequences of the amendment, logged: the flagships' "How it was built" strips are
 dropped for now (data still in `items.ts`, unrendered), and the Traeco tombstone plus
-RoleQuick's Chrome Web Store proof no longer render anywhere. The last two are OPEN
+Litos's Chrome Web Store proof no longer renders anywhere. The last two are OPEN
 and flagged to Mehek, not decided. Several receipt-card CSS classes
 (`.receipt-desc`, `.receipt-making`, `.metric-sourced`, and friends) are orphaned
 pending that decision.

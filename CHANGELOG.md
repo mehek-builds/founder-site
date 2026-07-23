@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-07-23: Responsive project grid and Litos consistency
+
+- Replaced the drifting project carousel with six equal project cards in a
+  responsive three, two, and one-column grid.
+- Kept subtle 1.2-second card entrances and looping project footage while each
+  card is visible, with static poster frames under reduced motion.
+- Shortened the Nourish phone preview to align with the browser-window cards.
+- Standardized the product identity as Litos, linked to trylitos.com, and renamed
+  its local media assets.
+
 ## 2026-07-22: About-page bookshelf
 
 - Added an interactive accordion bookshelf to the About page with twelve selected
@@ -14,14 +24,14 @@
   and custom spine treatments. Kept the existing *A Little History of
   Economics* entry without duplicating it.
 
-## 2026-07-22: RoleQuick rebrand to Litos
+## 2026-07-22: Litos product identity
 
 - Updated the homepage highlight reel and shared product metadata to use the new
   Litos product name and link to trylitos.com.
 
 ## 2026-07-12: Two-tier receipts (Mehek curation directive, shelf ratified)
 
-- **Shelf, ratified by Mehek:** exactly six full receipt cards render: RoleQuick,
+- **Shelf, ratified by Mehek:** exactly six full receipt cards render: Litos,
   BuildSmart, Rufescent, the earnings-drift trading system, LetterStory, and the
   Traeco tombstone. Traeco gains a `Site` link to traeco.dev (verified live
   2026-07-12; re-verify at ship).
@@ -38,9 +48,9 @@
 - **Verified:** tsc clean; dev render shows 6 cards + 15 ledger rows, evicted
   items absent, Traeco link present.
 
-## 2026-07-12 — RoleQuick store link + design-plan alignment pass
+## 2026-07-12: Litos store link + design-plan alignment pass
 
-- **RoleQuick** is now published on the Chrome Web Store (confirmed live): added
+- **Litos** is now published on the Chrome Web Store (confirmed live): added
   the Store link + "Distribution: Chrome Web Store" metric to its receipt, updated
   the Work window beat and the making-of line.
 - **Craft alignment** against the design plan's carry-over rules: replaced the
@@ -90,11 +100,9 @@ demolished (survives in git history); the data layer was kept and extended.
   functional label (eyebrows, buttons, chips, tags, dates, nav, terminal) moved
   to the quiet neutral sans. Disciplined two-face system per plan §5.
 
-## 2026-07-12 — Scene 3 windows play on hover (live clips)
+## 2026-07-12: Scene 3 live clips
 
-- The three motion-driven windows (RoleQuick, BuildSmart, Rufescent) now hold a
-  short muted scroll-through **clip** of the real site, recorded via Playwright
-  and compressed to small mp4s (192-480KB each). The window plays the clip on
-  hover/focus and resets to the screenshot poster at rest; reduced-motion and
-  touch keep the static poster. The PEAD dashboard stays a still. Total Scene 3
-  media ~1.4MB, within budget.
+- The motion-driven windows hold short muted scroll-through clips of the real
+  sites, recorded via Playwright and compressed to small mp4s. The current grid
+  loops each clip only while its card is visible; reduced motion keeps the static
+  poster. The PEAD dashboard stays a still.

@@ -18,7 +18,7 @@ Everything the visitor reads is server-rendered HTML. The motion layer hydrates 
                                                 │
    app/page.tsx     server-rendered scene composition (the readable baseline)
    ┌────────────────────────────────────────────────────────────────────────┐
-   │ IntroZoomOut → OriginGlobe(stamp) → Hero → WorkCarousel → Receipts →    │
+   │ IntroZoomOut → OriginGlobe(stamp) → Hero → Work grid → Receipts →       │
    │ Leading → OriginGlobe(route) → Person → NowFooter                       │
    │ overlays: StickyNav · SceneCaption · Reveal                             │
    └───────────────────────────────▲────────────────────────────────────────┘
@@ -79,9 +79,9 @@ The same component, passed `stamp`, renders a smaller, quieter, non-zooming vers
 
 Two shared robustness patterns run through all three: an `IntersectionObserver` starts the route animation only when it scrolls into view, and a `setInterval` watchdog re-drives the render loop if `requestAnimationFrame` has been suspended for more than 300ms (as embedded webviews do).
 
-## The work carousel (`components/WorkCarousel.tsx`)
+## The work grid (`components/WorkCarousel.tsx`)
 
-Every flagship product is a "fake-live" window: device chrome, a real screenshot poster from `public/work/`, the deployed URL shown as the one ember element in the frame, and short muted product footage (`.mp4`) that loops over the poster. The track drifts left forever via a duplicated half for a seamless wrap, driven by a `requestAnimationFrame` loop (not a CSS marquee) whose speed is derived from the measured half-width so the pace is identical at any card size. It pauses on hover so the links are clickable and supports pointer dragging, with a deliberate subtlety documented in the code: the pointer is *not* captured on pointer-down, because `setPointerCapture` would retarget the follow-up click away from the card link; capture is taken lazily only once movement exceeds a 6px threshold, and a real drag suppresses the click so a drag never accidentally opens a link. Under reduced motion the whole thing degrades to a plain scrollable row and the videos rest on their poster frames.
+Every flagship product is a "fake-live" window: device chrome, a real screenshot poster from `public/work/`, the deployed URL shown as the one ember element in the frame, and short muted product footage (`.mp4`) that loops while its card is visible. Six equal cards render in a responsive grid: three columns on desktop, two on tablet, and one on mobile. A quiet 1.2-second entrance staggers across each row. Under reduced motion, every card is immediately visible and each video rests on its poster frame.
 
 ## The receipts: a two-tier evidence index (`components/Receipts.tsx`)
 
@@ -139,7 +139,7 @@ npm run activity   # scripts/build-activity.mjs → content/activity.json
 npm run qa:motion  # scripts/qa-motion-recorder.js [baseURL]
 ```
 
-`scripts/qa-motion-recorder.js` launches real Chromium with Playwright and asserts the site's motion non-negotiables against a running dev server: that the hero harmonograph canvas signature actually changes over two seconds (it is animating, not stuck), that under `prefers-reduced-motion` the same canvas is parked static *and* the hero still exposes real visible text (the accessible twin is intact), that a scroll-scrub scene lights progressively and monotonically as you scroll rather than jumping straight to fully-lit or staying at zero, and that the work-window videos start paused on their poster frame, play on hover, and reset when the cursor leaves. It exits non-zero with a labeled `[FAIL]` line on any regression.
+`scripts/qa-motion-recorder.js` launches real Chromium with Playwright and asserts the site's motion non-negotiables against a running dev server: the hero harmonograph animates and becomes fully static under `prefers-reduced-motion`; the hero keeps real visible text; the Work grid renders six equal cards across desktop, tablet, and mobile layouts without overflow; Litos consistently points to `trylitos.com`; Nourish aligns with the browser-window cards; and visible project clips loop while reduced-motion clips stay parked. It exits non-zero with a labeled `[FAIL]` line on any regression.
 
 ## Deploy
 

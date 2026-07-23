@@ -9,8 +9,8 @@
 // one-line ledger row under "The rest of the record" (Mehek ruling, same day)
 // rather than rendering a card with an empty hero slot.
 //
-// A "metric" is any verified fact, not just a number: RoleQuick's is the value
-// "Chrome Web Store" with a source link. Ember still means exactly one thing.
+// A "metric" is any verified fact, not just a number: Litos uses the value
+// "Chrome Web Store." Ember still means exactly one thing.
 // Pillar filter chips (?pillar= URL state) and #item-slug deep links work across
 // both groups. All content is server-rendered (plain fetch returns every receipt).
 import { useEffect, useMemo, useState } from "react";

@@ -1,14 +1,13 @@
 #!/usr/bin/env node
 /* mehek-site motion QA gate (canon since 2026-07-14). Run before merging any
-   branch that touches Hero, Record, or Work motion. Drives a real Chromium
-   page with Playwright and checks the three moving parts against the site's
+   branch that touches Hero or Work motion. Drives a real Chromium page with
+   Playwright and checks the moving parts against the site's
    own non-negotiables (docs/DECISIONS.md, founder-site-HANDOFF.md):
      - the hero harmonograph actually animates, and goes fully static under
        prefers-reduced-motion (no reveal gimmick left running)
-     - the Record scene's scroll-scrub lights nodes monotonically (no stuck-
-       at-zero, no jump straight to fully-lit before the section is reached)
-     - Work window hover-to-play clips actually play on hover and reset to
-       the poster frame at rest
+     - the Work grid contains six equal cards in two rows of three
+     - Work clips play continuously, while reduced motion parks them
+     - the Litos identity and Nourish device sizing stay aligned
 
    HOW TO RUN
      1. Start the dev server: npm run dev (or preview_start "mehek-site").
@@ -99,88 +98,160 @@ async function checkHeroReducedMotionStatic(browser) {
   }
 }
 
-async function checkRecordScrub(browser) {
-  const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-  await page.goto(BASE_URL, { waitUntil: "networkidle" });
-  const record = await page.$("#record");
-  if (!record) {
-    fail("Record scene: #record not found on page.");
+async function measureWorkGrid(page) {
+  await page.waitForSelector(".car-grid .car-card");
+  await page.locator(".car-grid").scrollIntoViewIfNeeded();
+  return page.evaluate(() => {
+    const cards = [...document.querySelectorAll(".car-grid .car-card")];
+    const rects = cards.map((card) => {
+      const rect = card.getBoundingClientRect();
+      return { x: Math.round(rect.x), y: Math.round(rect.y), width: Math.round(rect.width) };
+    });
+    const phone = document.querySelector(".phone-frame")?.getBoundingClientRect();
+    const windowFrame = document.querySelector(".win-frame")?.getBoundingClientRect();
+    const mediaStages = [...document.querySelectorAll(".project-media")].map((stage) =>
+      Math.round(stage.getBoundingClientRect().height)
+    );
+    const litos = cards.find((card) => card.textContent?.includes("Litos"));
+    const retiredBrand = ["role", "quick"].join("");
+    return {
+      count: cards.length,
+      columns: new Set(rects.map((rect) => rect.x)).size,
+      rows: new Set(rects.map((rect) => rect.y)).size,
+      widths: new Set(rects.map((rect) => rect.width)).size,
+      litosHref: litos?.getAttribute("href") ?? "",
+      oldBrandPresent: document.documentElement.innerHTML.toLowerCase().includes(retiredBrand),
+      phoneHeight: phone ? Math.round(phone.height) : 0,
+      windowHeight: windowFrame ? Math.round(windowFrame.height) : 0,
+      mediaStageHeights: [...new Set(mediaStages)],
+      overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
+      durations: cards.map((card) => getComputedStyle(card).transitionDuration),
+      delays: cards.map((card) => getComputedStyle(card).transitionDelay),
+    };
+  });
+}
+
+async function checkWorkGrid(browser) {
+  const cases = [
+    { width: 1280, columns: 3, rows: 2 },
+    { width: 900, columns: 2, rows: 3 },
+    { width: 620, columns: 1, rows: 6 },
+  ];
+  const measured = [];
+  for (const expected of cases) {
+    const page = await browser.newPage({
+      viewport: { width: expected.width, height: 900 },
+      reducedMotion: "reduce",
+    });
+    await page.goto(BASE_URL, { waitUntil: "networkidle" });
+    const result = await measureWorkGrid(page);
     await page.close();
-    return;
+    measured.push({ expected, result });
+    if (
+      result.count !== 6 ||
+      result.columns !== expected.columns ||
+      result.rows !== expected.rows ||
+      result.widths !== 1 ||
+      result.mediaStageHeights.length !== 1 ||
+      result.overflow
+    ) {
+      fail(`Work grid at ${expected.width}px: unexpected layout ${JSON.stringify(result)}.`);
+    } else {
+      pass(`Work grid at ${expected.width}px: ${expected.columns} column layout has six equal cards and no overflow.`);
+    }
   }
 
-  const litCounts = [];
-  const box = await record.boundingBox();
-  const sectionTop = box.y;
-  const sectionHeight = box.height;
-  const steps = 6;
-
-  for (let i = 0; i <= steps; i++) {
-    const y = sectionTop + (sectionHeight * i) / steps;
-    await page.mouse.wheel(0, 0); // no-op, ensures a paint tick
-    await page.evaluate((yy) => window.scrollTo(0, yy), y);
-    await page.waitForTimeout(300);
-    const lit = await page.$$eval(".rec-node.lit", (els) => els.length);
-    litCounts.push(lit);
-  }
-  await page.close();
-
-  // Monotonic non-decreasing is the contract: the scrub should never light
-  // fewer nodes further into the section than it did earlier.
-  let monotonic = true;
-  for (let i = 1; i < litCounts.length; i++) {
-    if (litCounts[i] < litCounts[i - 1]) monotonic = false;
-  }
-  const allSameAndZero = litCounts.every((c) => c === 0);
-  const allSameAndMax = new Set(litCounts).size === 1 && litCounts[0] > 0;
-
-  if (allSameAndZero) {
-    fail(`Record scrub: node lit-count stayed at 0 across the whole section (${litCounts.join(",")}) — scroll-scrub looks stuck.`);
-  } else if (allSameAndMax) {
-    fail(`Record scrub: node lit-count jumped straight to ${litCounts[0]} and never changed (${litCounts.join(",")}) — scrub not driving progressively.`);
-  } else if (!monotonic) {
-    fail(`Record scrub: lit-count went backwards while scrolling down (${litCounts.join(",")}) — should be non-decreasing.`);
+  const result = measured[0].result;
+  if (result.litosHref !== "https://trylitos.com" || result.oldBrandPresent) {
+    fail(`Work grid: Litos identity is inconsistent (${JSON.stringify(result)}).`);
   } else {
-    pass(`Record scrub: lit-count progressed non-decreasing through the section (${litCounts.join(",")}).`);
+    pass("Work grid: Litos points to trylitos.com and the retired brand is absent.");
+  }
+  if (result.phoneHeight > result.windowHeight || result.windowHeight - result.phoneHeight > 32) {
+    fail(`Work grid: Nourish is ${result.phoneHeight}px tall versus ${result.windowHeight}px for a browser window.`);
+  } else {
+    pass(`Work grid: Nourish stays slightly shorter inside an aligned media stage (${result.phoneHeight}px versus ${result.windowHeight}px).`);
+  }
+
+  const revealPage = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  await revealPage.goto(BASE_URL, { waitUntil: "networkidle" });
+  await revealPage.locator(".car-grid").scrollIntoViewIfNeeded();
+  await revealPage.waitForFunction(() =>
+    [...document.querySelectorAll(".car-grid .car-card")].every((card) => card.classList.contains("in"))
+  );
+  await revealPage.waitForFunction(() =>
+    [...document.querySelectorAll(".car-grid .car-card")].every(
+      (card) => getComputedStyle(card).transform === "none" && getComputedStyle(card).opacity === "1"
+    )
+  );
+  const revealStyles = await revealPage.$$eval(".car-grid .car-card", (cards) =>
+    cards.map((card) => ({
+      duration: getComputedStyle(card).transitionDuration,
+      delay: getComputedStyle(card).transitionDelay.split(",")[0].trim(),
+    }))
+  );
+  await revealPage.close();
+  const expectedDelays = ["0s", "0.12s", "0.24s", "0s", "0.12s", "0.24s"];
+  if (
+    revealStyles.some((style) => style.duration !== "1.2s") ||
+    revealStyles.some((style, index) => style.delay !== expectedDelays[index])
+  ) {
+    fail(`Work reveal: expected a 1.2s row stagger, got ${JSON.stringify(revealStyles)}.`);
+  } else {
+    pass("Work reveal: cards use the intended 1.2 second row stagger.");
   }
 }
 
-async function checkWorkHoverToPlay(browser) {
+async function checkWorkVideoMotion(browser) {
   const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
   await page.goto(BASE_URL, { waitUntil: "networkidle" });
-  const video = await page.$("video");
-  if (!video) {
-    fail("Work scene: no <video> element found — hover-to-play clips missing from the page.");
-    await page.close();
-    return;
-  }
-  await video.scrollIntoViewIfNeeded();
-  const pausedBefore = await video.evaluate((v) => v.paused);
-
-  const box = await video.boundingBox();
-  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-  await page.waitForTimeout(600);
-  const pausedDuringHover = await video.evaluate((v) => v.paused);
-
-  await page.mouse.move(0, 0);
-  await page.waitForTimeout(400);
-  const pausedAfter = await video.evaluate((v) => v.paused);
+  await page.locator(".car-grid").scrollIntoViewIfNeeded();
+  await page.waitForFunction(
+    () => {
+      const videos = [...document.querySelectorAll(".car-grid video")];
+      return videos.length === 4 && videos.every((video) => !video.paused && video.currentTime > 0);
+    },
+    { timeout: 10000 }
+  );
+  const states = await page.$$eval(".car-grid video", (videos) =>
+    videos.map((video) => ({ paused: video.paused, currentTime: video.currentTime }))
+  );
+  const stillAnimations = await page.$$eval(".car-grid .has-still .win-shot", (images) =>
+    images.map((image) => getComputedStyle(image).animationName)
+  );
   await page.close();
+  if (states.length !== 4 || states.some((state) => state.paused || state.currentTime <= 0)) {
+    fail(`Work motion: expected four visible product clips to play, got ${JSON.stringify(states)}.`);
+  } else {
+    pass("Work motion: all four available product clips play while visible.");
+  }
+  if (stillAnimations.length !== 2 || stillAnimations.some((name) => name !== "project-still-drift")) {
+    fail(`Work motion: expected two still projects to use subtle movement, got ${JSON.stringify(stillAnimations)}.`);
+  } else {
+    pass("Work motion: both still projects use the subtle drift treatment.");
+  }
 
-  if (!pausedBefore) {
-    fail("Work window: video is already playing before any hover — should start paused on the poster frame.");
+  const reducedPage = await browser.newPage({
+    viewport: { width: 1280, height: 900 },
+    reducedMotion: "reduce",
+  });
+  await reducedPage.goto(BASE_URL, { waitUntil: "networkidle" });
+  const reducedStates = await reducedPage.$$eval(".car-grid video", (videos) =>
+    videos.map((video) => ({ paused: video.paused, currentTime: video.currentTime }))
+  );
+  const reducedStillAnimations = await reducedPage.$$eval(".car-grid .has-still .win-shot", (images) =>
+    images.map((image) => getComputedStyle(image).animationName)
+  );
+  await reducedPage.close();
+  if (reducedStates.some((state) => !state.paused || state.currentTime !== 0)) {
+    fail(`Work motion (reduced): clips should be parked, got ${JSON.stringify(reducedStates)}.`);
   } else {
-    pass("Work window: video starts paused (poster frame) at rest.");
+    pass("Work motion (reduced): all clips are parked on their poster frames.");
   }
-  if (pausedDuringHover) {
-    fail("Work window: video did not start playing on hover.");
+  if (reducedStillAnimations.some((name) => name !== "none")) {
+    fail(`Work motion (reduced): still-image movement should be disabled, got ${JSON.stringify(reducedStillAnimations)}.`);
   } else {
-    pass("Work window: video plays on hover.");
-  }
-  if (!pausedAfter) {
-    fail("Work window: video kept playing after the cursor left — should reset to the poster frame.");
-  } else {
-    pass("Work window: video pauses/resets after hover ends.");
+    pass("Work motion (reduced): still-image movement is disabled.");
   }
 }
 
@@ -189,8 +260,8 @@ async function checkWorkHoverToPlay(browser) {
   try {
     await checkHeroMotion(browser);
     await checkHeroReducedMotionStatic(browser);
-    await checkRecordScrub(browser);
-    await checkWorkHoverToPlay(browser);
+    await checkWorkGrid(browser);
+    await checkWorkVideoMotion(browser);
   } catch (err) {
     fail(`Recorder crashed: ${err.message}`);
   } finally {

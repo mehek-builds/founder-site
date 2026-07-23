@@ -36,7 +36,7 @@ for the 21-day staleness check in `content/now.ts`.
   drive the hero harmonograph (`components/HeroHarmonograph.tsx`), all three globes
   (`components/OriginGlobe.tsx`, `IntroZoomOut.tsx`, `FaviconGlobe.tsx`, which share
   the same sphere math and the `lib/land-arcs.ts` Natural Earth coastline data), the
-  product carousel (`components/WorkCarousel.tsx`), and the cursor snitch. Entrances
+  product grid (`components/WorkCarousel.tsx`), and the cursor snitch. Entrances
   and count-ups use `IntersectionObserver` + CSS transitions. There is no 3D library
   and no WebGL anywhere.
 - GSAP 3.15.0 + ScrollTrigger is a dependency, registered once client-side in
@@ -63,8 +63,8 @@ for the 21-day staleness check in `content/now.ts`.
 - `content/` - the data layer (items, counts, now.ts + now.json, activity.json).
 - `lib/` - the engine: gsap (register ScrollTrigger), motion (tokens), visible
   (background-tab gate), land-arcs (Natural Earth 110m coastlines).
-- `public/` - headshot.jpg, og.png, work/*.jpg (carousel posters) + work/*.mp4
-  (hover-play clips; pead is a still, with no mp4).
+- `public/` - headshot.jpg, og.png, work/*.jpg (project posters) + work/*.mp4
+  (visible-card clips; pead is a still, with no mp4).
 - `scripts/` - build-activity.mjs (git-log day counts), qa-motion-recorder.js
   (Playwright motion gate). `docs/` - this file, DECISIONS, SCENES.
 
