@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-07-23: USC education line
+
+- Added one compact education row to the About page for computer science at the
+  University of Southern California, without implying a completed degree.
+
 ## 2026-07-23: Remove project-grid title
 
 - Removed the Highlight reel title block so the homepage moves directly from

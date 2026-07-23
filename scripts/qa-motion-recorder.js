@@ -275,6 +275,36 @@ async function checkWorkVideoMotion(browser) {
   }
 }
 
+async function checkAboutEducation(browser) {
+  for (const width of [1280, 390]) {
+    const page = await browser.newPage({ viewport: { width, height: 900 } });
+    await page.goto(`${BASE_URL}/about`, { waitUntil: "networkidle" });
+    const result = await page.evaluate(() => {
+      const rows = [...document.querySelectorAll(".about-education")];
+      const row = rows[0];
+      return {
+        count: rows.length,
+        text: row?.textContent?.replace(/\s+/g, " ").trim() ?? "",
+        href: row?.getAttribute("href") ?? "",
+        overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
+      };
+    });
+    await page.close();
+    if (
+      result.count !== 1 ||
+      !result.text.includes("Computer science") ||
+      !result.text.includes("USC") ||
+      !result.text.includes("University of Southern California") ||
+      result.href !== "https://www.usc.edu/" ||
+      result.overflow
+    ) {
+      fail(`About education at ${width}px: unexpected result ${JSON.stringify(result)}.`);
+    } else {
+      pass(`About education at ${width}px: one USC row is visible with no overflow.`);
+    }
+  }
+}
+
 (async () => {
   const browser = await chromium.launch();
   try {
@@ -282,6 +312,7 @@ async function checkWorkVideoMotion(browser) {
     await checkHeroReducedMotionStatic(browser);
     await checkWorkGrid(browser);
     await checkWorkVideoMotion(browser);
+    await checkAboutEducation(browser);
   } catch (err) {
     fail(`Recorder crashed: ${err.message}`);
   } finally {

@@ -78,6 +78,21 @@ export default function AboutBody() {
             world, hearing what gets in their way, and building the simplest
             thing that fixes it. That is the whole job.
           </p>
+          <a
+            className="about-education"
+            href="https://www.usc.edu/"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Computer science at the University of Southern California"
+          >
+            <span className="about-education-role">Computer science</span>
+            <span className="about-education-mark" aria-hidden="true">
+              USC
+            </span>
+            <span className="about-education-school">
+              University of Southern California
+            </span>
+          </a>
         </header>
 
         <div className="about-grid">
