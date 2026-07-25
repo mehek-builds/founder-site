@@ -9,111 +9,129 @@
   display: flex;
   align-items: center;
   overflow: hidden;
-  /* the moon's light + the name-reveal both key off these (JS updates them) */
-  --moon-x: 50%;
-  --moon-y: 45%;
+  isolation: isolate;
 }
-/* THE HARMONOGRAPH + MOONLIGHT: an ink moon slowly draws a small looping curve
-   (the ribbon, on canvas) AND casts a cool pool of light that follows it. The
-   light is what reveals the name in ink (.hero-lit-layer, masked to the moon). */
-.hero-moon-scene {
+.hero-orbit {
+  --pointer-x: 0px;
+  --pointer-y: 0px;
   position: absolute;
-  inset: 0;
-  z-index: 0;
-}
-.hero-harmo {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-/* Cool, cinematic moonlight: a soft silver-blue pool with a whisper-warm core
-   (the one note of warmth), pooled at the moon. */
-.hero-moonlight {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(circle 70px at var(--moon-x) var(--moon-y), rgba(255, 246, 232, 0.3), transparent 66%),
-    radial-gradient(circle 150px at var(--moon-x) var(--moon-y), rgba(214, 228, 246, 0.42), transparent 62%),
-    radial-gradient(circle 360px at var(--moon-x) var(--moon-y), rgba(196, 214, 240, 0.18), transparent 72%);
-  /* hovering the hero brightens the pool (JS eases --moon-glow, see
-     HeroHarmonograph.tsx); brightness can exceed 1, unlike opacity */
-  filter: brightness(var(--moon-glow, 1));
-  transition: filter 0.1s linear;
-}
-/* The ink skyline (Mehek ruling, 2026-07-16): one building per items.ts
-   record item, drawn/undrawn on a slow loop along the hero horizon. Sits
-   above the harmonograph field but under the name layers. */
-.hero-skyline {
-  position: absolute;
-  inset: 0;
+  inset: 12% 5%;
   z-index: 1;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
+  opacity: 0.68;
+  will-change: transform;
+  animation: hero-orbit-drift 5.5s var(--ease-ui) infinite;
 }
+.hero-orbit ellipse,
+.hero-orbit path,
+.hero-orbit circle {
+  fill: none;
+  stroke: var(--line-strong);
+  stroke-width: 1;
+  transform-box: fill-box;
+  transform-origin: center;
+  will-change: transform, stroke-dashoffset, opacity;
+}
+.hero-orbit ellipse { stroke-dasharray: 3 12; }
+.hero-orbit ellipse:nth-of-type(1) { animation: hero-ring-clockwise 11s linear infinite; }
+.hero-orbit ellipse:nth-of-type(2) { animation: hero-ring-counter 8s linear infinite; }
+.hero-orbit path:not(.hot) { stroke-dasharray: 18 13; animation: hero-line-travel 3.6s linear infinite; }
+.hero-orbit .hot {
+  stroke: var(--amber);
+  stroke-width: 1.4;
+  stroke-dasharray: 10 16;
+  animation: hero-hot-line-travel 2.4s linear infinite;
+}
+.hero-orbit .dot {
+  fill: var(--amber);
+  stroke: none;
+  animation: hero-dot-breathe 2.8s var(--ease-ui) infinite;
+}
+.hero-orbit .dot:last-child { animation-delay: -1.4s; }
+.hero-orbit .signal { animation: hero-signal-pulse 1.8s var(--ease-ui) infinite; }
+.hero-orbit .signal:nth-of-type(2) { animation-delay: -0.45s; }
+.hero-orbit .signal:nth-of-type(3) { animation-delay: -0.9s; }
+.hero-orbit .signal:nth-of-type(4) { animation-delay: -1.35s; }
+.hero-orbit .signal circle {
+  fill: var(--amber);
+  stroke: var(--bg);
+  stroke-width: 4;
+  filter: drop-shadow(0 0 8px var(--amber-glow));
+}
+.hero-orbit .signal text {
+  fill: var(--amber-bright);
+  stroke: var(--bg);
+  stroke-width: 4px;
+  paint-order: stroke fill;
+  font: 500 12px var(--font-mono);
+  letter-spacing: 0.16em;
+}
+.hero-orbit .signal-dark circle { fill: var(--text); }
+.hero-orbit .signal-dark text { fill: var(--text); }
 .hero-inner {
   position: relative;
   z-index: 2;
   padding-top: 12vh;
   padding-bottom: 12vh;
+  text-align: center;
+  animation: hero-copy-float 4.5s var(--ease-ui) infinite;
 }
 .hero-title {
-  font-size: clamp(2.9rem, 9vw, 7rem);
-  line-height: 1.04;
-  letter-spacing: -0.035em;
+  font-size: clamp(4.5rem, 12.5vw, 11.875rem);
+  line-height: 0.78;
+  letter-spacing: -0.055em;
   margin: 0;
   text-align: center;
 }
 .hero-title span {
   display: block;
-  padding: 0.02em 0.03em 0.08em;
 }
-/* The tagline sets 30% smaller than the name (Mehek, 2026-07-16), so the pair
-   reads as compressed rather than as two equal lines. Both the ghost and the
-   lit layer inherit this, which keeps the masked duplicate in register.
-   The margin REBASES on purpose: it is em-based, and em on this line now means
-   0.7 of what it meant, so leaving it at 0.21em would quietly close the gap by
-   30% along with the type. 0.21 / 0.7 = 0.3em holds the original distance. */
-.hero-title span + span {
-  font-size: 0.7em;
-  margin-top: 0.3em;
+.hero-title .hero-builds {
+  color: var(--amber);
+  font-size: clamp(2rem, 7.5vw, 6.75rem);
+  font-style: italic;
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+  margin-top: 0.18em;
+  white-space: nowrap;
 }
-/* ghost: the name barely present in the paper (and the real SSR text). */
-.ht-ghost {
-  color: rgba(27, 26, 23, 0.11);
+@keyframes hero-orbit-drift {
+  0%, 100% { transform: translate(var(--pointer-x), var(--pointer-y)) rotate(-1deg) scale(1); }
+  33% { transform: translate(calc(var(--pointer-x) + 24px), calc(var(--pointer-y) - 16px)) rotate(2deg) scale(1.025); }
+  66% { transform: translate(calc(var(--pointer-x) - 20px), calc(var(--pointer-y) + 13px)) rotate(-1deg) scale(0.982); }
 }
-/* lit: full ink, revealed only where the moonlight falls (masked to the moon). */
-.hero-lit-layer {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  pointer-events: none;
-  -webkit-mask-image: radial-gradient(circle 200px at var(--moon-x) var(--moon-y), #000 0%, rgba(0, 0, 0, 0.55) 52%, transparent 78%);
-  mask-image: radial-gradient(circle 200px at var(--moon-x) var(--moon-y), #000 0%, rgba(0, 0, 0, 0.55) 52%, transparent 78%);
+@keyframes hero-ring-clockwise { from { transform: rotate(-9deg); } to { transform: rotate(351deg); } }
+@keyframes hero-ring-counter { from { transform: rotate(34deg); } to { transform: rotate(-326deg); } }
+@keyframes hero-line-travel { to { stroke-dashoffset: -310; } }
+@keyframes hero-hot-line-travel {
+  0% { stroke-dashoffset: 0; opacity: 0.62; }
+  50% { opacity: 1; }
+  100% { stroke-dashoffset: -260; opacity: 0.62; }
 }
-.ht-lit {
-  color: var(--text);
+@keyframes hero-dot-breathe {
+  0%, 100% { transform: scale(0.75); opacity: 0.58; }
+  50% { transform: scale(1.65); opacity: 1; }
 }
-/* Only the line the moon is currently over is ever visible at all - ghost
-   AND ink both fade with it; the JS sets each line's opacity per frame (see
-   HeroHarmonograph.tsx setActiveLine). */
-.ht-ghost > span,
-.ht-lit > span {
-  transition: opacity 0.5s ease;
+@keyframes hero-signal-pulse {
+  0%, 100% { opacity: 0.72; }
+  50% { opacity: 1; }
+}
+@keyframes hero-copy-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-11px); }
+}
+@media (max-width: 700px) {
+  .hero { min-height: 800px; }
+  .hero-title { font-size: clamp(4.125rem, 23vw, 6.5625rem); }
+  .hero-title .hero-builds {
+    font-size: clamp(2rem, 8.7vw, 2.375rem);
+    margin-top: 0.28em;
+  }
+  .hero-orbit { inset: 16% -42%; width: 184%; }
 }
 @media (prefers-reduced-motion: reduce) {
-  /* accessible static twin: both lines stay fully visible, no line-gating */
-  .ht-ghost > span { opacity: 1 !important; }
-}
-@media (prefers-reduced-motion: reduce) {
-  /* accessible static twin: the whole name, in ink, no reveal gimmick */
-  .ht-ghost { color: var(--text); }
-  .hero-lit-layer { display: none; }
+  .hero-orbit,
+  .hero-orbit *,
+  .hero-inner { animation: none !important; }
 }
 /* The opening: a full-viewport paper cover where the zoom-out globe plays
    (Earth pulls back through orbit rings toward the sun-glow and stars, then
