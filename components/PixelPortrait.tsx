@@ -43,7 +43,7 @@ const INK = "#1b1a17";
 const SPRITE = [".1111111.", "111111111", "112111211", "112111211", "111111111"];
 const LEGS = [".3.....3.", "..3...3.."];
 
-const LINES = ["on it", "more hair", "hair is 40% of this job", "left a bit", "looks like her?", "smile row next"];
+const LINES = ["on it", "more hair", "left a bit", "looks like her?", "smile row next"];
 
 type Cell = { r: number; c: number; color: string };
 type Block = Cell & { t0: number; fromY: number };
