@@ -184,9 +184,6 @@ export default function IntroZoomOut() {
       g.addColorStop(1, "rgba(236,178,96,0)");
       ctx.fillStyle = g;
       ctx.fillRect(0, 0, W, H);
-      ctx.beginPath(); ctx.arc(sx, sy, 20, 0, 7);
-      ctx.fillStyle = `rgba(224,150,60,${0.5 * alpha})`;
-      ctx.fill();
     };
 
     const drawStars = (alpha: number, now: number) => {
