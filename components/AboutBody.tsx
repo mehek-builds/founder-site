@@ -23,6 +23,7 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import Bookshelf from "./Bookshelf";
 import OriginGlobe from "./OriginGlobe";
+import PixelPortrait from "./PixelPortrait";
 import SiteTabs from "./SiteTabs";
 
 export default function AboutBody() {
@@ -110,13 +111,10 @@ export default function AboutBody() {
         <div className="about-grid">
           <div className="about-photo" ref={wrap}>
             <div className="about-photo-inner" ref={img}>
-              {/* Black-and-white photocopy on pure white (Mehek, 2026-07-16).
-                  REAL ASSET, GRADED, nothing generated: her own headshot with
-                  the hallway lifted out on-device via Apple's Vision framework
-                  (the file never went to a third-party service), then a xerox
-                  tone curve. Original headshot.jpg is kept untouched. */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/headshot-photocopy.jpg" alt="Mehek Mandal" />
+              {/* Pixel portrait built live by a crew of agents (Mehek,
+                  2026-10-06), replacing the 2026-07-16 black-and-white
+                  photocopy. Same real headshot underneath; see PixelPortrait. */}
+              <PixelPortrait />
             </div>
             {/* The Dean's List badge is GONE (Mehek, 2026-07-16): "this is not
                 about school, this is about me as a person". It was also the last

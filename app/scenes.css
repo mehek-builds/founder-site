@@ -699,6 +699,25 @@ video.win-shot { background: var(--bg-2); }
    rounded UI card. */
 .about-photo-inner img { width: 100%; display: block; }
 
+/* Pixel portrait (Mehek, 2026-10-06): a dot-grid panel the crew builds on.
+   Aspect = 96 cols x 120 rows (112 portrait + 8 rows of landing room). */
+.pixel-portrait {
+  position: relative;
+  aspect-ratio: 96 / 120;
+  background-color: var(--bg-2);
+  background-image: radial-gradient(var(--line-strong) 1px, transparent 1.2px);
+  background-size: 12px 12px;
+  background-position: 6px 6px;
+}
+.about-photo-inner .pixel-portrait-static {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: auto;
+}
+.pixel-portrait-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
 /* The lede: her own line, set one step up from the blocks so the builder claim
    lands before any of the texture does. */
 .about-lede {

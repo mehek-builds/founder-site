@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-10-06: Pixel portrait built by agents
+
+- The About photo is now a pixel-art portrait that a crew of ten pixel agents
+  builds bottom-up when it scrolls into view (about 5 seconds), with speech
+  bubbles. The blocks then sharpen in two quick passes and fade into the
+  real photo, which is what stays on the page; then the crew flies off. Modeled on samuelrizzon.dev's About card.
+- Art comes from the real headshot: on-device Vision cutout, a 96x112 grid,
+  40-color palette, no dithering, no hand touch-ups (`scripts/pixel-portrait/`).
+- The real photo (background removed) renders underneath for no-JS; reduced
+  motion shows the photo with no build.
+- Ledger amendment recorded in `docs/DECISIONS.md` (laws 2 and 7, this scene only).
+
 ## 2026-07-23: Match the USC education treatment
 
 - Replaced the invented USC initials badge with the official USC shield.
